@@ -1,0 +1,1 @@
+Lixi version 2 use react hook + redux, nodejs + mongo

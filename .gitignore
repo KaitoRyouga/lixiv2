@@ -1,0 +1,6 @@
+./backend/node_modules
+./backend/.docker/data/db/*
+!./backend/.docker/data/db/.gitkeep
+./backend/coverage
+
+./frontend/node_modules

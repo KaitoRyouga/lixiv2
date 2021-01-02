@@ -1,0 +1,4 @@
+node_modules
+.docker/data/db/*
+!.docker/data/db/.gitkeep
+coverage
