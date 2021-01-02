@@ -2,6 +2,7 @@
 module.exports = function(app) {
     // const API = require('../controllers/appController');
     const Product = require('../controllers/ProductController');
+    const Cart = require('../controllers/CartController');
     // const authMiddleware = require('../middleware/middlewares');
     // const isAuth = authMiddleware.isAuth;
 
@@ -12,4 +13,8 @@ module.exports = function(app) {
     app.route('/products')
         .get(Product.index)
         .post(Product.store)
+
+    app.route('/cart')
+        .get(Cart.index)
+        .post(Cart.store)
 };

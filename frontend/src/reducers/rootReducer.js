@@ -1,16 +1,16 @@
-// import axios from 'axios'
+import axios from 'axios'
 
 const initState = {
 
     product: [
-        {
-            _id: "0",
-            name: "Ao 1",
-            quantity: 1,
-            image: undefined,
-            createdAt: undefined,
-            updatedAt: undefined
-        }
+        // {
+        //     _id: "0",
+        //     name: "Ao 1",
+        //     quantity: 1,
+        //     image: undefined,
+        //     createdAt: undefined,
+        //     updatedAt: undefined
+        // }
     ], 
     cart: [
         {
@@ -26,25 +26,36 @@ const initState = {
 // }
 
 
-const rootReducer = (state = initState, action) => {
+const rootReducer = async (state = initState, action) => {
     
+    const products = await axios.get("http://localhost:3000/products")
+    // console.log()
     
 
     // let newState = [].concat(product.data.Products, state.product)
     // console.log(newState)
+    console.log(action.info)
 
     try {
         if(action.type === "ADD_PRODUCT"){
-            action.info.key = state.product.length + 1
-            action.info.index = state.product.length + 1
-            let NewProduct = [].concat(state.product, action.info)
-            return{
+            await axios.post('http://localhost:3000/products', action.info[0]).then(res => {
+                console.log(res)
+            }).catch(err => {
+                console.log(err)
+            });
+
+            // const products = await axios.get("http://localhost:3000/products")
+
+            return {
                 ...state,
-                product: NewProduct
+                product: products.data.Products
             }
         }
 
-        return state
+        return {
+            ...state,
+            product: products.data.Products
+        }
     } catch (error) {
         return error
     }

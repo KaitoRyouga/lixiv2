@@ -11,17 +11,15 @@ const ProductSchema = new Schema({
     type: Number,
     required: true
   },
+  price: {
+    type: Number,
+    required: true
+  },
   image: String
-  // userCreated: {
-  //   ref: 'User',
-  //   required: true,
-  //   type: Schema.Types.ObjectId
-  // }
 }, { timestamps: true })
 
 ProductSchema.statics.protectedFields = [
-  '_id',
-  '__v'
+  '_id'
 ]
 
 const Product = mongoose.model('Product', ProductSchema)
