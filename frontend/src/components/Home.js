@@ -3,15 +3,23 @@ import { Redirect } from "react-router-dom";
 import { Image, Card, Row, Col, Button } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
+import AddCart from '../actions/Cart/AddCart'
+import { useDispatch } from 'react-redux'
+// import { useDispatch, useSelector } from 'react-redux'
 
-const ViewProduct = (params) => {
-    const [count, setCount] = useState(0)
+function ViewProduct (params) {
+    const [count, setCount] = useState(0);
+    const dispatch = useDispatch();
 
-    const onIncrement = () => {
+    const addCart = (info) => {
+        dispatch(AddCart(info))
+    }
+
+    function onIncrement() {
         setCount(count + 1)
     }
 
-    const onDecrement = () => {
+    function onDecrement() {
         setCount(count - 1)
     }
 
@@ -26,7 +34,16 @@ const ViewProduct = (params) => {
                 <div>
                     <Row>
                         <Col span={8}>
-                            <Button onClick={onDecrement}>
+                            <Button onClick={() => {
+                                onDecrement()
+                                const cartTemp = [
+                                    {
+                                        name: params.product.name,
+                                        quantity: count - 1
+                                    }
+                                ];
+                                addCart(cartTemp)
+                            }}>
                                 <LeftOutlined />
                             </Button> 
                         </Col>
@@ -34,7 +51,16 @@ const ViewProduct = (params) => {
                             <p>{count}</p>
                         </Col>
                         <Col span={8}>
-                            <Button onClick={onIncrement}>
+                        <Button onClick={() => {
+                                onIncrement()
+                                const cartTemp = [
+                                    {
+                                        name: params.product.name,
+                                        quantity: count + 1
+                                    }
+                                ];
+                                addCart(cartTemp)
+                            }}>
                                 <RightOutlined />
                             </Button> 
                         </Col>
@@ -75,6 +101,13 @@ const Home = () => {
                     setChange(1)
                 }}>
                     Products
+                </button>
+                <button onClick={() => {
+                    setData("cart")
+                    setPath("cart")
+                    setChange(1)
+                }}>
+                    Cart
                 </button>
                 <Row>
                 {
