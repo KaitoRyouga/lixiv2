@@ -18,9 +18,8 @@ class ProductController {
       const product = new Product({
         name: req.body.name,
         quantity: parseInt(req.body.quantity, 10),
+        price: parseInt(req.body.price, 10),
         image: req.body.image
-        // image: req.file ? req.file.path : undefined,
-        // userCreated: req.user._id
       })
 
       await product.save()
