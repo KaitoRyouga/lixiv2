@@ -78,15 +78,12 @@ const Home = () => {
         const [change, setChange] = useState(0);
         const [products, setProducts] = useState([]);
 
-        useEffect(() => {
-            async function fetchData() {
-                const result = await axios.get(
-                    'http://localhost:3000/products',
-                );
-                setProducts(result.data.Products);
-            }
-            fetchData();
-            
+        useEffect(async () => {
+            const result = await axios.get(
+              'http://localhost:3000/products',
+            );
+         
+            setProducts(result.data.Products);
         }, []);
     
         return(
@@ -95,6 +92,12 @@ const Home = () => {
                 { change ? <Redirect to={{ pathname: path, data: data }} /> : null }
 
                 <article>this is Home</article>
+                {/* <Image src={process.env.PUBLIC_URL + '/images/ao1.jpg'}></Image> */}
+                <Card size="small" title="ao" style={{ width: 300 }} cover={<Image
+                    width={200}
+                    src={process.env.PUBLIC_URL + '/images/ao1.jpg'}
+                />}>
+                </Card>
                 <button onClick={() => {
                     setData("products")
                     setPath("products")

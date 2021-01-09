@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux'
 import { Image } from "antd";
 // import { useDispatch, useSelector } from 'react-redux'
 
-const ViewCart = (params) => {
+const ViewCart = (props) => {
 
-    const pricePresent = params.product.filter(p => p.name === params.cart.name)
+    const pricePresent = props.products.filter(p => p.name === props.cart.name)
 
     return (
         <div>
@@ -14,30 +14,24 @@ const ViewCart = (params) => {
                 <li>
                     <Image src={pricePresent[0].image} alt="image"></Image>
                 </li>
-                <li>{params.cart.name}</li>
-                <li>{params.cart.quantity}</li>
+                <li>{props.cart.name}</li>
+                <li>{props.cart.quantity}</li>
                 <li>{pricePresent[0].price}</li>
             </ul>
         </div>
     )
 }
 
-function Cart() {
+const Cart = () => {
 
     const [data, setData] = useState("");
     const [path, setPath] = useState("");
-    const [cart, setCart] = useState([{}]);
     const [change, setChange] = useState(0);
     // const dispatch = useDispatch();
-    const carts = useSelector(state => state)
-
-    useEffect(() => {
-        async function fetchData() {
-            setCart(await carts)
-        }
-        fetchData();
-    }, [carts]);
-        
+    const stateRoot = useSelector(state => state);
+    // console.log(stateRoot)
+    // console.log(stateRoot.carts)
+    // console.log(stateRoot.products)
 
     return (
         <div>
@@ -54,9 +48,9 @@ function Cart() {
                 </button>
 
 
-            { cart.carts === undefined ||
-                cart.carts.map(c => {
-                    return <ViewCart key={c.name} cart={c} product={cart.product} carts={cart.carts}></ViewCart>
+            { stateRoot.carts === undefined ||
+                stateRoot.carts.map(c => {
+                    return <ViewCart key={c.name} cart={c} products={stateRoot.products} carts={stateRoot.carts}></ViewCart>
                 })
             }
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from "react-router-dom";
 import { useDispatch } from 'react-redux'
 import AddProduct from '../actions/Product/AddProduct'
@@ -38,6 +38,7 @@ const Products = () => {
         // const products = useSelector(state => state.product);
         const dispatch = useDispatch();
         const [form] = Form.useForm();
+        // const { register, handleSubmit } = useForm() 
 
         const addProduct = (info) => {
             dispatch(AddProduct(info))
@@ -79,7 +80,6 @@ const Products = () => {
           
         return(
             <div>
-
                 { change ? <Redirect to={{ pathname: path, data: data }} /> : null }
 
                 <article>this is Products</article>
