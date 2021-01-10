@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from "react-router-dom";
-import { useDispatch } from 'react-redux'
-import AddProduct from '../actions/Product/AddProduct'
 import { Form, Input, Button, Upload } from "antd";
 import axios from 'axios'
 import ImgCrop from 'antd-img-crop';
@@ -22,13 +20,8 @@ const Products = () => {
         const [change, setChange] = useState(0);
         const [products, setProducts] = useState({});
         // const products = useSelector(state => state.product);
-        const dispatch = useDispatch();
         const [form] = Form.useForm();
         // const { register, handleSubmit } = useForm() 
-
-        const addProduct = (info) => {
-            dispatch(AddProduct(info))
-        }
 
         const onFinish = values => {
             const newProduct = [
@@ -40,14 +33,7 @@ const Products = () => {
                 }
             ]
 
-            console.log(newProduct[0])
             setProducts(newProduct[0])
-            // addProduct(newProduct)
-            // await axios.post('http://localhost:3000/products', action.info[0]).then(res => {
-            //     console.log(res)
-            // }).catch(err => {
-            //     console.log(err)
-            // });
         };
         
         const onReset = () => {

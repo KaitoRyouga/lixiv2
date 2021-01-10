@@ -42,9 +42,6 @@ class ProductController {
     }
   }
 
-  static async get_home (req, res) {
-    return res.json("kaito")
-  }
 }
 
 module.exports = ProductController

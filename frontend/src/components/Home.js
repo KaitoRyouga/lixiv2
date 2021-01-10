@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from "react-router-dom";
-import { Image, Card, Row, Col, Button, Alert, message } from "antd";
+import { Image, Card, Row, Col, Button, Alert } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
@@ -124,6 +124,13 @@ const Home = () => {
                     setChange(1)
                 }}>
                     Cart
+                </button>
+                <button onClick={() => {
+                    setData("promos")
+                    setPath("promos")
+                    setChange(1)
+                }}>
+                    Promo
                 </button>
                 <Row>
                 {

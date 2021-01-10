@@ -1,6 +1,7 @@
 const initState = []
 
 const CartReducer = (state = initState, action) => {
+
     switch (action.type) {
         case 'ADD_CART':
             const data = action.info
@@ -13,7 +14,8 @@ const CartReducer = (state = initState, action) => {
                 NewCart = [].concat(newData, data)   
             }
             return NewCart
-    
+        case 'RESET_CART':
+            return [];
         default:
             return state;
     }
