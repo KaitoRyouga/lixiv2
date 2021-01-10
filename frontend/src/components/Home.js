@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from "react-router-dom";
-import { Image, Card, Row, Col, Button } from "antd";
+import { Image, Card, Row, Col, Button, Alert, message } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
@@ -9,7 +9,16 @@ import { useDispatch } from 'react-redux'
 
 function ViewProduct (params) {
     const [count, setCount] = useState(0);
+    const [showMessenge, setShowMessenge] = useState(false);
     const dispatch = useDispatch();
+
+    const messageWarning = (<Alert
+        message="Warning"
+        description="Quantity should not be less than 0"
+        type="warning"
+        showIcon
+        closable
+    />)
 
     const addCart = (info) => {
         dispatch(AddCart(info))
@@ -17,10 +26,15 @@ function ViewProduct (params) {
 
     function onIncrement() {
         setCount(count + 1)
+        setShowMessenge(false)
     }
 
     function onDecrement() {
-        setCount(count - 1)
+        if (count !== 0 ) {
+            setCount(count - 1)
+        }else{
+            setShowMessenge(true)
+        }
     }
 
 
@@ -67,6 +81,9 @@ function ViewProduct (params) {
                     </Row>
                 </div>
             </Card>
+            {
+                showMessenge && messageWarning
+            }
         </Col>
     )
 }
@@ -94,12 +111,6 @@ const Home = () => {
                 { change ? <Redirect to={{ pathname: path, data: data }} /> : null }
 
                 <article>this is Home</article>
-                {/* <Image src={process.env.PUBLIC_URL + '/images/ao1.jpg'}></Image> */}
-                <Card size="small" title="ao" style={{ width: 300 }} cover={<Image
-                    width={200}
-                    src={process.env.PUBLIC_URL + '/images/ao1.jpg'}
-                />}>
-                </Card>
                 <button onClick={() => {
                     setData("products")
                     setPath("products")
