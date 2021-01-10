@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import AllProduct from './actions/Product/AllProduct'
@@ -18,11 +18,10 @@ function App() {
             'http://localhost:3000/products',
         );
         dispatch(AllProduct(result.data.Products));
-        // console.log(result.data.Products)
     }
     fetchData();
     
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="App">

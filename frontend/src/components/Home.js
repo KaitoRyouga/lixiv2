@@ -78,12 +78,14 @@ const Home = () => {
         const [change, setChange] = useState(0);
         const [products, setProducts] = useState([]);
 
-        useEffect(async () => {
-            const result = await axios.get(
-              'http://localhost:3000/products',
-            );
-         
-            setProducts(result.data.Products);
+        useEffect(() => {
+            async function fetchData() {
+                const result = await axios.get(
+                    'http://localhost:3000/products',
+                );
+                setProducts(result.data.Products);
+            }
+              fetchData();
         }, []);
     
         return(

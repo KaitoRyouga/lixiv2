@@ -14,9 +14,10 @@ const ViewCart = (props) => {
                 <li>
                     <Image src={pricePresent[0].image} alt="image"></Image>
                 </li>
-                <li>{props.cart.name}</li>
-                <li>{props.cart.quantity}</li>
-                <li>{pricePresent[0].price}</li>
+                <li>Name: {props.cart.name}</li>
+                <li>quantity: {props.cart.quantity}</li>
+                <li>price: {pricePresent[0].price}</li>
+                <li>total: {pricePresent[0].price*props.cart.quantity}</li>
             </ul>
         </div>
     )
@@ -26,12 +27,19 @@ const Cart = () => {
 
     const [data, setData] = useState("");
     const [path, setPath] = useState("");
+    const [total, setTotal] = useState(0);
     const [change, setChange] = useState(0);
     // const dispatch = useDispatch();
     const stateRoot = useSelector(state => state);
-    // console.log(stateRoot)
-    // console.log(stateRoot.carts)
-    // console.log(stateRoot.products)
+
+    useEffect(() => {
+        const subtotal = stateRoot.carts.map(c => {
+            const prod = stateRoot.products.filter(pro => pro.name === c.name);
+            const sub = c.quantity*prod[0].price
+            return setTotal(prevState => (prevState + sub))
+        })
+        return subtotal
+    }, [stateRoot])
 
     return (
         <div>
@@ -47,12 +55,12 @@ const Cart = () => {
                     Home
                 </button>
 
-
             { stateRoot.carts === undefined ||
                 stateRoot.carts.map(c => {
                     return <ViewCart key={c.name} cart={c} products={stateRoot.products} carts={stateRoot.carts}></ViewCart>
                 })
             }
+            <p>Subtotal: {total}</p>
         </div>
     )
 }
