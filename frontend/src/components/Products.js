@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from "react-router-dom";
-import { useDispatch } from 'react-redux'
-import AddProduct from '../actions/Product/AddProduct'
-import { Image, Card, Form, Input, Button, Upload } from "antd";
+import { Form, Input, Button, Upload } from "antd";
 import axios from 'axios'
 import ImgCrop from 'antd-img-crop';
 
@@ -15,34 +13,15 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
-const ViewProduct = (params) => {
-    return(
-        <div>            
-            <Card size="small" title={params.product.name} style={{ width: 300 }} cover={<Image
-                width={200}
-                src={params.product.image}
-            />}>
-                <p>{params.product.price}$</p>
-            </Card>
-        </div>
-    )
-}
-
-
 const Products = () => {
     
         const [data, setData] = useState("");
         const [path, setPath] = useState("");
         const [change, setChange] = useState(0);
-        const [products, setProducts] = useState([]);
+        const [products, setProducts] = useState({});
         // const products = useSelector(state => state.product);
-        const dispatch = useDispatch();
         const [form] = Form.useForm();
         // const { register, handleSubmit } = useForm() 
-
-        const addProduct = (info) => {
-            dispatch(AddProduct(info))
-        }
 
         const onFinish = values => {
             const newProduct = [
@@ -53,11 +32,12 @@ const Products = () => {
                     image: fileList[0].thumbUrl
                 }
             ]
-            addProduct(newProduct)
+
+            setProducts(newProduct[0])
         };
         
         const onReset = () => {
-        form.resetFields();
+            form.resetFields();
         };
 
         const [fileList, setFileList] = useState([
@@ -69,14 +49,12 @@ const Products = () => {
 
         useEffect(() => {
             async function fetchData() {
-                const result = await axios.get(
-                    'http://localhost:3000/products',
-                );
-                setProducts(result.data.Products);
+                await axios.post(
+                    'http://localhost:3000/products', products
+                ).then(res => console.log(res)).catch(err => console.log(err))
             }
             fetchData();
-            
-        }, []);
+        }, [products]);
           
         return(
             <div>
@@ -91,12 +69,6 @@ const Products = () => {
                     Home
                 </button>
                 <div>
-                {
-                    
-                    products.map((product, id) => {
-                        return <ViewProduct key={id} product={product}></ViewProduct>
-                    })
-                }
                 </div>
                 <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
                     <Form.Item name="Name" label="Name" rules={[{ required: true }]}>
