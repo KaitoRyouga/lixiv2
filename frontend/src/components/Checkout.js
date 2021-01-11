@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Input, Button } from "antd";
 import { useSelector } from 'react-redux'
+import { useHistory } from "react-router-dom";
 import Header from './Header'
 import axios from 'axios'
 
@@ -26,16 +27,17 @@ const VIewCart = (props) => {
 
 
 const Checkout = (props) => {
-    console.log(props)  
 
     const [form] = Form.useForm();
+    const history = useHistory()
     const stateCart = useSelector(state => state.carts);
 
     const onFinish = values => {
         values.cart = {stateCart}
         values.subtotal = props.location.data
-        // console.log("check finish:", values)
         axios.post('http://localhost:3000/order', values).then(res => console.log(res)).catch(err => console.log(err))
+        form.resetFields();
+        history.push("/")
     };
     
     const onReset = () => {
