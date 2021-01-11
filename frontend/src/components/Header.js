@@ -12,7 +12,7 @@ const Header = (props) => {
 
     return (
         <div>
-            <article>this is {props.name}</article>
+            <article>This is {props.name}</article>
             <Button onClick={() => {
                 changePage("/")
             }}>
@@ -34,9 +34,9 @@ const Header = (props) => {
                 Promo
             </Button>
             <Button onClick={() => {
-                changePage("/checkout")
+                changePage("/order")
             }}>
-                Checkout
+                Order
             </Button>
         </div>
     )

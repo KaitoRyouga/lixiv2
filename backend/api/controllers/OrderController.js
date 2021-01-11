@@ -42,7 +42,7 @@ class OrderController {
                 })
             }
         })
-
+        // console.log(OrderCartRaw)
         const OrderCart = new Order(OrderCartRaw)
 
         await OrderCart.save()

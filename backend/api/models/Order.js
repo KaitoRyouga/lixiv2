@@ -17,7 +17,7 @@ const OrderSchema = new Schema({
     required: true,
     trim: true
   },
-  product: {
+  cart: {
     type: JSON
   },
   subtotal: {
