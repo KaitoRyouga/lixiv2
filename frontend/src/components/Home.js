@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from "react-router-dom";
 import { Image, Card, Row, Col, Button, Alert } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
 import { useDispatch } from 'react-redux'
-// import { useDispatch, useSelector } from 'react-redux'
+import Header from './Header'
 
 const MessengeQuantity = (props) => {
 
@@ -116,9 +115,6 @@ function ViewProduct (params) {
 
 const Home = () => {
 
-        const [data, setData] = useState("");
-        const [path, setPath] = useState("");
-        const [change, setChange] = useState(0);
         const [products, setProducts] = useState([]);
 
         useEffect(() => {
@@ -133,31 +129,7 @@ const Home = () => {
     
         return(
             <div>
-
-                { change ? <Redirect to={{ pathname: path, data: data }} /> : null }
-
-                <article>this is Home</article>
-                <button onClick={() => {
-                    setData("products")
-                    setPath("products")
-                    setChange(1)
-                }}>
-                    Products
-                </button>
-                <button onClick={() => {
-                    setData("cart")
-                    setPath("cart")
-                    setChange(1)
-                }}>
-                    Cart
-                </button>
-                <button onClick={() => {
-                    setData("promos")
-                    setPath("promos")
-                    setChange(1)
-                }}>
-                    Promo
-                </button>
+                <Header name="Home"></Header>
                 <Row>
                 {
                     

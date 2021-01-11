@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from "react-router-dom";
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Form, Input, Button, Image, Alert, Row, Col} from "antd";
 import ResetCart from '../actions/Cart/ResetCart'
-import { useDispatch } from 'react-redux'
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import EditCart from '../actions/Cart/EditCart'
 import DeleteCart from '../actions/Cart/DeleteCart'
+import Header from './Header'
 
 const layout = {
     labelCol: { span: 8 },
@@ -102,11 +102,8 @@ const MessengeQuantity = (props) => {
 }
 
 const Cart = () => {
-
-    const [data, setData] = useState("");
-    const [path, setPath] = useState("");
-    const [total, setTotal] = useState(0);
     const [change, setChange] = useState(0);
+    const [total, setTotal] = useState(0);
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const stateRoot = useSelector(state => state);
@@ -160,6 +157,12 @@ const Cart = () => {
         setTotal(total + newTotal)
     }
 
+    const onCheckout = () => {
+        // console.log("check out")
+        // history.push('/checkout')
+        setChange(1)
+    }
+
     useEffect(() => {
         let sumSub = 0;
         const subtotal = stateRoot.carts.map(c => {
@@ -180,17 +183,9 @@ const Cart = () => {
 
     return (
         <div>
+            { change ? <Redirect to={{ pathname: "/checkout", data: total }} /> : null }
 
-            { change ? <Redirect to={{ pathname: path, data: data }} /> : null }
-
-            <article>This is Cart</article>
-            <button onClick={() => {
-                    setData("home")
-                    setPath("/")
-                    setChange(1)
-                }}>
-                    Home
-                </button>
+            <Header name="Cart"></Header>
 
             { stateRoot.carts === undefined ||
                 stateRoot.carts.map(c => {
@@ -217,6 +212,9 @@ const Cart = () => {
                     </Button>
                     <Button htmlType="button" onClick={onResetCart}>
                     Reset all cart
+                    </Button>
+                    <Button htmlType="button" onClick={onCheckout}>
+                    Check out
                     </Button>
                 </Form.Item>
             </Form>
