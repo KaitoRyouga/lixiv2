@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  frontend:
+    restart: always
+    image: docker.pkg.github.com/kaitoryouga/lixiv2/lixiv2_frontend:latest
+    ports:
+    - "80:80"
+  backend:
+    restart: always
+    image: docker.pkg.github.com/kaitoryouga/lixiv2/lixiv2_backend:latest
+    ports:
+    - "3000:3000"

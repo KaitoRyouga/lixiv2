@@ -8,3 +8,10 @@ services:
         dockerfile: Dockerfile
     ports:
     - "8181:80"
+  backend:
+    restart: always
+    build: 
+        context: ./backend
+        dockerfile: Dockerfile
+    ports:
+    - "3000:3000"
