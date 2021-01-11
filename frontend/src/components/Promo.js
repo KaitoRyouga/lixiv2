@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import axios from 'axios'
+import Header from "./Header"
 
 const layout = {
     labelCol: { span: 8 },
@@ -16,9 +16,6 @@ const Promo = () => {
 
     const [form] = Form.useForm();
     const [promo, setPromo] = useState({});
-    const [data, setData] = useState("");
-    const [path, setPath] = useState("");
-    const [change, setChange] = useState(0);
 
     const onFinish = values => {
         const newPromo = [
@@ -49,31 +46,7 @@ const Promo = () => {
 
     return (
         <div>
-
-            { change ? <Redirect to={{ pathname: path, data: data }} /> : null }
-
-            <article>this is Home</article>
-            <button onClick={() => {
-                setData("products")
-                setPath("products")
-                setChange(1)
-            }}>
-                Products
-            </button>
-            <button onClick={() => {
-                setData("cart")
-                setPath("cart")
-                setChange(1)
-            }}>
-                Cart
-            </button>
-            <button onClick={() => {
-                setData("promos")
-                setPath("promos")
-                setChange(1)
-            }}>
-                Promo
-            </button>
+            <Header name="Promo"></Header>
 
             <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
                 <Form.Item name="Name" label="Name" rules={[{ required: true }]}>

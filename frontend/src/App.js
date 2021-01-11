@@ -8,6 +8,7 @@ import Products from './components/Products'
 import Home from './components/Home'
 import Cart from './components/Cart'
 import Promo from './components/Promo'
+import Checkout from './components/Checkout'
 import './App.css';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path="/products" component={Products}></Route>
           <Route path="/cart" component={Cart}></Route>
           <Route path="/promos" component={Promo}></Route>
+          <Route path="/checkout" component={Checkout}></Route>
         </Switch>
       </BrowserRouter>
     </div>

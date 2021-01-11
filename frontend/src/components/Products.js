@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from "react-router-dom";
 import { Form, Input, Button, Upload } from "antd";
 import axios from 'axios'
 import ImgCrop from 'antd-img-crop';
+import Header from './Header'
 
 const layout = {
   labelCol: { span: 8 },
@@ -15,9 +15,6 @@ const tailLayout = {
 
 const Products = () => {
     
-        const [data, setData] = useState("");
-        const [path, setPath] = useState("");
-        const [change, setChange] = useState(0);
         const [products, setProducts] = useState({});
         // const products = useSelector(state => state.product);
         const [form] = Form.useForm();
@@ -58,16 +55,7 @@ const Products = () => {
           
         return(
             <div>
-                { change ? <Redirect to={{ pathname: path, data: data }} /> : null }
-
-                <article>this is Products</article>
-                <button onClick={() => {
-                    setData("Home")
-                    setPath("/")
-                    setChange(1)
-                }}>
-                    Home
-                </button>
+                <Header name="Product"></Header>
                 <div>
                 </div>
                 <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
