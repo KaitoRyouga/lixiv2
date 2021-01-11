@@ -16,6 +16,18 @@ const CartReducer = (state = initState, action) => {
             return NewCart
         case 'RESET_CART':
             return [];
+        case 'EDIT_CART':
+            let editCart = state.findIndex(c => c.id === action.id)
+            state[editCart].quantity = state[editCart].quantity + action.count
+            if (state[editCart].quantity <= 0) {
+                let fixCart = state.filter(c => c.id !== action.id)
+                return fixCart
+            }
+
+            return state
+        case 'DELETE_CART':
+            const newCart = state.filter(s => s.id !== action.id)
+            return newCart
         default:
             return state;
     }

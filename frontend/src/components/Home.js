@@ -7,9 +7,23 @@ import AddCart from '../actions/Cart/AddCart'
 import { useDispatch } from 'react-redux'
 // import { useDispatch, useSelector } from 'react-redux'
 
+const MessengeQuantity = (props) => {
+
+    return (
+        <Alert
+            message="Warning"
+            description={`Quantity of ${props.error.name} max is ${props.error.quantity}`}
+            type="warning"
+            showIcon
+            closable
+        />
+    )
+}
+
 function ViewProduct (params) {
     const [count, setCount] = useState(0);
     const [showMessenge, setShowMessenge] = useState(false);
+    const [showMessengeCount, setShowMessengeCount] = useState(false);
     const dispatch = useDispatch();
 
     const messageWarning = (<Alert
@@ -25,16 +39,39 @@ function ViewProduct (params) {
     }
 
     function onIncrement() {
-        setCount(count + 1)
+        if (params.product.quantity < count + 1) {
+            setShowMessengeCount(true)
+        } else {
+            setCount(count + 1)
+            setShowMessengeCount(false)
+            const cartTemp = [
+                {   
+                    id: params.product._id,
+                    name: params.product.name,
+                    quantity: count + 1
+                }
+            ];
+            addCart(cartTemp)
+        }
         setShowMessenge(false)
     }
 
     function onDecrement() {
         if (count !== 0 ) {
             setCount(count - 1)
+            setShowMessenge(false)
+            const cartTemp = [
+                {   
+                    id: params.product._id,
+                    name: params.product.name,
+                    quantity: count - 1
+                }
+            ];
+            addCart(cartTemp)
         }else{
             setShowMessenge(true)
         }
+        setShowMessengeCount(false)
     }
 
 
@@ -50,13 +87,6 @@ function ViewProduct (params) {
                         <Col span={8}>
                             <Button onClick={() => {
                                 onDecrement()
-                                const cartTemp = [
-                                    {
-                                        name: params.product.name,
-                                        quantity: count - 1
-                                    }
-                                ];
-                                addCart(cartTemp)
                             }}>
                                 <LeftOutlined />
                             </Button> 
@@ -67,13 +97,6 @@ function ViewProduct (params) {
                         <Col span={8}>
                         <Button onClick={() => {
                                 onIncrement()
-                                const cartTemp = [
-                                    {
-                                        name: params.product.name,
-                                        quantity: count + 1
-                                    }
-                                ];
-                                addCart(cartTemp)
                             }}>
                                 <RightOutlined />
                             </Button> 
@@ -83,6 +106,9 @@ function ViewProduct (params) {
             </Card>
             {
                 showMessenge && messageWarning
+            }
+            {
+                showMessengeCount && <MessengeQuantity error={params.product}></MessengeQuantity>
             }
         </Col>
     )

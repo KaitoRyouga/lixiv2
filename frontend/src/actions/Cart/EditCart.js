@@ -1,7 +1,8 @@
-const EditCart = (id) => {
+const EditCart = (id, count) => {
     return{
-        type: 'EDIT_Cart',
-        id
+        type: 'EDIT_CART',
+        id,
+        count
     }
 }
 

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from "react-router-dom";
 import { useSelector } from 'react-redux'
-import { Form, Input, Button, Image, Alert} from "antd";
+import { Form, Input, Button, Image, Alert, Row, Col} from "antd";
 import ResetCart from '../actions/Cart/ResetCart'
 import { useDispatch } from 'react-redux'
+import { LeftOutlined, RightOutlined} from '@ant-design/icons'
+import EditCart from '../actions/Cart/EditCart'
+import DeleteCart from '../actions/Cart/DeleteCart'
 
 const layout = {
     labelCol: { span: 8 },
@@ -16,8 +19,37 @@ const tailLayout = {
 
 const ViewCart = (props) => {
 
+    const dispatch = useDispatch();
+    const [count, setCount] = useState(0);
+    const [showMessengeCount, setShowMessengeCount] = useState(false);
     const pricePresent = props.products.filter(p => p.name === props.cart.name)
-    const checkErrorCount = props.errorquantity.filter(e => e.namequantity === props.cart.name)
+
+    const onDecrement = (id) => {
+        dispatch(EditCart(id, -1))
+        if (count - 1 !== 0) {
+            props.updateTotal(-pricePresent[0].price)
+        }
+        setCount(count - 1)
+        setShowMessengeCount(false)
+    }
+
+    const onIncrement = (id) => {
+        if (count + 1 > pricePresent[0].quantity) {
+            setShowMessengeCount(true)
+        } else {
+            dispatch(EditCart(id, 1))
+            props.updateTotal(pricePresent[0].price)
+            setCount(count + 1)
+        }
+    }
+
+    const onDelete = (id) => {
+        dispatch(DeleteCart(id))
+    }
+
+    useEffect(() => {
+        setCount(props.cart.quantity)
+    }, [props])
 
     return (
         <div>
@@ -25,15 +57,32 @@ const ViewCart = (props) => {
                 <li>
                     <Image src={pricePresent[0].image} alt="image"></Image>
                 </li>
+                <Button onClick={() => onDelete(props.cart.id)}>Delete</Button>
                 <li>Name: {props.cart.name}</li>
-                <li>quantity: {checkErrorCount.length > 0 ? checkErrorCount[0].quantity : props.cart.quantity}</li>
+                <Row>
+                        <Col span={8}>
+                            <Button onClick={() => {
+                                onDecrement(props.cart.id)
+                            }}>
+                                <LeftOutlined />
+                            </Button> 
+                        </Col>
+                        <Col span={8}>
+                            <p>quantity: {count}</p>
+                        </Col>
+                        <Col span={8}>
+                        <Button onClick={() => {
+                                onIncrement(props.cart.id)
+                            }}>
+                                <RightOutlined />
+                            </Button> 
+                        </Col>
+                    </Row>
                 <li>price: {pricePresent[0].price}</li>
-                <li>total: {checkErrorCount.length > 0 ? pricePresent[0].price*checkErrorCount[0].quantity : pricePresent[0].price*props.cart.quantity}</li>
+                <li>total: {pricePresent[0].price*props.cart.quantity}</li>
             </ul>
             {
-                checkErrorCount.map(c => {
-                    return <MessengeQuantity errorcount={c}></MessengeQuantity>
-                })
+                showMessengeCount && <MessengeQuantity error={pricePresent[0]}></MessengeQuantity>
             }
         </div>
     )
@@ -44,7 +93,7 @@ const MessengeQuantity = (props) => {
     return (
         <Alert
             message="Warning"
-            description={`Quantity of ${props.errorcount.namequantity} max is ${props.errorcount.quantity}`}
+            description={`Quantity of ${props.error.name} max is ${props.error.quantity}`}
             type="warning"
             showIcon
             closable
@@ -63,7 +112,6 @@ const Cart = () => {
     const stateRoot = useSelector(state => state);
     const [showMessengeWarning, setShowMessengeWarning] = useState(false);
     const [showMessengeSuccess, setShowMessengeSuccess] = useState(false);
-    const [errorQuantity, setErrorQuantity] = useState([]);
 
     const messageWarning = (<Alert
         message="Warning"
@@ -83,7 +131,6 @@ const Cart = () => {
 
     const onFinish = values => {
         const checkPromo = stateRoot.promos.filter(p => p.code === values.Code)
-        console.log(checkPromo[0])
         if (checkPromo.length === 0) {
             setShowMessengeWarning(true)
             setShowMessengeSuccess(false)
@@ -109,28 +156,27 @@ const Cart = () => {
         setTotal(0)
     }
 
+    const updateTotal = (newTotal) => {
+        setTotal(total + newTotal)
+    }
+
     useEffect(() => {
+        let sumSub = 0;
         const subtotal = stateRoot.carts.map(c => {
             const prod = stateRoot.products.filter(pro => pro.name === c.name);
             let sub;
-            let error = {
-                namequantity: "",
-                quantity: 0
-            }
             if (prod[0].quantity < c.quantity) {
                 sub = prod[0].quantity*prod[0].price;
-                error.namequantity = c.name;
-                error.quantity = prod[0].quantity;
-                errorQuantity.push(error)
-                setErrorQuantity(errorQuantity)
             } else {
                 sub = c.quantity*prod[0].price;
             }
             
-            return setTotal(prevState => (prevState + sub))
+            sumSub += sub
+            return sumSub
         })
+        setTotal(sumSub)
         return subtotal
-    }, [stateRoot, errorQuantity])
+    }, [stateRoot])
 
     return (
         <div>
@@ -148,7 +194,7 @@ const Cart = () => {
 
             { stateRoot.carts === undefined ||
                 stateRoot.carts.map(c => {
-                    return <ViewCart key={c.name} cart={c} products={stateRoot.products} carts={stateRoot.carts} errorquantity={errorQuantity}></ViewCart>
+                    return <ViewCart key={c.name} cart={c} products={stateRoot.products} carts={stateRoot.carts} updateTotal={updateTotal}></ViewCart>
                 })
             }
             <p>Subtotal: {total}</p>
