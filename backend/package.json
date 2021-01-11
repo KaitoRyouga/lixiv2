@@ -4,10 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./api/server.js",
-    "test": "jest --coverage --detectOpenHandles --forceExit",
-    "dev": "nodemon ./api/server.js",
-    "lint": "eslint \"./**/*.js\" --fix",
-    "format": "prettier --write \"./**/*.js\""
+    "dev": "nodemon ./api/server.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
@@ -18,34 +15,6 @@
     "mongoose": "^5.9.28"
   },
   "devDependencies": {
-    "eslint": "^7.9.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "husky": "^4.3.0",
-    "jest": "^26.2.2",
-    "lint-staged": "^10.4.0",
-    "nodemon": "^2.0.4",
-    "prettier": "^2.1.2",
-    "supertest": "^4.0.2"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "__tests__/*"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": [
-      "npm run lint",
-      "npm run format",
-      "git add ."
-    ]
+    "nodemon": "^2.0.4"
   }
 }

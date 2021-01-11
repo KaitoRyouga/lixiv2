@@ -1,7 +1,7 @@
 FROM node:10 AS builder
 WORKDIR /app
 COPY . .
-RUN yarn install && yarn build
+RUN npm install && npm run build
 
 ############################
 FROM nginx:alpine
