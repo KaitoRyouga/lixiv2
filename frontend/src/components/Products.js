@@ -1,8 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Upload } from "antd";
+import { Form, Input, Button, Upload, Card, Row, Col, Image } from "antd";
+import { useSelector } from 'react-redux'
 import axios from 'axios'
 import ImgCrop from 'antd-img-crop';
 import Header from './Header'
+
+const ViewProduct = (props) => {
+
+    const [form] = Form.useForm();
+
+    const onReset = () => {
+        form.resetFields();
+    };
+
+    const onFinish = (values) => {
+        console.log(values)
+    }
+    
+
+    useEffect(() => {
+        form.setFieldsValue({
+            name: props.product.name,
+            quantity: props.product.quantity,
+            price: props.product.price,
+        })
+    }, [props]);
+
+    return(
+        <Col span={8}>
+            <Card size="small" title={props.product.name} style={{ width: 300 }} cover={<Image
+                width={200}
+                src={props.product.image}
+            />}>
+                <Form onFinish={onFinish} form={form}>
+                    <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+                        <Input type="text"/>
+                    </Form.Item>
+                    <Form.Item name="quantity" label="Quantity" rules={[{ required: true }]}>
+                        <Input type="number"/>
+                    </Form.Item>
+                    <Form.Item name="price" label="Price" rules={[{ required: true }]}>
+                        <Input type="number"/>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                        Submit
+                        </Button>
+                        <Button htmlType="button" onClick={onReset}>
+                        Reset
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
+        </Col>
+    )
+}
+
 
 const layout = {
   labelCol: { span: 8 },
@@ -15,10 +68,9 @@ const tailLayout = {
 
 const Products = () => {
     
-        const [products, setProducts] = useState({});
-        // const products = useSelector(state => state.product);
+        // const [products, setProducts] = useState({});
+        const productsRaw = useSelector(state => state.products);
         const [form] = Form.useForm();
-        // const { register, handleSubmit } = useForm() 
 
         const onFinish = values => {
             const newProduct = [
@@ -29,8 +81,8 @@ const Products = () => {
                     image: fileList[0].thumbUrl
                 }
             ]
-
-            setProducts(newProduct[0])
+            axios.post('http://localhost:3000/products', newProduct[0]).then(res => console.log(res)).catch(err => console.log(err))
+            form.resetFields();
         };
         
         const onReset = () => {
@@ -44,20 +96,25 @@ const Products = () => {
             setFileList(await newFileList);              
         };
 
-        useEffect(() => {
-            async function fetchData() {
-                await axios.post(
-                    'http://localhost:3000/products', products
-                ).then(res => console.log(res)).catch(err => console.log(err))
-            }
-            fetchData();
-        }, [products]);
+        // useEffect(() => {
+        //     async function fetchData() {
+        //         await axios.post(
+        //             'http://localhost:3000/products', products
+        //         ).then(res => console.log(res)).catch(err => console.log(err))
+        //     }
+        //     fetchData();
+        // }, [products]);
           
         return(
             <div>
                 <Header name="Product"></Header>
-                <div>
-                </div>
+                <Row>
+                    {
+                        productsRaw.map(r => {
+                            return <ViewProduct key={r._id} product={r}></ViewProduct>
+                        })
+                    }
+                </Row>
                 <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
                     <Form.Item name="Name" label="Name" rules={[{ required: true }]}>
                         <Input />
