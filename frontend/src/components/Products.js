@@ -1,10 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from "react-router-dom";
-import { useDispatch } from 'react-redux'
-import AddProduct from '../actions/Product/AddProduct'
-import { Image, Card, Form, Input, Button, Upload } from "antd";
+import { Form, Input, Button, Upload, Card, Row, Col, Image } from "antd";
+import { useSelector } from 'react-redux'
 import axios from 'axios'
 import ImgCrop from 'antd-img-crop';
+import Header from './Header'
+
+const ViewProduct = (props) => {
+
+    const [form] = Form.useForm();
+
+    const onReset = () => {
+        form.resetFields();
+    };
+
+    const onFinish = (values) => {
+        console.log(values)
+    }
+    
+
+    useEffect(() => {
+        form.setFieldsValue({
+            name: props.product.name,
+            quantity: props.product.quantity,
+            price: props.product.price,
+        })
+    }, [props]);
+
+    return(
+        <Col span={8}>
+            <Card size="small" title={props.product.name} style={{ width: 300 }} cover={<Image
+                width={200}
+                src={props.product.image}
+            />}>
+                <Form onFinish={onFinish} form={form}>
+                    <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+                        <Input type="text"/>
+                    </Form.Item>
+                    <Form.Item name="quantity" label="Quantity" rules={[{ required: true }]}>
+                        <Input type="number"/>
+                    </Form.Item>
+                    <Form.Item name="price" label="Price" rules={[{ required: true }]}>
+                        <Input type="number"/>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                        Submit
+                        </Button>
+                        <Button htmlType="button" onClick={onReset}>
+                        Reset
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
+        </Col>
+    )
+}
+
 
 const layout = {
   labelCol: { span: 8 },
@@ -15,34 +66,11 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
-const ViewProduct = (params) => {
-    return(
-        <div>            
-            <Card size="small" title={params.product.name} style={{ width: 300 }} cover={<Image
-                width={200}
-                src={params.product.image}
-            />}>
-                <p>{params.product.price}$</p>
-            </Card>
-        </div>
-    )
-}
-
-
 const Products = () => {
     
-        const [data, setData] = useState("");
-        const [path, setPath] = useState("");
-        const [change, setChange] = useState(0);
-        const [products, setProducts] = useState([]);
-        // const products = useSelector(state => state.product);
-        const dispatch = useDispatch();
+        // const [products, setProducts] = useState({});
+        const productsRaw = useSelector(state => state.products);
         const [form] = Form.useForm();
-        // const { register, handleSubmit } = useForm() 
-
-        const addProduct = (info) => {
-            dispatch(AddProduct(info))
-        }
 
         const onFinish = values => {
             const newProduct = [
@@ -53,11 +81,12 @@ const Products = () => {
                     image: fileList[0].thumbUrl
                 }
             ]
-            addProduct(newProduct)
+            axios.post('http://localhost:3000/products', newProduct[0]).then(res => console.log(res)).catch(err => console.log(err))
+            form.resetFields();
         };
         
         const onReset = () => {
-        form.resetFields();
+            form.resetFields();
         };
 
         const [fileList, setFileList] = useState([
@@ -67,37 +96,25 @@ const Products = () => {
             setFileList(await newFileList);              
         };
 
-        useEffect(() => {
-            async function fetchData() {
-                const result = await axios.get(
-                    'http://localhost:3000/products',
-                );
-                setProducts(result.data.Products);
-            }
-            fetchData();
-            
-        }, []);
+        // useEffect(() => {
+        //     async function fetchData() {
+        //         await axios.post(
+        //             'http://localhost:3000/products', products
+        //         ).then(res => console.log(res)).catch(err => console.log(err))
+        //     }
+        //     fetchData();
+        // }, [products]);
           
         return(
             <div>
-                { change ? <Redirect to={{ pathname: path, data: data }} /> : null }
-
-                <article>this is Products</article>
-                <button onClick={() => {
-                    setData("Home")
-                    setPath("/")
-                    setChange(1)
-                }}>
-                    Home
-                </button>
-                <div>
-                {
-                    
-                    products.map((product, id) => {
-                        return <ViewProduct key={id} product={product}></ViewProduct>
-                    })
-                }
-                </div>
+                <Header name="Product"></Header>
+                <Row>
+                    {
+                        productsRaw.map(r => {
+                            return <ViewProduct key={r._id} product={r}></ViewProduct>
+                        })
+                    }
+                </Row>
                 <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
                     <Form.Item name="Name" label="Name" rules={[{ required: true }]}>
                         <Input />

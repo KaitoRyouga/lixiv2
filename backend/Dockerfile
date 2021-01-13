@@ -11,8 +11,8 @@ RUN npm install --silent
 COPY . .
 
 # ----- If UID:GID is 1000:1000
-RUN chown -R node:node /app
-USER node
+# RUN chown -R node:node /app
+# USER node
 
 # ----- Else
 # First find your host UID:GID using "whoami", Eg: your host user is "1111:2222"
@@ -22,4 +22,4 @@ USER node
 # USER appuser
 # ---------------------------------------
 
-CMD ["pm2-runtime", "ecosystem.config.js"]
+CMD ["npm", "start"]

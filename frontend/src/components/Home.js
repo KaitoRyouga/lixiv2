@@ -1,26 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from "react-router-dom";
-import { Image, Card, Row, Col, Button } from "antd";
+import { Image, Card, Row, Col, Button, Alert } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
 import { useDispatch } from 'react-redux'
-// import { useDispatch, useSelector } from 'react-redux'
+import Header from './Header'
+
+const MessengeQuantity = (props) => {
+
+    return (
+        <Alert
+            message="Warning"
+            description={`Quantity of ${props.error.name} max is ${props.error.quantity}`}
+            type="warning"
+            showIcon
+            closable
+        />
+    )
+}
 
 function ViewProduct (params) {
     const [count, setCount] = useState(0);
+    const [showMessenge, setShowMessenge] = useState(false);
+    const [showMessengeCount, setShowMessengeCount] = useState(false);
     const dispatch = useDispatch();
+
+    const messageWarning = (<Alert
+        message="Warning"
+        description="Quantity should not be less than 0"
+        type="warning"
+        showIcon
+        closable
+    />)
 
     const addCart = (info) => {
         dispatch(AddCart(info))
     }
 
     function onIncrement() {
-        setCount(count + 1)
+        if (params.product.quantity < count + 1) {
+            setShowMessengeCount(true)
+        } else {
+            setCount(count + 1)
+            setShowMessengeCount(false)
+            const cartTemp = [
+                {   
+                    id: params.product._id,
+                    name: params.product.name,
+                    quantity: count + 1
+                }
+            ];
+            addCart(cartTemp)
+        }
+        setShowMessenge(false)
     }
 
     function onDecrement() {
-        setCount(count - 1)
+        if (count !== 0 ) {
+            setCount(count - 1)
+            setShowMessenge(false)
+            const cartTemp = [
+                {   
+                    id: params.product._id,
+                    name: params.product.name,
+                    quantity: count - 1
+                }
+            ];
+            addCart(cartTemp)
+        }else{
+            setShowMessenge(true)
+        }
+        setShowMessengeCount(false)
     }
 
 
@@ -36,13 +86,6 @@ function ViewProduct (params) {
                         <Col span={8}>
                             <Button onClick={() => {
                                 onDecrement()
-                                const cartTemp = [
-                                    {
-                                        name: params.product.name,
-                                        quantity: count - 1
-                                    }
-                                ];
-                                addCart(cartTemp)
                             }}>
                                 <LeftOutlined />
                             </Button> 
@@ -53,13 +96,6 @@ function ViewProduct (params) {
                         <Col span={8}>
                         <Button onClick={() => {
                                 onIncrement()
-                                const cartTemp = [
-                                    {
-                                        name: params.product.name,
-                                        quantity: count + 1
-                                    }
-                                ];
-                                addCart(cartTemp)
                             }}>
                                 <RightOutlined />
                             </Button> 
@@ -67,51 +103,33 @@ function ViewProduct (params) {
                     </Row>
                 </div>
             </Card>
+            {
+                showMessenge && messageWarning
+            }
+            {
+                showMessengeCount && <MessengeQuantity error={params.product}></MessengeQuantity>
+            }
         </Col>
     )
 }
 
 const Home = () => {
 
-        const [data, setData] = useState("");
-        const [path, setPath] = useState("");
-        const [change, setChange] = useState(0);
         const [products, setProducts] = useState([]);
 
-        useEffect(async () => {
-            const result = await axios.get(
-              'http://localhost:3000/products',
-            );
-         
-            setProducts(result.data.Products);
+        useEffect(() => {
+            async function fetchData() {
+                const result = await axios.get(
+                    'http://localhost:3000/products',
+                );
+                setProducts(result.data.Products);
+            }
+              fetchData();
         }, []);
     
         return(
             <div>
-
-                { change ? <Redirect to={{ pathname: path, data: data }} /> : null }
-
-                <article>this is Home</article>
-                {/* <Image src={process.env.PUBLIC_URL + '/images/ao1.jpg'}></Image> */}
-                <Card size="small" title="ao" style={{ width: 300 }} cover={<Image
-                    width={200}
-                    src={process.env.PUBLIC_URL + '/images/ao1.jpg'}
-                />}>
-                </Card>
-                <button onClick={() => {
-                    setData("products")
-                    setPath("products")
-                    setChange(1)
-                }}>
-                    Products
-                </button>
-                <button onClick={() => {
-                    setData("cart")
-                    setPath("cart")
-                    setChange(1)
-                }}>
-                    Cart
-                </button>
+                <Header name="Home"></Header>
                 <Row>
                 {
                     

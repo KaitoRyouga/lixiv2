@@ -42,9 +42,28 @@ class ProductController {
     }
   }
 
-  static async get_home (req, res) {
-    return res.json("kaito")
+  static async productById (req, res, next, productId) {
+    try {
+      const product = await Product.findById(productId)
+
+      return res.json({ Product: product })
+    } catch (error) {
+      console.log(error)
+      console.log('error')
+    }
   }
+
+  static async edit (req, res, next) {
+    try {
+      const products = await Product.find({})
+
+      return res.json({ Products: products })
+    } catch (error) {
+      console.log(error)
+      console.log('error')
+    }
+  }
+
 }
 
 module.exports = ProductController

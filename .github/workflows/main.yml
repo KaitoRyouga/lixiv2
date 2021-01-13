@@ -1,0 +1,31 @@
+name: Docker-lixiv2
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+env:
+  IMAGE_NAME: image
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Build image
+        run: docker-compose -p lixiv2 build
+
+      - name: Push image
+        run: |
+          VERSION=latest
+          docker tag lixiv2_frontend docker.pkg.github.com/kaitoryouga/lixiv2/lixiv2_frontend:$VERSION
+          docker push docker.pkg.github.com/kaitoryouga/lixiv2/lixiv2_frontend:$VERSION
+
+          docker tag lixiv2_backend docker.pkg.github.com/kaitoryouga/lixiv2/lixiv2_backend:$VERSION
+          docker push docker.pkg.github.com/kaitoryouga/lixiv2/lixiv2_backend:$VERSION

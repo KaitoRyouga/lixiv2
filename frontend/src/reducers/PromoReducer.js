@@ -2,12 +2,12 @@ const initState = []
 
 const ProductReducer = (state = initState, action) => {
     switch (action.type) {
-        case 'ALL_PRODUCT':
+        case 'ALL_PROMO':
             const data = action.info
             return data
-        case 'ADD_PRODUCT':
-            const newProduct = [].concat(state, action.info)
-            return newProduct
+        case 'ADD_PROMO':
+            const newPromo = [].concat(state, action.info)
+            return newPromo
         default:
             return state;
     }
