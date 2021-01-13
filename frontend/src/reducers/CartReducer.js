@@ -9,7 +9,7 @@ const CartReducer = (state = initState, action) => {
             let NewCart
 
             if (data[0].quantity === 0) {
-                NewCart = state
+                NewCart = newData
             }else{
                 NewCart = [].concat(newData, data)   
             }

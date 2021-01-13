@@ -158,8 +158,6 @@ const Cart = () => {
     }
 
     const onCheckout = () => {
-        // console.log("check out")
-        // history.push('/checkout')
         setChange(1)
     }
 
