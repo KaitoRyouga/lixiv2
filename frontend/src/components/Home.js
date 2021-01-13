@@ -128,19 +128,138 @@ const Home = () => {
         }, []);
     
         return(
-            <div>
-                <Header name="Home"></Header>
-                <Row>
-                {
-                    
-                    products.map((product, id) => {
-                        return (
-                            <ViewProduct key={id} product={product}></ViewProduct> 
-                        )
-                    })
-                }
-                </Row>
-            </div>
+<div className="container">
+  <div className="row">
+    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-6  ">
+      <div className="section_content-home">
+        <div className="box_content">
+        </div>
+        <div className="overlay">
+          <div className="icon">
+            <i className="far fa-heart" />
+          </div>
+          <div className="botton">
+            <a href className="view">
+              <div className="view-text">Quick view</div>
+              <div className="view-icon">
+                <i className="fas fa-eye" />
+              </div>
+            </a>
+            <a href className="view">
+              <div className="view-text">Quick shop</div>
+              <div className="view-icon">
+                <i className="fas fa-cart-plus" />
+              </div>
+            </a>
+          </div>
+          <div className="size">
+            XS, S, M, L, XL
+          </div>
+        </div>
+      </div>
+      <div className="price">
+        <h3 className="headding">City Backpack Black</h3>
+        <span className="price-content">$72.00</span>
+      </div>
+    </div>
+    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-6  ">
+      <div className="section_content-home">
+        <div className="box_content">
+        </div>
+        <div className="overlay">
+          <div className="icon">
+            <i className="far fa-heart" />
+          </div>
+          <div className="botton">
+            <a href className="view">
+              <div className="view-text">Quick view</div>
+              <div className="view-icon">
+                <i className="fas fa-eye" />
+              </div>
+            </a>
+            <a href className="view">
+              <div className="view-text">Quick shop</div>
+              <div className="view-icon">
+                <i className="fas fa-cart-plus" />
+              </div>
+            </a>
+          </div>
+          <div className="size">
+            XS, S, M, L, XL
+          </div>
+        </div>
+      </div>
+      <div className="price">
+        <h3 className="headding">City Backpack Black</h3>
+        <span className="price-content">$72.00</span>
+      </div>
+    </div>
+    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-6  ">
+      <div className="section_content-home">
+        <div className="box_content">
+        </div>
+        <div className="overlay">
+          <div className="icon">
+            <i className="far fa-heart" />
+          </div>
+          <div className="botton">
+            <a href className="view">
+              <div className="view-text">Quick view</div>
+              <div className="view-icon">
+                <i className="fas fa-eye" />
+              </div>
+            </a>
+            <a href className="view">
+              <div className="view-text">Quick shop</div>
+              <div className="view-icon">
+                <i className="fas fa-cart-plus" />
+              </div>
+            </a>
+          </div>
+          <div className="size">
+            XS, S, M, L, XL
+          </div>
+        </div>
+      </div>
+      <div className="price">
+        <h3 className="headding">City Backpack Black</h3>
+        <span className="price-content">$72.00</span>
+      </div>
+    </div>
+    <div className="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+      <div className="section_content-home">
+        <div className="box_content">
+        </div>
+        <div className="overlay">
+          <div className="icon">
+            <i className="far fa-heart" />
+          </div>
+          <div className="botton">
+            <a href className="view">
+              <div className="view-text">Quick view</div>
+              <div className="view-icon">
+                <i className="fas fa-eye" />
+              </div>
+            </a>
+            <a href className="view">
+              <div className="view-text">Quick shop</div>
+              <div className="view-icon">
+                <i className="fas fa-cart-plus" />
+              </div>
+            </a>
+          </div>
+          <div className="size">
+            XS, S, M, L, XL
+          </div>
+        </div>
+      </div>
+      <div className="price">
+        <h3 className="headding">City Backpack Black</h3>
+        <span className="price-content">$72.00</span>
+      </div>
+    </div>
+  </div>
+</div>
         )
 }
 
