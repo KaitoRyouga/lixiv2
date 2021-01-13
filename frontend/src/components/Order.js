@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux'
 
 const ViewOrder = (props) => {
 
-    console.log(props.order)
-
     return(
         <>
             <ul>

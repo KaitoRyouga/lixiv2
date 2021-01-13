@@ -95,15 +95,6 @@ const Products = () => {
         const onChange = async ({ fileList: newFileList }) => {
             setFileList(await newFileList);              
         };
-
-        // useEffect(() => {
-        //     async function fetchData() {
-        //         await axios.post(
-        //             'http://localhost:3000/products', products
-        //         ).then(res => console.log(res)).catch(err => console.log(err))
-        //     }
-        //     fetchData();
-        // }, [products]);
           
         return(
             <div>
