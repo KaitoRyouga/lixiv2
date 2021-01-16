@@ -48,7 +48,7 @@ function App() {
           <Route path="/cart" component={Cart}></Route>
           <Route path="/promos" component={Promo}></Route>
           <Route path="/checkout" component={Checkout}></Route>
-          <Route path="/order" component={Order}></Route>
+          <Route path="/orders" component={Order}></Route>
         </Switch>
       </BrowserRouter>
     </div>
