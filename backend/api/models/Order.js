@@ -23,7 +23,12 @@ const OrderSchema = new Schema({
   subtotal: {
     type: Number,
     required: true
-  }
+  },
+  status: {
+    type: String,
+    required: true,
+    trim: true
+  },
 }, { timestamps: true })
 
 OrderSchema.statics.protectedFields = [

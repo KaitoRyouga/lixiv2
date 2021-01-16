@@ -7,13 +7,32 @@ module.exports = function(app) {
 
     // Users Routes
 
+    app.param(['promoId'], function(req, res, next) {
+        req.promoId = req.params.promoId;
+        next()
+    });
+
+    app.param(['productId'], function(req, res, next) {
+        req.productId = req.params.productId;
+        next()
+    });
+
+    app.param(['orderId'], function(req, res, next) {
+        req.orderId = req.params.orderId;
+        next()
+    });
+    
+
+    app.route('/')
+        .get(Product.welcome)
+
     app.route('/products')
         .get(Product.index)
         .post(Product.store)
 
     app.route('/product/:productId')
-        .get(Product.productById)
-        .post(Product.edit)
+        .put(Product.editById)
+        .delete(Product.deleteById)
 
     app.route('/cart')
         .get(Cart.index)
@@ -23,9 +42,14 @@ module.exports = function(app) {
         .get(Promo.index)
         .post(Promo.store)
 
-    app.route('/order')
+    app.route('/promo/:promoId')
+        .put(Promo.editById)
+        .delete(Promo.deleteById)
+
+    app.route('/orders')
         .get(Order.index)
         .post(Order.store)
 
-    app.param('productId', Product.productById)
+    app.route('/order/:orderId')
+        .put(Order.editById)
 };

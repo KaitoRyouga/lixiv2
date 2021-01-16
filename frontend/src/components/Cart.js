@@ -22,7 +22,7 @@ const ViewCart = (props) => {
     const dispatch = useDispatch();
     const [count, setCount] = useState(0);
     const [showMessengeCount, setShowMessengeCount] = useState(false);
-    const pricePresent = props.products.filter(p => p.name === props.cart.name)
+    const pricePresent = props.products.filter(p => p._id === props.cart.id)
 
     const onDecrement = (id) => {
         dispatch(EditCart(id, -1))
@@ -55,7 +55,7 @@ const ViewCart = (props) => {
         <div>
             <ul>
                 <li>
-                    <Image src={pricePresent[0].image} alt="image"></Image>
+                    <Image src={process.env.PUBLIC_URL + pricePresent[0].image} alt="image"></Image>
                 </li>
                 <Button onClick={() => onDelete(props.cart.id)}>Delete</Button>
                 <li>Name: {props.cart.name}</li>

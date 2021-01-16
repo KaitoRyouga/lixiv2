@@ -37,7 +37,7 @@ class PromoController {
 
       await promo.save()
 
-      return res.redirect('/')
+      return res.json({ Promo: promo })
     } catch (error) {
       console.log(error)
       console.log('ERROR')
@@ -49,6 +49,28 @@ class PromoController {
       const promos = await Promo.find({})
 
       return res.json({ Promos: promos })
+    } catch (error) {
+      console.log(error)
+      console.log('error')
+    }
+  }
+
+  static async editById (req, res, next) {
+
+    try {
+      await Promo.updateOne({_id: req.params.promoId}, req.body)
+      return res.json({ Promo: req.body })
+    } catch (error) {
+      console.log(error)
+      console.log('error')
+    }
+  }
+
+  static async deleteById (req, res, next) {
+    try {
+      await Promo.deleteOne({_id: req.params.promoId})
+
+      return res.json({ messenge: req.params.promoId}) 
     } catch (error) {
       console.log(error)
       console.log('error')
