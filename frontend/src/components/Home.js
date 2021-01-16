@@ -157,7 +157,7 @@ function ViewProduct (params) {
                 showMessenge && messageWarning
             }
             {
-                showMessengeCount && <MessengeQuantity error={params.product}></MessengeQuantity>
+                showMessengeCount && <MessengeQuantity key={params.product.id} error={params.product}></MessengeQuantity>
             }
             <Modal
                 title="Quick view"
