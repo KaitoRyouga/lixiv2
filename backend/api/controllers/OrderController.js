@@ -47,7 +47,7 @@ class OrderController {
 
         await OrderCart.save()
 
-        return res.redirect('/')
+        return res.json({ Order: OrderCart })
     } catch (error) {
       console.log(error)
       console.log('ERROR')
@@ -59,6 +59,16 @@ class OrderController {
       const OrderCart = await Order.find({})
 
       return res.json({ Order: OrderCart })
+    } catch (error) {
+      console.log(error)
+      console.log('error')
+    }
+  }
+
+  static async editById (req, res, next) {
+    try {
+      await Order.updateOne({_id: req.params.orderId}, req.body)
+      return res.json({ Order: req.body })
     } catch (error) {
       console.log(error)
       console.log('error')

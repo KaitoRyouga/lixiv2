@@ -28,7 +28,7 @@ function App() {
         );
 
         const resultOrders = await axios.get(
-          'http://localhost:3000/order',
+          'http://localhost:3000/orders',
         );
 
         dispatch(AllProduct(resultProducts.data.Products));
