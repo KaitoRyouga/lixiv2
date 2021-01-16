@@ -24,6 +24,7 @@ const ViewList = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const [hover, setHover] = useState(false);
 
     const onQuickShop = (values) => {
 
@@ -36,12 +37,26 @@ const ViewList = (props) => {
         dispatch(AddCart(newCart))
         history.push("cart")
     }
+
+    const section_content = {
+        backgroundImage: `url(${process.env.PUBLIC_URL}${props.product.image})`,
+    }
+
+    const hoverBackground = {
+        backgroundImage: `url(${process.env.PUBLIC_URL}'/images/3.jpg')`
+    }
     
 
     return(
-        <div className="col-lg-3 col-md-3 col-sm-6 col-xs-6  ">
-            <div className="section_content-home">
-                <div className="box_content">
+        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className="col-lg-3 col-md-3 col-sm-6 col-xs-6  ">
+            <div className="section_content-home" style={{
+                ...section_content,
+                ...(hover ? hoverBackground : null)
+            }}>
+                <div className="box_content" style={{
+                    ...section_content,
+                    ...(hover ? hoverBackground : null)
+                }}>
                 </div>
                 <div className="overlay">
                     <div className="icon">
