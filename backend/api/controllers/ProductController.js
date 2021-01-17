@@ -24,7 +24,7 @@ class ProductController {
 
       await product.save()
 
-      return res.redirect('/')
+      return res.json({ Product: product })
     } catch (error) {
       console.log(error)
       console.log('ERROR')
@@ -42,22 +42,33 @@ class ProductController {
     }
   }
 
-  static async productById (req, res, next, productId) {
+  static async welcome (req, res, next) {
     try {
-      const product = await Product.findById(productId)
+      // const products = await Product.find({})
 
-      return res.json({ Product: product })
+      return res.json({ messenge: "welcome to lixiv2" })
     } catch (error) {
       console.log(error)
       console.log('error')
     }
   }
 
-  static async edit (req, res, next) {
+  static async editById (req, res, next) {
+    
     try {
-      const products = await Product.find({})
+      await Product.updateOne({_id: req.params.productId}, req.body)
+      return res.json({ Product: req.body })
+    } catch (error) {
+      console.log(error)
+      console.log('error')
+    }
+  }
 
-      return res.json({ Products: products })
+  static async deleteById (req, res, next) {
+    try {
+      await Product.deleteOne({_id: req.params.productId})
+
+      return res.json({ messenge: req.params.productId}) 
     } catch (error) {
       console.log(error)
       console.log('error')

@@ -35,9 +35,14 @@ const Header = (props) => {
                 Promo
             </Button>
             <Button onClick={() => {
-                changePage("/order")
+                changePage("/orders")
             }}>
                 Order
+            </Button>
+            <Button onClick={() => {
+                changePage("/login")
+            }}>
+                Login
             </Button>
         </div>
     )

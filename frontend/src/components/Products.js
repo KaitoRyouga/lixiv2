@@ -1,22 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Upload, Card, Row, Col, Image } from "antd";
-import { useSelector } from 'react-redux'
+import { Form, Input, Button, Card, Row, Col, Image } from "antd";
+import { useSelector , useDispatch} from 'react-redux'
 import axios from 'axios'
-import ImgCrop from 'antd-img-crop';
 import Header from './Header'
+import AddProduct from '../actions/Product/AddProduct'
+import EditProduct from '../actions/Product/EditProduct'
+import DeleteProduct from '../actions/Product/DeleteProduct'
 
 const ViewProduct = (props) => {
 
     const [form] = Form.useForm();
+    const dispatch = useDispatch()
 
     const onReset = () => {
         form.resetFields();
     };
 
     const onFinish = (values) => {
-        console.log(values)
+        const newProduct = [
+            {
+                name: values.name,
+                quantity: values.quantity,
+                price: values.price,
+                image: '/images/ao_1.jpg'
+            }
+        ]
+        
+        axios.put(
+            `http://localhost:3000/product/${props.product._id}`, newProduct[0]
+        ).then(res => dispatch(EditProduct(props.product._id, res))).catch(err => console.log(err))
     }
     
+    const onDelete = (id) => {
+        axios.delete(
+            `http://localhost:3000/product/${id}`
+        ).then(res => dispatch(DeleteProduct(res))).catch(err => console.log(err))
+    }
 
     useEffect(() => {
         form.setFieldsValue({
@@ -49,6 +68,9 @@ const ViewProduct = (props) => {
                         <Button htmlType="button" onClick={onReset}>
                         Reset
                         </Button>
+                        <Button htmlType="button" onClick={() => onDelete(props.product._id)}>
+                        Delete
+                        </Button>
                     </Form.Item>
                 </Form>
             </Card>
@@ -68,8 +90,8 @@ const tailLayout = {
 
 const Products = () => {
     
-        // const [products, setProducts] = useState({});
         const productsRaw = useSelector(state => state.products);
+        const dispatch = useDispatch()
         const [form] = Form.useForm();
 
         const onFinish = values => {
@@ -78,22 +100,15 @@ const Products = () => {
                     name: values.Name,
                     quantity: values.Quantity,
                     price: values.Price,
-                    image: fileList[0].thumbUrl
+                    image: '/images/ao_1.jpg'
                 }
             ]
-            axios.post('http://localhost:3000/products', newProduct[0]).then(res => console.log(res)).catch(err => console.log(err))
+            axios.post('http://localhost:3000/products', newProduct[0]).then(res => dispatch(AddProduct(res))).catch(err => console.log(err))
             form.resetFields();
         };
         
         const onReset = () => {
             form.resetFields();
-        };
-
-        const [fileList, setFileList] = useState([
-        ]);
-        
-        const onChange = async ({ fileList: newFileList }) => {
-            setFileList(await newFileList);              
         };
           
         return(
@@ -116,16 +131,6 @@ const Products = () => {
                     <Form.Item name="Price" label="Price" rules={[{ required: true }]}>
                         <Input type="number" />
                     </Form.Item>
-                    <ImgCrop rotate>
-                        <Upload
-                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                            listType="picture-card"
-                            fileList={fileList}
-                            onChange={onChange}
-                        >
-                            {fileList.length < 1 && '+ Upload'}
-                        </Upload>
-                    </ImgCrop>
                     <Form.Item {...tailLayout}>
                         <Button type="primary" htmlType="submit">
                         Submit

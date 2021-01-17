@@ -11,6 +11,7 @@ import Cart from './components/Cart'
 import Promo from './components/Promo'
 import Checkout from './components/Checkout'
 import Order from './components/Order'
+import Login from './components/Login'
 import './App.css';
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
         );
 
         const resultOrders = await axios.get(
-          'http://localhost:3000/order',
+          'http://localhost:3000/orders',
         );
 
         dispatch(AllProduct(resultProducts.data.Products));
@@ -48,7 +49,8 @@ function App() {
           <Route path="/cart" component={Cart}></Route>
           <Route path="/promos" component={Promo}></Route>
           <Route path="/checkout" component={Checkout}></Route>
-          <Route path="/order" component={Order}></Route>
+          <Route path="/orders" component={Order}></Route>
+          <Route path="/login" component={Login}></Route>
         </Switch>
       </BrowserRouter>
     </div>

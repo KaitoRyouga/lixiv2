@@ -1,9 +1,10 @@
 import React from 'react'
 import { Form, Input, Button } from "antd";
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from "react-router-dom";
 import Header from './Header'
 import axios from 'axios'
+import AddOrder from '../actions/Order/AddOrder'
 
 const layout = {
     labelCol: { span: 8 },
@@ -30,12 +31,14 @@ const Checkout = (props) => {
 
     const [form] = Form.useForm();
     const history = useHistory()
+    const dispatch = useDispatch();
     const stateCart = useSelector(state => state.carts);
 
     const onFinish = values => {
         values.cart = {stateCart}
         values.subtotal = props.location.data
-        axios.post('http://localhost:3000/order', values).then(res => console.log(res)).catch(err => console.log(err))
+        values.status = 'processing'
+        axios.post('http://localhost:3000/orders', values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
         form.resetFields();
         history.push("/")
     };

@@ -6,7 +6,7 @@
      position: relative;
    }
    .section_content-home:hover .box_content {
-     background-image: url("../image/2.webp");
+     /* background-image: url("../image/2.webp"); */
      animation: zoomBg 2s forwards;
    }
    .section_content-home:hover .overlay .icon {
@@ -29,7 +29,7 @@
      right: 0;
      bottom: 0;
      left: 0;
-     background-image: url("../image/1.webp");
+     /* background-image: url("../image/1.webp"); */
      background-size: cover;
      background-position: center;
      transition: all 0.2s ease-in-out;
