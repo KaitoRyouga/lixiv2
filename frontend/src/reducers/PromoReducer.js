@@ -15,6 +15,8 @@ const ProductReducer = (state = initState, action) => {
         case 'DELETE_PROMO':
             const newStateAfterDelete = state.filter(d => d._id !== action.id.data.messenge)
             return newStateAfterDelete
+        case 'EMPTY_PROMO':
+            return []
         default:
             return state;
     }

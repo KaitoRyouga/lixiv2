@@ -4,6 +4,8 @@ module.exports = function(app) {
     const Cart = require('../controllers/CartController');
     const Promo = require('../controllers/PromoController');
     const Order = require('../controllers/OrderController');
+    const User = require('../controllers/UserController');
+    const Check = require('../middleware/middlewares');
 
     // Users Routes
 
@@ -38,11 +40,11 @@ module.exports = function(app) {
         .get(Cart.index)
         .post(Cart.store)
 
-    app.route('/promos')
-        .get(Promo.index)
+    app.route('/promotions')
+        .get(Check.isAuthAdmin, Promo.index)
         .post(Promo.store)
 
-    app.route('/promo/:promoId')
+    app.route('/promotion/:promoId')
         .put(Promo.editById)
         .delete(Promo.deleteById)
 
@@ -52,4 +54,8 @@ module.exports = function(app) {
 
     app.route('/order/:orderId')
         .put(Order.editById)
+
+    app.route('/user')
+        .get(User.index)
+        .post(User.store)
 };

@@ -33,11 +33,13 @@ const Checkout = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
     const stateCart = useSelector(state => state.carts);
+    const stateUser = useSelector(state => state.users);
 
     const onFinish = values => {
         values.cart = {stateCart}
         values.subtotal = props.location.data
         values.status = 'processing'
+        values.author = stateUser[0].uid
         axios.post('http://localhost:3000/orders', values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
         form.resetFields();
         history.push("/")

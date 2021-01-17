@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import AllProduct from './actions/Product/AllProduct'
 import AllPromo from './actions/Promo/AllPromo'
 import AllOrder from './actions/Order/AllOrder'
+import EmptyPromo from './actions/Promo/EmptyPromo'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Products from './components/Products'
 import Home from './components/Home'
@@ -17,6 +18,8 @@ import './App.css';
 function App() {
 
   const dispatch = useDispatch()
+  const stateRaw= useSelector(state => state)
+  const [admin, setAdmin] = useState(true)
 
   useEffect(() => {
     async function fetchData() {
@@ -25,7 +28,11 @@ function App() {
         );
 
         const resultPromos = await axios.get(
-          'http://localhost:3000/promos',
+          'http://localhost:3000/promotions', {
+            headers: {
+              'uid': stateRaw.users[0].uid
+            }
+          }
         );
 
         const resultOrders = await axios.get(
@@ -33,7 +40,21 @@ function App() {
         );
 
         dispatch(AllProduct(resultProducts.data.Products));
-        dispatch(AllPromo(resultPromos.data.Promos));
+        try {
+          if(resultPromos.data === "Not Found"){
+            stateRaw.promos = []
+            localStorage.clear()
+            const serialisedState = JSON.stringify(stateRaw);
+            localStorage.setItem("persistantState", serialisedState);
+            dispatch(EmptyPromo());
+            setAdmin(false)
+          }else{
+            dispatch(AllPromo(resultPromos.data.Promos));
+          }
+        } catch (error) {
+          console.log("error")
+          console.log(error)
+        }
         dispatch(AllOrder(resultOrders.data.Order));
     }
     fetchData();
@@ -47,7 +68,9 @@ function App() {
           <Route exact path="/" component={Home}></Route>
           <Route path="/products" component={Products}></Route>
           <Route path="/cart" component={Cart}></Route>
-          <Route path="/promos" component={Promo}></Route>
+          {
+            admin && <Route path="/promotions" component={Promo}></Route>
+          }
           <Route path="/checkout" component={Checkout}></Route>
           <Route path="/orders" component={Order}></Route>
           <Route path="/login" component={Login}></Route>

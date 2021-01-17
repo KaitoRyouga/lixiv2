@@ -4,10 +4,13 @@ import {
   FirebaseAuthConsumer
 } from "@react-firebase/auth";
 import firebase from "firebase/app";
+import { useDispatch } from 'react-redux'
 import "firebase/auth";
 import { Button, Form, Input } from 'antd'
-
 import { config } from "./test-credentials";
+import AddUser from '../actions/User/AddUser'
+import UserLogOut from '../actions/User/UserLogOut'
+import axios from 'axios'
 
 const layout = {
   labelCol: { span: 8 },
@@ -20,7 +23,9 @@ const tailLayout = {
 
 const Login = () => {
   const [form] = Form.useForm();
+  const dispatch = useDispatch()
   const [confirmCode, setConfirmCode] = useState({});
+  const [count, setCount] = useState(0);
 
   const capcha = () => {
     console.log("check")
@@ -63,7 +68,13 @@ const Login = () => {
         <div>
           <FirebaseAuthConsumer>
             {({ isSignedIn, firebase, user }) => {
-                console.log(user)
+                {/* console.log(user) */}
+                if(user !== null && count === 0){
+                  setCount(count + 1)
+                  console.log("login !!!")
+                  dispatch(AddUser(user))
+                  axios.post('http://localhost:3000/user', user).then(res => console.log(res)).catch(err => console.log(err))
+                }
               if (isSignedIn === true) {
                 return (
                   <div>
@@ -74,6 +85,7 @@ const Login = () => {
                           .app()
                           .auth()
                           .signOut();
+                        dispatch(UserLogOut())
                       }}
                     >
                       Sign out

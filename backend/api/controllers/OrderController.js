@@ -2,6 +2,7 @@ const Order = require('../models/Order')
 
 class OrderController {
   static async store (req, res, next) {
+    // console.log(req)
     try {
         const OrderCartRaw = req.body
 
@@ -20,6 +21,12 @@ class OrderController {
         if (!req.body.address || !req.body.address.trim().length) {
           return res.status(422).json({
             message: 'Address is required!'
+          })
+        }
+
+        if (!req.body.author || !req.body.author.trim().length) {
+          return res.status(422).json({
+            message: 'Author is required!'
           })
         }
 
