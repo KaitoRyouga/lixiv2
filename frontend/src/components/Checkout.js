@@ -53,7 +53,7 @@ const Checkout = (props) => {
 
     return (
         <div>
-            <Header name="Check out"></Header>
+            {/* <Header name="Check out"></Header> */}
             <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
                 <Form.Item name="name" label="Name" rules={[{ required: true }]}>
                     <Input />

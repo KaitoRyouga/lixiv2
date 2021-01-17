@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory} from "react-router-dom";
 import { useSelector } from 'react-redux'
 import { Button} from "antd";
@@ -8,17 +8,6 @@ const Header = (props) => {
 
     const stateUser = useSelector(state => state.users)
     const [admin, setAdmin] = useState(false)
-    const checkAdmin = (res) => {
-        setAdmin(res.data.admin)
-    }
-
-    axios.get(
-        'http://localhost:3000/admin', {
-          headers: {
-            'uid': stateUser[0].uid
-          }
-        }
-    ).then(res => checkAdmin(res)).catch(err => console.log(err))
 
     const history = useHistory()
 
@@ -26,9 +15,22 @@ const Header = (props) => {
         history.push(path)
     }
 
+    useEffect(() => {
+        async function fetchData() {
+            const result = await axios.get(
+                'http://localhost:3000/admin', {
+                  headers: {
+                    'uid': stateUser[0].uid
+                  }
+                }
+            );
+            setAdmin(result.data.admin);
+        }
+          fetchData();
+    }, [stateUser]);
+
     return (
         <div>
-            <article>This is {props.name}</article>
             <Button onClick={() => {
                 changePage("/")
             }}>

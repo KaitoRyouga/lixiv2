@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, Card, Row, Col, Image } from "antd";
 import { useSelector , useDispatch} from 'react-redux'
 import axios from 'axios'
-import Header from './Header'
 import AddProduct from '../actions/Product/AddProduct'
 import EditProduct from '../actions/Product/EditProduct'
 import DeleteProduct from '../actions/Product/DeleteProduct'
@@ -88,8 +87,9 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
+
+
 const Products = () => {
-    
         const productsRaw = useSelector(state => state.products);
         const dispatch = useDispatch()
         const [form] = Form.useForm();
@@ -113,7 +113,6 @@ const Products = () => {
           
         return(
             <div>
-                <Header name="Product"></Header>
                 <Row>
                     {
                         productsRaw.map(r => {

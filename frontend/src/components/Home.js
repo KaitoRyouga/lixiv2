@@ -234,7 +234,7 @@ const Home = () => {
     
         return(
           <div>
-              <Header name="Home"></Header>
+              {/* <Header name="Home"></Header> */}
               <div className="container">
                 <div className="row">
                     {

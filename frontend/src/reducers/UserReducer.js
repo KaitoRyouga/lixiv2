@@ -16,7 +16,7 @@ const UserReducer = (state = initState, action) => {
             const data = action.info
             return data
         case 'ADD_USER':
-            // console.log(action.info.displayName)
+            
             try {
                 const typeLogin = action.info
                 let login = {
@@ -26,7 +26,7 @@ const UserReducer = (state = initState, action) => {
                     uid: typeLogin.uid
                 }
                 const newOrder = [login]
-                // axios.post('http://localhost:3000/user', login).then(res => console.log(res)).catch(err => console.log(err))
+                axios.post('http://localhost:3000/user', login).then(res => console.log(res)).catch(err => console.log(err))
     
                 return newOrder
             } catch (error) {

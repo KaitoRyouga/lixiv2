@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Form, Input, Button } from "antd";
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
-import Header from "./Header"
 import EditPromo from '../actions/Promo/EditPromo'
 import DeletePromo from '../actions/Promo/DeletePromo'
 import AddPromo from '../actions/Promo/AddPromo'
@@ -117,8 +116,6 @@ const Promo = () => {
 
     return (
         <div>
-            <Header name="Promo"></Header>
-
             {
                 statePromos.map(p => {
                     return(
