@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button } from "antd";
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
@@ -105,7 +105,6 @@ const Promo = () => {
             }
         ]
 
-        // setPromo(newPromo[0])
         axios.post(
             'http://localhost:3000/promotions', newPromo[0]
         ).then(res => dispatch(AddPromo(res))).catch(err => console.log(err))
@@ -123,7 +122,7 @@ const Promo = () => {
             {
                 statePromos.map(p => {
                     return(
-                        <ViewPromo key={p.id} promo={p}></ViewPromo>
+                        <ViewPromo key={p._id} promo={p}></ViewPromo>
                     )
                 })
             }

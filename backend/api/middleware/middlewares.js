@@ -60,7 +60,7 @@ dotenv.config();
 
 exports.isAuthAdmin = async (req, res, next) => {
 
-	console.log(req.headers.uid)
+	// console.log(req.headers.uid)
 	const checkAdmin = await Admin.findOne({uid: `${req.headers.uid}`})
 	try {
 		if(checkAdmin !== null){
@@ -71,5 +71,21 @@ exports.isAuthAdmin = async (req, res, next) => {
 	} catch (e) {
 		console.log("not JSON");
 		res.json("Not Found")
+	}
+};
+
+exports.isAdmin = async (req, res, next) => {
+
+	// console.log(req.headers.uid)
+	const check = await Admin.findOne({uid: `${req.headers.uid}`})
+	try {
+		if(check !== null){
+			res.json({admin: true})
+		}else{
+			res.json({admin: false})
+		}
+	} catch (e) {
+		console.log("not JSON");
+		res.json({admin: false})
 	}
 };

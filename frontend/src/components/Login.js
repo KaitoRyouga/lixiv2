@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FirebaseAuthProvider,
   FirebaseAuthConsumer
 } from "@react-firebase/auth";
 import firebase from "firebase/app";
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import "firebase/auth";
 import { Button, Form, Input } from 'antd'
 import { config } from "./test-credentials";
 import AddUser from '../actions/User/AddUser'
 import UserLogOut from '../actions/User/UserLogOut'
-import axios from 'axios'
+import Header from '../components/Header'
 
 const layout = {
   labelCol: { span: 8 },
@@ -25,7 +25,11 @@ const Login = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch()
   const [confirmCode, setConfirmCode] = useState({});
-  const [count, setCount] = useState(0);
+  const [userRaw, setUserRaw] = useState({});
+  const stateUser = useSelector(state => state.users)
+  const stateAll = useSelector(state => state)
+  console.log(stateUser[0].uid === "")
+  console.log(stateAll)
 
   const capcha = () => {
     console.log("check")
@@ -62,20 +66,23 @@ const Login = () => {
     });
   };
 
+  useEffect(() => {
+    if (userRaw) {
+      dispatch(AddUser(userRaw))
+    }
+  }, [userRaw]);
+
   return (
     <div>
+      <Header name="Login"></Header>
       <FirebaseAuthProvider {...config} firebase={firebase}>
         <div>
           <FirebaseAuthConsumer>
             {({ isSignedIn, firebase, user }) => {
-                {/* console.log(user) */}
-                if(user !== null && count === 0){
-                  setCount(count + 1)
-                  console.log("login !!!")
-                  dispatch(AddUser(user))
-                  axios.post('http://localhost:3000/user', user).then(res => console.log(res)).catch(err => console.log(err))
-                }
-              if (isSignedIn === true) {
+              if (isSignedIn === true && user !== null && userRaw !== {}) {
+
+                setUserRaw(user)
+                
                 return (
                   <div>
                     <h2>You're signed in, welcome {user.displayName} 🎉 </h2>
@@ -85,7 +92,7 @@ const Login = () => {
                           .app()
                           .auth()
                           .signOut();
-                        dispatch(UserLogOut())
+                          dispatch(UserLogOut())
                       }}
                     >
                       Sign out

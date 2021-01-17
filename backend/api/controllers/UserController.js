@@ -32,6 +32,7 @@ class UserController {
           console.log("not JSON");
           return res.json("Not Found")
         }
+
     } catch (error) {
       console.log(error)
       console.log('ERROR')

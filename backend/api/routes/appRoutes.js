@@ -58,4 +58,7 @@ module.exports = function(app) {
     app.route('/user')
         .get(User.index)
         .post(User.store)
+
+    app.route('/admin')
+        .get(Check.isAdmin)
 };
