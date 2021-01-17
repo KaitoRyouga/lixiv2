@@ -13,6 +13,7 @@ import Promo from './components/Promo'
 import Checkout from './components/Checkout'
 import Order from './components/Order'
 import Login from './components/Login'
+import test from './components/test'
 import './App.css';
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
             setAdmin(false)
           }else{
             dispatch(AllPromo(resultPromos.data.Promos));
+            setAdmin(true)
           }
         } catch (error) {
           console.log("error")
@@ -66,14 +68,21 @@ function App() {
           <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Home}></Route>
-          <Route path="/products" component={Products}></Route>
+          {
+            admin && (
+                <Route path="/products" component={Products}></Route>
+            )
+          }
           <Route path="/cart" component={Cart}></Route>
           {
-            admin && <Route path="/promotions" component={Promo}></Route>
+            admin && (
+                <Route path="/promotions" component={Promo}></Route>
+            )
           }
           <Route path="/checkout" component={Checkout}></Route>
           <Route path="/orders" component={Order}></Route>
           <Route path="/login" component={Login}></Route>
+          <Route path="/test" component={test}></Route>
         </Switch>
       </BrowserRouter>
     </div>

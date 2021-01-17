@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Card, Row, Col, Button, Alert, Modal, Drawer } from "antd";
+import { Row, Col, Button, Alert, Modal, Drawer } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
@@ -258,10 +258,10 @@ const Home = () => {
                     {
                         stateCart.carts.map(c => {
                             return (
-                                <>
+                                <div key={c.name}>
                                     <p>{c.name}</p>
                                     <p>{c.quantity}</p>
-                                </>
+                                </div>
                             )
                         })
                     }

@@ -1,8 +1,24 @@
-import React from 'react'
-import { useHistory } from "react-router-dom";
+import React, { useState } from 'react'
+import { useHistory} from "react-router-dom";
+import { useSelector } from 'react-redux'
 import { Button} from "antd";
+import axios from 'axios'
 
 const Header = (props) => {
+
+    const stateUser = useSelector(state => state.users)
+    const [admin, setAdmin] = useState(false)
+    const checkAdmin = (res) => {
+        setAdmin(res.data.admin)
+    }
+
+    axios.get(
+        'http://localhost:3000/admin', {
+          headers: {
+            'uid': stateUser[0].uid
+          }
+        }
+    ).then(res => checkAdmin(res)).catch(err => console.log(err))
 
     const history = useHistory()
 
@@ -18,21 +34,28 @@ const Header = (props) => {
             }}>
                 Home
             </Button>
-            <Button onClick={() => {
-                changePage("/products")
-            }}>
-                Products
-            </Button>
+            {
+                admin &&
+                <Button onClick={() => {
+                    changePage("/products")
+                }}>
+                    Products
+                </Button>
+            }
             <Button onClick={() => {
                 changePage("/cart")
             }}>
                 Cart
             </Button>
-            <Button onClick={() => {
-                changePage("/promotions")
-            }}>
-                Promo
-            </Button>
+            {
+                admin &&
+                <Button onClick={() => {
+                    changePage("/promotions")
+                }}>
+                    Promo
+                </Button>
+            }
+
             <Button onClick={() => {
                 changePage("/orders")
             }}>
