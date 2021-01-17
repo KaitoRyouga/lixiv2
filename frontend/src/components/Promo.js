@@ -32,14 +32,14 @@ const ViewPromo = (props) => {
         ]
         
         axios.put(
-            `http://localhost:3000/promo/${props.promo._id}`, newPromo[0]
+            `http://localhost:3000/promotion/${props.promo._id}`, newPromo[0]
         ).then(res => dispatch(EditPromo(props.promo._id, res))).catch(err => console.log(err))
 
     };
 
     const onDelete = (id) => {
         axios.delete(
-            `http://localhost:3000/promo/${id}`
+            `http://localhost:3000/promotion/${id}`
         ).then(res => dispatch(DeletePromo(res))).catch(err => console.log(err))
     }
     
@@ -107,7 +107,7 @@ const Promo = () => {
 
         // setPromo(newPromo[0])
         axios.post(
-            'http://localhost:3000/promos', newPromo[0]
+            'http://localhost:3000/promotions', newPromo[0]
         ).then(res => dispatch(AddPromo(res))).catch(err => console.log(err))
         onReset()
     };

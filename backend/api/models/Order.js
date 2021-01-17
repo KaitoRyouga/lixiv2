@@ -29,6 +29,11 @@ const OrderSchema = new Schema({
     required: true,
     trim: true
   },
+  author: {
+    type: String,
+    required: true,
+    trim: true
+  }
 }, { timestamps: true })
 
 OrderSchema.statics.protectedFields = [
