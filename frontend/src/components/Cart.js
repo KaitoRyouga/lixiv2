@@ -183,7 +183,7 @@ const Cart = () => {
         <div>
             { change ? <Redirect to={{ pathname: "/checkout", data: total }} /> : null }
 
-            <Header name="Cart"></Header>
+            {/* <Header name="Cart"></Header> */}
 
             { stateRoot.carts === undefined ||
                 stateRoot.carts.map(c => {

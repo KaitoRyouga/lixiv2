@@ -41,7 +41,7 @@ module.exports = function(app) {
         .post(Cart.store)
 
     app.route('/promotions')
-        .get(Check.isAuthAdmin, Promo.index)
+        .get(Promo.index)
         .post(Promo.store)
 
     app.route('/promotion/:promoId')

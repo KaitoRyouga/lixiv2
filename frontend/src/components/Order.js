@@ -17,10 +17,12 @@ const tailLayout = {
 const ViewOrder = (props) => {
 
     const [form] = Form.useForm();
+    const Option = Select.Option;
     const formRef = useRef(null);
     const dispatch = useDispatch()
     const stateUser = useSelector(state => state.users)
     const [admin, setAdmin] = useState(false)
+    
     const checkAdmin = (res) => {
         setAdmin(res.data.admin)
     }
@@ -44,9 +46,11 @@ const ViewOrder = (props) => {
     };
 
     useEffect(() => {
-        form.setFieldsValue({
-            status: props.order.status,
-        })
+        setTimeout(() => {
+            form.setFieldsValue({
+                status: props.order.status,
+            })
+        }, 600);
     }, [props]);
     
     return(
@@ -73,7 +77,7 @@ const ViewOrder = (props) => {
                         <Form.Item name="status" label="Status" rules={[{ required: true }]}>
                             <Select>
                                 <Option selected value={props.order.status}>{props.order.status}</Option>
-                                <Option selected value={props.order.status !== "processing" ? "processing" : "delivered"}>{props.order.status !== "processing" ? "processing" : "delivered"}</Option>
+                                <Option value={props.order.status !== "processing" ? "processing" : "delivered"}>{props.order.status !== "processing" ? "processing" : "delivered"}</Option>
                             </Select>
                         </Form.Item>
                         <Form.Item {...tailLayout}>
@@ -109,7 +113,7 @@ const Order = () => {
 
     return (
         <div>
-            <Header name="Order"></Header>
+            {/* <Header name="Order"></Header> */}
             {
                 stateRoot.map(s => {
                     if(s.author === stateUser[0].uid && admin === false) {

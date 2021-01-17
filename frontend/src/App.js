@@ -4,7 +4,6 @@ import axios from 'axios'
 import AllProduct from './actions/Product/AllProduct'
 import AllPromo from './actions/Promo/AllPromo'
 import AllOrder from './actions/Order/AllOrder'
-import EmptyPromo from './actions/Promo/EmptyPromo'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Products from './components/Products'
 import Home from './components/Home'
@@ -14,13 +13,14 @@ import Checkout from './components/Checkout'
 import Order from './components/Order'
 import Login from './components/Login'
 import test from './components/test'
+import Header from './components/Header'
 import './App.css';
 
 function App() {
 
   const dispatch = useDispatch()
-  const stateRaw= useSelector(state => state)
-  const [admin, setAdmin] = useState(true)
+  const stateUser = useSelector(state => state.users)
+  const [admin, setAdmin] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -29,43 +29,34 @@ function App() {
         );
 
         const resultPromos = await axios.get(
-          'http://localhost:3000/promotions', {
-            headers: {
-              'uid': stateRaw.users[0].uid
-            }
-          }
+          'http://localhost:3000/promotions'
         );
 
         const resultOrders = await axios.get(
           'http://localhost:3000/orders',
         );
 
-        dispatch(AllProduct(resultProducts.data.Products));
-        try {
-          if(resultPromos.data === "Not Found"){
-            stateRaw.promos = []
-            localStorage.clear()
-            const serialisedState = JSON.stringify(stateRaw);
-            localStorage.setItem("persistantState", serialisedState);
-            dispatch(EmptyPromo());
-            setAdmin(false)
-          }else{
-            dispatch(AllPromo(resultPromos.data.Promos));
-            setAdmin(true)
+        const resultAdmin = await axios.get(
+          'http://localhost:3000/admin', {
+            headers: {
+              'uid': stateUser[0].uid
+            }
           }
-        } catch (error) {
-          console.log("error")
-          console.log(error)
-        }
+      );
+      setAdmin(resultAdmin.data.admin);
+
+        dispatch(AllProduct(resultProducts.data.Products));
+        dispatch(AllPromo(resultPromos.data.Promos));
         dispatch(AllOrder(resultOrders.data.Order));
     }
     fetchData();
     
-  }, [dispatch]);
+  }, [stateUser]);
 
   return (
     <div className="App">
           <BrowserRouter>
+          <Header></Header>
         <Switch>
           <Route exact path="/" component={Home}></Route>
           {
