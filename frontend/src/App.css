@@ -1,5 +1,7 @@
 @import '~antd/dist/antd.css';
 @import './assets/css/home.css';
+@import './assets/css/reset.css';
+@import './assets/css/header.css'
 
 .App {
   text-align: center;
