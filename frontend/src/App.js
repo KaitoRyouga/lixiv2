@@ -11,6 +11,7 @@ import Cart from './components/Cart'
 import Promo from './components/Promo'
 import Checkout from './components/Checkout'
 import Order from './components/Order'
+import Login from './components/Login'
 import './App.css';
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
           <Route path="/promos" component={Promo}></Route>
           <Route path="/checkout" component={Checkout}></Route>
           <Route path="/orders" component={Order}></Route>
+          <Route path="/login" component={Login}></Route>
         </Switch>
       </BrowserRouter>
     </div>

@@ -38,6 +38,11 @@ const Header = (props) => {
             }}>
                 Order
             </Button>
+            <Button onClick={() => {
+                changePage("/login")
+            }}>
+                Login
+            </Button>
         </div>
     )
 }
