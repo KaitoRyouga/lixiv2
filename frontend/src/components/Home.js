@@ -148,10 +148,10 @@ function ViewProduct (params) {
     const showDrawer = () => {
         params.showDrawer()
         setVisible(false)
-    }
+    }   
     
     return(
-        <>
+        <div>
             <ViewList key={params.product.id} product={params.product} setVisible={setVisible}></ViewList>
             {
                 showMessenge && messageWarning
@@ -199,7 +199,7 @@ function ViewProduct (params) {
                     </Col>
                 </Row>
             </Modal>
-        </>
+        </div>
     )
 }
 
@@ -234,7 +234,6 @@ const Home = () => {
     
         return(
           <div>
-              {/* <Header name="Home"></Header> */}
               <div className="container">
                 <div className="row">
                     {
@@ -266,7 +265,7 @@ const Home = () => {
                         })
                     }
                     <Button onClick={() => changePage("cart")}>Go to cart</Button>
-                    <Button onClick={() => changePage("checkout")}>Check out</Button>
+                    {/* <Button onClick={() => changePage("checkout")}>Check out</Button> */}
                 </Drawer>
           </div>
         )
