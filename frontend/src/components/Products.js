@@ -26,13 +26,13 @@ const ViewProduct = (props) => {
         ]
         
         axios.put(
-            `http://localhost:3000/product/${props.product._id}`, newProduct[0]
+            `http://${process.env.REACT_APP_API}:3000/product/${props.product._id}`, newProduct[0]
         ).then(res => dispatch(EditProduct(props.product._id, res))).catch(err => console.log(err))
     }
     
     const onDelete = (id) => {
         axios.delete(
-            `http://localhost:3000/product/${id}`
+            `http://${process.env.REACT_APP_API}:3000/product/${id}`
         ).then(res => dispatch(DeleteProduct(res))).catch(err => console.log(err))
     }
 
@@ -103,7 +103,7 @@ const Products = () => {
                     image: '/images/ao_1.jpg'
                 }
             ]
-            axios.post('http://localhost:3000/products', newProduct[0]).then(res => dispatch(AddProduct(res))).catch(err => console.log(err))
+            axios.post(`http://${process.env.REACT_APP_API}:3000/products`, newProduct[0]).then(res => dispatch(AddProduct(res))).catch(err => console.log(err))
             form.resetFields();
         };
         

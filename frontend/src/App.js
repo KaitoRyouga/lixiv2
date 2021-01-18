@@ -18,6 +18,8 @@ import './App.css';
 
 function App() {
 
+  // console.log()
+
   const dispatch = useDispatch()
   const stateUser = useSelector(state => state.users)
   const [admin, setAdmin] = useState(false)
@@ -25,19 +27,21 @@ function App() {
   useEffect(() => {
     async function fetchData() {
         const resultProducts = await axios.get(
-            'http://localhost:3000/products',
+            `http://${process.env.REACT_APP_API}:3000/products`,
         );
 
+        console.log(resultProducts)
+
         const resultPromos = await axios.get(
-          'http://localhost:3000/promotions'
+          `http://${process.env.REACT_APP_API}:3000/promotions`
         );
 
         const resultOrders = await axios.get(
-          'http://localhost:3000/orders',
+          `http://${process.env.REACT_APP_API}:3000/orders`,
         );
 
         const resultAdmin = await axios.get(
-          'http://localhost:3000/admin', {
+          `http://${process.env.REACT_APP_API}:3000/admin`, {
             headers: {
               'uid': stateUser[0].uid
             }
