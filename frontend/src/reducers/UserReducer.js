@@ -26,7 +26,7 @@ const UserReducer = (state = initState, action) => {
                     uid: typeLogin.uid
                 }
                 const newOrder = [login]
-                axios.post('http://localhost:3000/user', login).then(res => console.log(res)).catch(err => console.log(err))
+                axios.post(`http://${process.env.REACT_APP_API}:3000/user`, login).then(res => console.log(res)).catch(err => console.log(err))
     
                 return newOrder
             } catch (error) {
