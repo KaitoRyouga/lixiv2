@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal } from "antd";
+import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal, Typography } from "antd";
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import EditCart from '../actions/Cart/EditCart'
 import DeleteCart from '../actions/Cart/DeleteCart'
@@ -19,6 +19,8 @@ const tailLayout = {
 };
 
 const Cart = () => {
+
+    const { Text } = Typography;
 
     const [change, setChange] = useState(0);
     const [total, setTotal] = useState(0);
@@ -75,7 +77,7 @@ const Cart = () => {
                             <LeftOutlined />
                         </Button> 
                     </Col>
-                    <Col>
+                    <Col type="flex" align="center" justify="center" style={{marginTop: "1em"}}>
                         <p>{quantity}</p>
                     </Col>
                     <Col>
@@ -161,6 +163,7 @@ const Cart = () => {
             }
             
             messageSuccess()
+            onReset()
         }
     };
     
@@ -237,13 +240,17 @@ const Cart = () => {
                         SUBTOTAL: {
                             percent > 0 && (
                                 <div>
-                                    <Tag color="volcano" style={{ textDecoration: "line-through" }}>{preTotal}</Tag>
-                                    <span> (giảm {percent}%)</span>
+                                    <Text delete type="secondary">{preTotal} vnđ </Text>
+                                    <Text type="success">(giảm {percent}%)</Text>
                                     <br></br>
-                                    <Tag color="green">{total}</Tag>
+                                    <Tag color="green">
+                                        <Text  type="success">{total} vnđ</Text>
+                                    </Tag>
                                 </div>
                             ) || (
-                                <Tag color="green">{total}</Tag>
+                                <Tag color="green">
+                                    <Text  type="success">{total} vnđ</Text>
+                                </Tag>
                             )
                         }
                     </p>
