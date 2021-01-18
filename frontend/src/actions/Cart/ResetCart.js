@@ -1,7 +1,6 @@
-const ResetCart = (info) => {
+const ResetCart = () => {
     return{
-        type: 'RESET_CART',
-        info
+        type: 'RESET_CART'
     }
 }
 
