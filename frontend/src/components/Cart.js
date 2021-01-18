@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { Form, Input, Button, Image, Alert, Row, Col} from "antd";
-import ResetCart from '../actions/Cart/ResetCart'
+import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal } from "antd";
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import EditCart from '../actions/Cart/EditCart'
 import DeleteCart from '../actions/Cart/DeleteCart'
-import Header from './Header'
+import { DeleteOutlined } from '@ant-design/icons'
+  
+let data = [];
 
 const layout = {
     labelCol: { span: 8 },
@@ -17,141 +18,155 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
-const ViewCart = (props) => {
-
-    const dispatch = useDispatch();
-    const [count, setCount] = useState(0);
-    const [showMessengeCount, setShowMessengeCount] = useState(false);
-    const pricePresent = props.products.filter(p => p._id === props.cart.id)
-
-    const onDecrement = (id) => {
-        dispatch(EditCart(id, -1))
-        if (count - 1 !== 0) {
-            props.updateTotal(-pricePresent[0].price)
-        }
-        setCount(count - 1)
-        setShowMessengeCount(false)
-    }
-
-    const onIncrement = (id) => {
-        if (count + 1 > pricePresent[0].quantity) {
-            setShowMessengeCount(true)
-        } else {
-            dispatch(EditCart(id, 1))
-            props.updateTotal(pricePresent[0].price)
-            setCount(count + 1)
-        }
-    }
-
-    const onDelete = (id) => {
-        dispatch(DeleteCart(id))
-    }
-
-    useEffect(() => {
-        setCount(props.cart.quantity)
-    }, [props])
-
-    return (
-        <div>
-            <ul>
-                <li>
-                    <Image src={process.env.PUBLIC_URL + pricePresent[0].image} alt="image"></Image>
-                </li>
-                <Button onClick={() => onDelete(props.cart.id)}>Delete</Button>
-                <li>Name: {props.cart.name}</li>
-                <Row>
-                        <Col span={8}>
-                            <Button onClick={() => {
-                                onDecrement(props.cart.id)
-                            }}>
-                                <LeftOutlined />
-                            </Button> 
-                        </Col>
-                        <Col span={8}>
-                            <p>quantity: {count}</p>
-                        </Col>
-                        <Col span={8}>
-                        <Button onClick={() => {
-                                onIncrement(props.cart.id)
-                            }}>
-                                <RightOutlined />
-                            </Button> 
-                        </Col>
-                    </Row>
-                <li>price: {pricePresent[0].price}</li>
-                <li>total: {pricePresent[0].price*props.cart.quantity}</li>
-            </ul>
-            {
-                showMessengeCount && <MessengeQuantity error={pricePresent[0]}></MessengeQuantity>
-            }
-        </div>
-    )
-}
-
-const MessengeQuantity = (props) => {
-
-    return (
-        <Alert
-            message="Warning"
-            description={`Quantity of ${props.error.name} max is ${props.error.quantity}`}
-            type="warning"
-            showIcon
-            closable
-        />
-    )
-}
-
 const Cart = () => {
+
     const [change, setChange] = useState(0);
     const [total, setTotal] = useState(0);
+    const [preTotal, setPreTotal] = useState(0);
+    const [percent, setPercent] = useState(0);
+    const [,updateState] = React.useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const stateRoot = useSelector(state => state);
-    const [showMessengeWarning, setShowMessengeWarning] = useState(false);
-    const [showMessengeSuccess, setShowMessengeSuccess] = useState(false);
 
-    const messageWarning = (<Alert
-        message="Warning"
-        description="Code incorrect"
-        type="warning"
-        showIcon
-        closable
-    />)
+    const columns = [
+        {
+          title: 'PRODUCT',
+          dataIndex: 'product',
+          render: (product, all) => (
+            <Row type="flex" align="middle">
+                <Space size="middle">
+                    <Col span={12}>
+                        <Image src={`${product[1]}`} alt={product[0]} width={120} height={150}></Image>
+                    </Col>
+                    <Col>             
+                        <Row>
+                            <Col span={12}>
+                                <Tag color="green">{product[0]}</Tag>
+                            </Col>
+                            <Col>
+                                <Tag color="volcano">
+                                    <DeleteOutlined onClick={() => {
+                                        onDelete(all.key)
+                                    }} />
+                                </Tag>  
+                            </Col>
+                        </Row>
+                    </Col>
+                </Space>
+            </Row>
+          ),
+        },
+        {
+          title: 'PRICE',
+          dataIndex: 'price',
+        },
+        {
+          title: 'QUANTITY',
+          dataIndex: 'quantity',
+          render: (quantity, all) => (
+            <Row type="flex" align="stretch">
+                <Space size="middle">
+                    <Col>
+                        <Button onClick={() => {
+                            onDecrement(all.key)
+                        }}>
+                            <LeftOutlined />
+                        </Button> 
+                    </Col>
+                    <Col>
+                        <p>{quantity}</p>
+                    </Col>
+                    <Col>
+                    <Button onClick={() => {
+                            onIncrement(all.key)
+                        }}>
+                            <RightOutlined />
+                        </Button> 
+                    </Col>
+                </Space>
+            </Row>
+          )
+        },
+        {
+            title: 'TOTAL',
+            dataIndex: 'total',
+        },
+    ];
 
-    const messageSuccess = (<Alert
-        message="Success"
-        description="Code correct"
-        type="success"
-        showIcon
-        closable
-    />)
+    data = []
+
+    const onDecrement = (id) => {
+        const cartDest = data.findIndex(d => d.key === id)
+        updateTotal(-data[cartDest].price)
+        dispatch(EditCart(id, -1))
+        data[cartDest].quantity = stateRoot.carts[cartDest].quantity
+        data[cartDest].total = stateRoot.carts[cartDest].quantity * data[cartDest].price
+        forceUpdate()
+    }
+
+    const onIncrement = (id) => {
+
+        const cartDest = data.findIndex(d => d.key === id)
+        const productDest = stateRoot.products.findIndex(d => d._id === id)
+
+        if (data[cartDest].quantity >= stateRoot.products[productDest].quantity) {
+            fail(`Quantity of ${data[cartDest].name} max is ${stateRoot.products[productDest].quantity}`)
+        }else{
+            updateTotal(data[cartDest].price)
+            dispatch(EditCart(id, 1))
+            data[cartDest].quantity = stateRoot.carts[cartDest].quantity
+            data[cartDest].total = stateRoot.carts[cartDest].quantity * data[cartDest].price
+            forceUpdate()
+        }
+    }
+
+    const fail = (victim) => {
+        Modal.error({
+          title: 'Login fail',
+          content: `${victim}, try again !!!`,
+        });
+        forceUpdate()
+    }
+
+    const messageWarning = () => {
+        Modal.warning({
+          title: 'Warning',
+          content: `Code incorrect, try again !!!`,
+        });
+        forceUpdate()
+    }
+
+    const messageSuccess = () => {
+        Modal.success({
+          title: 'Success',
+          content: `Code correct, happy shoppping !!!`,
+        });
+        forceUpdate()
+    }
 
     const onFinish = values => {
         const checkPromo = stateRoot.promos.filter(p => p.code === values.Code)
         if (checkPromo.length === 0) {
-            setShowMessengeWarning(true)
-            setShowMessengeSuccess(false)
+            messageWarning()
             onReset()
         }else if(checkPromo[0].quantity > 0) {
+            setPreTotal(total)
+            setPercent(100 - Math.floor(total / checkPromo[0].price))
             if (total - checkPromo[0].price < 0) {
                 setTotal(0)
             }else{
                 setTotal(total - checkPromo[0].price)
             }
             
-            setShowMessengeSuccess(true)
-            setShowMessengeWarning(false)
+            messageSuccess()
         }
     };
     
     const onReset = () => {
         form.resetFields();
     };
-
-    const onResetCart = () => {
-        dispatch(ResetCart([]))
-        setTotal(0)
-    }
 
     const updateTotal = (newTotal) => {
         setTotal(total + newTotal)
@@ -160,6 +175,11 @@ const Cart = () => {
     const onCheckout = () => {
         setChange(1)
     }
+
+    const onDelete = (id) => {
+        dispatch(DeleteCart(id))
+    }
+    
 
     useEffect(() => {
         let sumSub = 0;
@@ -183,39 +203,55 @@ const Cart = () => {
         <div>
             { change ? <Redirect to={{ pathname: "/checkout", data: total }} /> : null }
 
-            {/* <Header name="Cart"></Header> */}
-
             { stateRoot.carts === undefined ||
                 stateRoot.carts.map(c => {
-                    return <ViewCart key={c.name} cart={c} products={stateRoot.products} carts={stateRoot.carts} updateTotal={updateTotal}></ViewCart>
+                    const product = stateRoot.products.filter(p => p._id === c.id)
+                    if(product){
+                        data.push({
+                            key: c.id,
+                            product: [c.name, product[0].image],
+                            price: product[0].price,
+                            quantity: c.quantity,
+                            total: product[0].price * c.quantity,  
+                        })
+                    }
                 })
             }
-            <p>Subtotal: {total}</p>
-            <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-                <Form.Item name="Code" label="Code" rules={[{ required: true }]}>
-                    <Input type="text" />
-                </Form.Item>
-                {
-                    showMessengeWarning && messageWarning
-                }
-                {
-                    showMessengeSuccess && messageSuccess
-                }
-                <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">
-                    Submit
+
+            <Table columns={columns} dataSource={data} pagination={false} />
+            <Row justify="space-around">
+                <Col>
+                    <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+                        <Form.Item name="Code" label="Code" rules={[{ required: true }]}>
+                            <Input type="text" />
+                        </Form.Item>
+                        <Form.Item {...tailLayout}>
+                            <Button type="primary" htmlType="submit">
+                                Submit
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </Col>
+                <Col>
+                    <p>
+                        SUBTOTAL: {
+                            percent > 0 && (
+                                <div>
+                                    <Tag color="volcano" style={{ textDecoration: "line-through" }}>{preTotal}</Tag>
+                                    <span> (giảm {percent}%)</span>
+                                    <br></br>
+                                    <Tag color="green">{total}</Tag>
+                                </div>
+                            ) || (
+                                <Tag color="green">{total}</Tag>
+                            )
+                        }
+                    </p>
+                    <Button type="primary" onClick={onCheckout}>
+                        Check Out
                     </Button>
-                    <Button htmlType="button" onClick={onReset}>
-                    Reset
-                    </Button>
-                    <Button htmlType="button" onClick={onResetCart}>
-                    Reset all cart
-                    </Button>
-                    <Button htmlType="button" onClick={onCheckout}>
-                    Check out
-                    </Button>
-                </Form.Item>
-            </Form>
+                </Col>
+            </Row>
         </div>
     )
 }

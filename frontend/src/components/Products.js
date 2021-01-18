@@ -96,7 +96,7 @@ const Products = () => {
 
         const onFinish = values => {
             const newProduct = [
-                {
+                {   
                     name: values.Name,
                     quantity: values.Quantity,
                     price: values.Price,
