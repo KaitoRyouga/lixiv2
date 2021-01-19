@@ -122,6 +122,9 @@ const Cart = () => {
           title: 'PRICE',
           dataIndex: 'price',
           responsive: ['sm'],
+          render: (price) => (
+            <Tag color="green">{financial(price)} vnđ</Tag>
+          )
         },
         {
           title: 'QUANTITY',
