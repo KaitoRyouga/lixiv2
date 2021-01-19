@@ -28,7 +28,7 @@ function App() {
     async function fetchData() {
       
       const allInfo = await axios.get(
-        `http://${process.env.REACT_APP_API}/allinfo`, {
+        `https://${process.env.REACT_APP_API}/allinfo`, {
           headers: {
             'uid': stateUser[0].uid
           }

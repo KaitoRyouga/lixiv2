@@ -231,7 +231,7 @@ const Home = () => {
         useEffect(() => {
             async function fetchData() {
                 const result = await axios.get(
-                    `http://${process.env.REACT_APP_API}/products`,
+                    `https://${process.env.REACT_APP_API}/products`,
                 );
                 setProducts(result.data.Products);
             }

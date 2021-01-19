@@ -44,7 +44,7 @@ const Checkout = (props) => {
         values.status = 'processing'
         values.author = stateRoot.users[0].uid
         dispatch(ResetCart())
-        axios.post(`http://${process.env.REACT_APP_API}/orders`, values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
+        axios.post(`https://${process.env.REACT_APP_API}/orders`, values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
         form.resetFields();
         history.push("/")
     };
