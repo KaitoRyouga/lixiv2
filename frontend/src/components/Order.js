@@ -84,7 +84,7 @@ const ViewOrder = (props) => {
           title: 'QUANTITY',
           dataIndex: 'quantity',
           responsive: ['sm'],
-          render: () => (
+          render: (quantity) => (
             <Row type="flex" align="stretch">
                 <Col type="flex" align="center" justify="center" style={{marginTop: "1em"}}>
                     <Tag color="green">{quantity}</Tag>
