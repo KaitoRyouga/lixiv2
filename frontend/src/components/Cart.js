@@ -122,6 +122,9 @@ const Cart = () => {
           title: 'PRICE',
           dataIndex: 'price',
           responsive: ['sm'],
+          render: (price) => (
+            <Tag color="green">{financial(price)} vnđ</Tag>
+          )
         },
         {
           title: 'QUANTITY',
@@ -254,15 +257,17 @@ const Cart = () => {
         let sumSub = 0;
         const subtotal = stateRoot.carts.map(c => {
             const prod = stateRoot.products.filter(pro => pro.name === c.name);
-            let sub;
-            if (prod[0].quantity < c.quantity) {
-                sub = prod[0].quantity*prod[0].price;
-            } else {
-                sub = c.quantity*prod[0].price;
+            if (prod.length !== 0) {
+                let sub;
+                if (prod[0].quantity < c.quantity) {
+                    sub = prod[0].quantity*prod[0].price;
+                } else {
+                    sub = c.quantity*prod[0].price;
+                }
+                
+                sumSub += sub
+                return sumSub   
             }
-            
-            sumSub += sub
-            return sumSub
         })
         setTotal(sumSub)
         return subtotal

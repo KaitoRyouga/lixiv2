@@ -28,19 +28,19 @@ function App() {
   useEffect(() => {
     async function fetchData() {
         const resultProducts = await axios.get(
-            `http://${process.env.REACT_APP_API}:3000/products`,
+            `https://${process.env.REACT_APP_API}/products`,
         );
 
         const resultPromos = await axios.get(
-          `http://${process.env.REACT_APP_API}:3000/promotions`
+          `https://${process.env.REACT_APP_API}/promotions`
         );
 
         const resultOrders = await axios.get(
-          `http://${process.env.REACT_APP_API}:3000/orders`,
+          `https://${process.env.REACT_APP_API}/orders`,
         );
 
         const resultAdmin = await axios.get(
-          `http://${process.env.REACT_APP_API}:3000/admin`, {
+          `https://${process.env.REACT_APP_API}/admin`, {
             headers: {
               'uid': stateUser[0].uid
             }
