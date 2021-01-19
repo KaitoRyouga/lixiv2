@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Form, Select, Button, Descriptions, Typography, Table, Row, Col, Space, Tag, Image, Divider } from 'antd'
+import { Form, Select, Button, Descriptions, Typography, Table, Row, Col, Space, Tag, Image, Divider, Badge } from 'antd'
 import axios from 'axios'
 import EditOrder from '../actions/Order/EditOrder'
 
@@ -27,6 +27,7 @@ const ViewOrder = (props) => {
         {
           title: 'PRODUCT',
           dataIndex: 'product',
+          responsive: ['sm'],
           render: (product) => (
             <Row type="flex" align="middle">
                 <Space size="middle">
@@ -34,26 +35,71 @@ const ViewOrder = (props) => {
                         <Image src={`${product[1]}`} alt={product[0]} width={120} height={150}></Image>
                     </Col>
                     <Col>             
-                        <Tag color="green">{product[0]}</Tag>
+                        <Row>
+                            <Col span={12}>
+                                <Tag color="green">{product[0]}</Tag>
+                            </Col>
+                        </Row>
                     </Col>
                 </Space>
             </Row>
           ),
         },
         {
+            title: 'PRODUCT',
+            dataIndex: 'product',
+            responsive: ["xs"],
+            render: (product, all) => (
+                <Row type="flex" align="middle">
+                    <Space size="middle">
+                        <Col>
+                            <Badge count={all.quantity}>
+                                <Image src={`${product[1]}`} alt={product[0]}></Image>
+                            </Badge>
+                        </Col>
+                        <Col>        
+                            <Row>
+                                <Col>
+                                    <Tag color="green">{product[0]}</Tag>
+                                </Col>
+                            </Row>
+                            <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
+                            <Row>
+                                <Col>
+                                    <Tag color="green">{all.price} vnđ</Tag>
+                                </Col>
+                            </Row>
+                            <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
+                        </Col>
+                    </Space>
+                </Row>
+            ),
+        },
+        {
           title: 'PRICE',
           dataIndex: 'price',
+          responsive: ['sm'],
         },
         {
           title: 'QUANTITY',
           dataIndex: 'quantity',
-          render: (quantity) => (
-                <Text>{quantity}</Text>
+          responsive: ['sm'],
+          render: () => (
+            <Row type="flex" align="stretch">
+                <Col type="flex" align="center" justify="center" style={{marginTop: "1em"}}>
+                    <Tag color="green">{quantity}</Tag>
+                </Col>
+            </Row>
           )
         },
         {
             title: 'TOTAL',
             dataIndex: 'total',
+            render: () => (
+                <Tag color="green">
+                    {total} vnđ
+                </Tag>
+            )
         },
     ];
 
