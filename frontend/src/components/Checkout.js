@@ -145,10 +145,8 @@ const Checkout = (props) => {
                                         <Row justify="space-between" align="middle">
                                             <Col span="8">
                                                 <Row justify="space-between" align="middle">
-                                                    <Col span={12}>
-                                                        <Text>Subtotal:</Text>
-                                                    </Col>
-                                                    <Col span={12}>
+                                                    <Col>
+                                                        <Text>Total:</Text>
                                                     </Col>
                                                 </Row>
                                             </Col>
