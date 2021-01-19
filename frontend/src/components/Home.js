@@ -4,7 +4,7 @@ import axios from 'axios'
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
 import { useDispatch, useSelector } from 'react-redux'
-import Header from './Header'
+import financial from './financial'
 import { useHistory } from "react-router-dom";
 
 const MessengeQuantity = (props) => {
@@ -83,7 +83,7 @@ const ViewList = (props) => {
             </div>
             <div className="price">
                 <h3 className="headding">{props.product.name}</h3>
-                <span className="price-content">{props.product.price}$</span>
+                <span className="price-content">{financial(props.product.price)} vnđ</span>
             </div>
         </div>
     )
@@ -248,7 +248,7 @@ const Home = () => {
               </div>
 
                 <Drawer
-                    title="Basic Drawer"
+                    title="Cart"
                     placement="right"
                     closable={false}
                     onClose={onClose}
