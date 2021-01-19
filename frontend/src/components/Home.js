@@ -31,6 +31,8 @@ const ViewList = (props) => {
         const newCart = [{
             id: values.product._id,
             name: values.product.name,
+            price: values.product.price,
+            image: values.product.image,
             quantity: 1,
         }]
 
@@ -119,6 +121,8 @@ function ViewProduct (params) {
                 {   
                     id: params.product._id,
                     name: params.product.name,
+                    price: params.product.price,
+                    image: values.product.image,
                     quantity: count + 1
                 }
             ];
@@ -135,6 +139,8 @@ function ViewProduct (params) {
                 {   
                     id: params.product._id,
                     name: params.product.name,
+                    price: params.product.price,
+                    image: values.product.image,
                     quantity: count - 1
                 }
             ];
@@ -207,7 +213,7 @@ const Home = () => {
 
         const [products, setProducts] = useState([]);    
         const [visibleDrawer, setVisibleDrawer] = useState(false);
-        const stateCart = useSelector(state => state)    
+        const stateRoot = useSelector(state => state)    
         const history = useHistory()
 
         const changePage = (path) => {
@@ -225,7 +231,7 @@ const Home = () => {
         useEffect(() => {
             async function fetchData() {
                 const result = await axios.get(
-                    `https://${process.env.REACT_APP_API}/products`,
+                    `http://${process.env.REACT_APP_API}/products`,
                 );
                 setProducts(result.data.Products);
             }
@@ -255,7 +261,7 @@ const Home = () => {
                     visible={visibleDrawer}
                 >
                     {
-                        stateCart.carts.map(c => {
+                        stateRoot.carts.map(c => {
                             return (
                                 <div key={c.name}>
                                     <p>{c.name}</p>

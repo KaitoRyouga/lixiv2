@@ -3,6 +3,7 @@ import ProductReducer from './ProductReducer'
 import PromoReducer from './PromoReducer'
 import OrderReducer from './OrderReducer'
 import UserReducer from './UserReducer'
+import PromotionReducer from './PromotionReducer'
 import { combineReducers } from 'redux'
 
 const rootReducer = combineReducers({
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     promos: PromoReducer,
     orders: OrderReducer,
     users: UserReducer,
+    promotion: PromotionReducer,
 })
 
 export default rootReducer
