@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal, Typography } from "antd";
+import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal, Typography, Divider } from "antd";
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import EditCart from '../actions/Cart/EditCart'
 import DeleteCart from '../actions/Cart/DeleteCart'
@@ -36,6 +36,7 @@ const Cart = () => {
         {
           title: 'PRODUCT',
           dataIndex: 'product',
+          responsive: ['sm'],
           render: (product, all) => (
             <Row type="flex" align="middle">
                 <Space size="middle">
@@ -61,27 +62,81 @@ const Cart = () => {
           ),
         },
         {
+            title: 'PRODUCT',
+            dataIndex: 'product',
+            responsive: ["xs"],
+            render: (product, all) => (
+              <Row type="flex" align="middle">
+                  <Space size="middle">
+                      <Col>
+                          <Image src={`${product[1]}`} alt={product[0]}></Image>
+                      </Col>
+                      <Col>             
+                          <Row>
+                              <Col span={12}>
+                                  <Tag color="green">{product[0]}</Tag>
+                              </Col>
+                              <Col>
+                                  <Tag color="volcano">
+                                      <DeleteOutlined onClick={() => {
+                                          onDelete(all.key)
+                                      }} />
+                                  </Tag>  
+                              </Col>
+                              <Col>
+                                  <Tag color="green">{all.price} vnđ</Tag>
+                              </Col>
+                              <Col>
+                                <Row type="flex" align="stretch">
+                                    <Col span={8}>
+                                        <Tag color="green" onClick={() => {
+                                            onDecrement(all.key)
+                                        }}>
+                                            <LeftOutlined />
+                                        </Tag> 
+                                    </Col>
+                                    <Col span={2} type="flex" align="center" justify="center" style={{ marginLeft: "0.2em", marginRight: "0.1em" }}>
+                                        <p>{all.quantity}</p>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Tag color="green" onClick={() => {
+                                            onIncrement(all.key)
+                                        }}>
+                                            <RightOutlined />
+                                        </Tag> 
+                                    </Col>
+                                </Row>
+                              </Col>
+                          </Row>
+                      </Col>
+                  </Space>
+              </Row>
+            ),
+        },
+        {
           title: 'PRICE',
           dataIndex: 'price',
+          responsive: ['sm'],
         },
         {
           title: 'QUANTITY',
           dataIndex: 'quantity',
+          responsive: ['sm'],
           render: (quantity, all) => (
             <Row type="flex" align="stretch">
                 <Space size="middle">
-                    <Col>
+                    <Col span={11}>
                         <Button onClick={() => {
                             onDecrement(all.key)
                         }}>
                             <LeftOutlined />
                         </Button> 
                     </Col>
-                    <Col type="flex" align="center" justify="center" style={{marginTop: "1em"}}>
+                    <Col span={2} type="flex" align="center" justify="center" style={{marginTop: "1em"}}>
                         <p>{quantity}</p>
                     </Col>
-                    <Col>
-                    <Button onClick={() => {
+                    <Col span={11}>
+                        <Button onClick={() => {
                             onIncrement(all.key)
                         }}>
                             <RightOutlined />
@@ -93,7 +148,7 @@ const Cart = () => {
         },
         {
             title: 'TOTAL',
-            dataIndex: 'total',
+            dataIndex: 'total'
         },
     ];
 

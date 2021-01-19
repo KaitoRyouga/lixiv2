@@ -13,12 +13,13 @@ import Checkout from './components/Checkout'
 import Order from './components/Order'
 import Login from './components/Login'
 import test from './components/test'
-import Header from './components/Header'
+import HeaderRaw from './components/Header'
 import './App.css';
+import { Layout } from 'antd'
 
 function App() {
 
-  // console.log()
+  const { Header, Content, Footer, Sider } = Layout;
 
   const dispatch = useDispatch()
   const stateUser = useSelector(state => state.users)
@@ -29,8 +30,6 @@ function App() {
         const resultProducts = await axios.get(
             `http://${process.env.REACT_APP_API}:3000/products`,
         );
-
-        console.log(resultProducts)
 
         const resultPromos = await axios.get(
           `http://${process.env.REACT_APP_API}:3000/promotions`
@@ -58,10 +57,13 @@ function App() {
   }, [stateUser]);
 
   return (
-    <div className="App">
+    <Layout className="App">
           <BrowserRouter>
-          <Header></Header>
+          <Header>
+            <HeaderRaw></HeaderRaw>
+          </Header>
         <Switch>
+        <Content>
           <Route exact path="/" component={Home}></Route>
           {
             admin && (
@@ -78,9 +80,10 @@ function App() {
           <Route path="/orders" component={Order}></Route>
           <Route path="/login" component={Login}></Route>
           <Route path="/test" component={test}></Route>
+          </Content>
         </Switch>
       </BrowserRouter>
-    </div>
+    </Layout>
   );
 }
 
