@@ -66,51 +66,54 @@ const Cart = () => {
             dataIndex: 'product',
             responsive: ["xs"],
             render: (product, all) => (
-              <Row type="flex" align="middle">
-                  <Space size="middle">
-                      <Col>
-                          <Image src={`${product[1]}`} alt={product[0]}></Image>
-                      </Col>
-                      <Col>             
-                          <Row>
-                              <Col span={12}>
-                                  <Tag color="green">{product[0]}</Tag>
-                              </Col>
-                              <Col>
-                                  <Tag color="volcano">
-                                      <DeleteOutlined onClick={() => {
-                                          onDelete(all.key)
-                                      }} />
-                                  </Tag>  
-                              </Col>
-                              <Col>
-                                  <Tag color="green">{all.price} vnđ</Tag>
-                              </Col>
-                              <Col>
-                                <Row type="flex" align="stretch">
-                                    <Col span={8}>
-                                        <Tag color="green" onClick={() => {
-                                            onDecrement(all.key)
-                                        }}>
-                                            <LeftOutlined />
-                                        </Tag> 
-                                    </Col>
-                                    <Col span={2} type="flex" align="center" justify="center" style={{ marginLeft: "0.2em", marginRight: "0.1em" }}>
-                                        <p>{all.quantity}</p>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Tag color="green" onClick={() => {
-                                            onIncrement(all.key)
-                                        }}>
-                                            <RightOutlined />
-                                        </Tag> 
-                                    </Col>
-                                </Row>
-                              </Col>
-                          </Row>
-                      </Col>
-                  </Space>
-              </Row>
+                <Row type="flex" align="middle">
+                    <Space size="middle">
+                        <Col>
+                            <Image src={`${product[1]}`} alt={product[0]}></Image>
+                        </Col>
+                        <Col>        
+                            <Row>
+                                <Col span={12}>
+                                    <Tag color="green">{product[0]}</Tag>
+                                </Col>
+                                <Col>
+                                    <Tag color="volcano">
+                                        <DeleteOutlined onClick={() => {
+                                            onDelete(all.key)
+                                        }} />
+                                    </Tag>  
+                                </Col>
+                            </Row>
+                            <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
+                            <Row>
+                                <Col>
+                                    <Tag color="green">{all.price} vnđ</Tag>
+                                </Col>
+                            </Row>
+                            <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
+                            
+                            <Row>
+                                <Col span={8}>
+                                    <Tag color="green" onClick={() => {
+                                        onDecrement(all.key)
+                                    }}>
+                                        <LeftOutlined />
+                                    </Tag> 
+                                </Col>
+                                <Col span={2} type="flex" align="center" justify="center" style={{ marginLeft: "0.2em", marginRight: "0.1em" }}>
+                                    <p>{all.quantity}</p>
+                                </Col>
+                                <Col span={8}>
+                                    <Tag color="green" onClick={() => {
+                                        onIncrement(all.key)
+                                    }}>
+                                        <RightOutlined />
+                                    </Tag> 
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Space>
+                </Row>
             ),
         },
         {
@@ -148,7 +151,12 @@ const Cart = () => {
         },
         {
             title: 'TOTAL',
-            dataIndex: 'total'
+            dataIndex: 'total',
+            render: () => (
+                <Tag color="green">
+                    {total} vnđ
+                </Tag>
+            )
         },
     ];
 
