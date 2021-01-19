@@ -6,6 +6,7 @@ import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import EditCart from '../actions/Cart/EditCart'
 import DeleteCart from '../actions/Cart/DeleteCart'
 import { DeleteOutlined } from '@ant-design/icons'
+import financial from './financial'
   
 let data = [];
 
@@ -24,6 +25,7 @@ const Cart = () => {
 
     const [change, setChange] = useState(0);
     const [total, setTotal] = useState(0);
+    const [countPromo, setCountPromo] = useState(0);
     const [preTotal, setPreTotal] = useState(0);
     const [percent, setPercent] = useState(0);
     const [,updateState] = React.useState();
@@ -87,23 +89,23 @@ const Cart = () => {
                             <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
                             <Row>
                                 <Col>
-                                    <Tag color="green">{all.price} vnđ</Tag>
+                                    <Tag color="green">{financial(all.price)} vnđ</Tag>
                                 </Col>
                             </Row>
                             <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
                             
                             <Row>
-                                <Col span={8}>
+                                <Col span={6}>
                                     <Tag color="green" onClick={() => {
                                         onDecrement(all.key)
                                     }}>
                                         <LeftOutlined />
                                     </Tag> 
                                 </Col>
-                                <Col span={2} type="flex" align="center" justify="center" style={{ marginLeft: "0.2em", marginRight: "0.1em" }}>
+                                <Col span={8} type="flex" align="center" justify="center" style={{ marginLeft: "0.5em" }}>
                                     <p>{all.quantity}</p>
                                 </Col>
-                                <Col span={8}>
+                                <Col span={6}>
                                     <Tag color="green" onClick={() => {
                                         onIncrement(all.key)
                                     }}>
@@ -126,19 +128,19 @@ const Cart = () => {
           dataIndex: 'quantity',
           responsive: ['sm'],
           render: (quantity, all) => (
-            <Row type="flex" align="stretch">
-                <Space size="middle">
-                    <Col span={11}>
+            <Row type="flex" align="middle">
+                <Space size="small">
+                    <Col span={6}>
                         <Button onClick={() => {
                             onDecrement(all.key)
                         }}>
                             <LeftOutlined />
                         </Button> 
                     </Col>
-                    <Col span={2} type="flex" align="center" justify="center" style={{marginTop: "1em"}}>
+                    <Col span={24} type="flex" align="center" justify="center" style={{marginTop: "1em"}}>
                         <p>{quantity}</p>
                     </Col>
-                    <Col span={11}>
+                    <Col span={6}>
                         <Button onClick={() => {
                             onIncrement(all.key)
                         }}>
@@ -154,7 +156,7 @@ const Cart = () => {
             dataIndex: 'total',
             render: () => (
                 <Tag color="green">
-                    {total} vnđ
+                    {financial(total)} vnđ
                 </Tag>
             )
         },
@@ -217,16 +219,17 @@ const Cart = () => {
             messageWarning()
             onReset()
         }else if(checkPromo[0].quantity > 0) {
+            setPercent(checkPromo[0].price/total)
             setPreTotal(total)
-            setPercent(100 - Math.floor(total / checkPromo[0].price))
             if (total - checkPromo[0].price < 0) {
+                setCountPromo(countPromo + 1)
                 setTotal(0)
             }else{
                 setTotal(total - checkPromo[0].price)
+                setCountPromo(countPromo + 1)
             }
             
             messageSuccess()
-            onReset()
         }
     };
     
@@ -289,7 +292,7 @@ const Cart = () => {
                 <Col>
                     <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
                         <Form.Item name="Code" label="Code" rules={[{ required: true }]}>
-                            <Input type="text" />
+                            <Input disabled={percent !== 0 && countPromo == 1 ? true : false} type="text" />
                         </Form.Item>
                         <Form.Item {...tailLayout}>
                             <Button type="primary" htmlType="submit">
@@ -301,18 +304,18 @@ const Cart = () => {
                 <Col>
                     <p>
                         SUBTOTAL: {
-                            percent > 0 && (
+                            percent !== 0 && countPromo == 1 && (
                                 <div>
-                                    <Text delete type="secondary">{preTotal} vnđ </Text>
-                                    <Text type="success">(giảm {percent}%)</Text>
+                                    <Text delete type="secondary">{financial(preTotal)} vnđ </Text>
+                                    <Text type="success">(giảm {Math.floor(percent)}%)</Text>
                                     <br></br>
                                     <Tag color="green">
-                                        <Text  type="success">{total} vnđ</Text>
+                                        <Text  type="success">{financial(total)} vnđ</Text>
                                     </Tag>
                                 </div>
                             ) || (
                                 <Tag color="green">
-                                    <Text  type="success">{total} vnđ</Text>
+                                    <Text  type="success">{financial(total)} vnđ</Text>
                                 </Tag>
                             )
                         }
