@@ -18,7 +18,7 @@ const Header = (props) => {
     useEffect(() => {
         async function fetchData() {
             const result = await axios.get(
-                `https://${process.env.REACT_APP_API}/admin`, {
+                `http://${process.env.REACT_APP_API}/admin`, {
                   headers: {
                     'uid': stateUser[0].uid
                   }

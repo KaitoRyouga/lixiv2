@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal, Typography, Divider } from "antd";
+import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal, Typography } from "antd";
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import EditCart from '../actions/Cart/EditCart'
 import DeleteCart from '../actions/Cart/DeleteCart'
 import { DeleteOutlined } from '@ant-design/icons'
 import financial from './financial'
+import AddPromotion from '../actions/Promotion/AddPromotion'
   
 let data = [];
 
@@ -23,16 +24,23 @@ const Cart = () => {
 
     const { Text } = Typography;
 
-    const [change, setChange] = useState(0);
     const [total, setTotal] = useState(0);
     const [countPromo, setCountPromo] = useState(0);
     const [preTotal, setPreTotal] = useState(0);
+    const [pricePromo, setPricePromo] = useState([]);
     const [percent, setPercent] = useState(0);
+    const [enterPromo, setEnterPromo] = useState(false);
     const [,updateState] = React.useState();
     const forceUpdate = useCallback(() => updateState({}), []);
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const stateRoot = useSelector(state => state);
+
+    const history = useHistory()
+
+    const changePage = (path) => {
+        history.push(path)
+    }
 
     const columns = [
         {
@@ -157,9 +165,9 @@ const Cart = () => {
         {
             title: 'TOTAL',
             dataIndex: 'total',
-            render: () => (
+            render: (totalItem) => (
                 <Tag color="green">
-                    {financial(total)} vnđ
+                    {financial(totalItem)} vnđ
                 </Tag>
             )
         },
@@ -218,22 +226,8 @@ const Cart = () => {
 
     const onFinish = values => {
         const checkPromo = stateRoot.promos.filter(p => p.code === values.Code)
-        if (checkPromo.length === 0) {
-            messageWarning()
-            onReset()
-        }else if(checkPromo[0].quantity > 0) {
-            setPercent(checkPromo[0].price/total)
-            setPreTotal(total)
-            if (total - checkPromo[0].price < 0) {
-                setCountPromo(countPromo + 1)
-                setTotal(0)
-            }else{
-                setTotal(total - checkPromo[0].price)
-                setCountPromo(countPromo + 1)
-            }
-            
-            messageSuccess()
-        }
+        setPricePromo(checkPromo)
+        setEnterPromo(true)
     };
     
     const onReset = () => {
@@ -242,10 +236,6 @@ const Cart = () => {
 
     const updateTotal = (newTotal) => {
         setTotal(total + newTotal)
-    }
-
-    const onCheckout = () => {
-        setChange(1)
     }
 
     const onDelete = (id) => {
@@ -273,14 +263,46 @@ const Cart = () => {
         return subtotal
     }, [stateRoot])
 
+    useEffect(() => {
+        if(pricePromo.length !== 0){
+            if(pricePromo[0].quantity > 0 && enterPromo === true) {
+                setPercent(pricePromo[0].price)
+                setPreTotal(total)
+                dispatch(AddPromotion(pricePromo))
+                if (total - pricePromo[0].price < 0) {
+                    setCountPromo(countPromo + 1)
+                    setTotal(0)
+                }else{
+                    setTotal(total - pricePromo[0].price)
+                    setCountPromo(countPromo + 1)
+                }
+                
+                messageSuccess()
+            }
+        }else if(pricePromo.length === 0 && enterPromo === true) {
+            messageWarning()
+            onReset()
+        }
+    }, [pricePromo, enterPromo])
+
+    useEffect(() => {
+        if (preTotal !== 0 && preTotal - total !== pricePromo[0].price) {
+            setPreTotal(total)
+            if (total - pricePromo[0].price < 0) {
+                setTotal(0)
+            }else{
+                setTotal(total - pricePromo[0].price)
+            }
+        }
+    }, [total])
+
     return (
         <div>
-            { change ? <Redirect to={{ pathname: "/checkout", data: total }} /> : null }
-
-            { stateRoot.carts === undefined ||
+            { 
+                stateRoot.carts === undefined ||
                 stateRoot.carts.map(c => {
                     const product = stateRoot.products.filter(p => p._id === c.id)
-                    if(product){
+                    if(product.length !== 0){
                         data.push({
                             key: c.id,
                             product: [c.name, product[0].image],
@@ -293,43 +315,47 @@ const Cart = () => {
             }
 
             <Table columns={columns} dataSource={data} pagination={false} />
-            <Row justify="space-around">
-                <Col>
-                    <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-                        <Form.Item name="Code" label="Code" rules={[{ required: true }]}>
-                            <Input disabled={percent !== 0 && countPromo == 1 ? true : false} type="text" />
-                        </Form.Item>
-                        <Form.Item {...tailLayout}>
-                            <Button type="primary" htmlType="submit">
-                                Submit
+            {
+                total > 0 && (
+                    <Row justify="space-around">
+                        <Col>
+                            <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+                                <Form.Item name="Code" label="Code" rules={[{ required: true }]}>
+                                    <Input disabled={percent !== 0 && countPromo == 1 ? true : false} type="text" />
+                                </Form.Item>
+                                <Form.Item {...tailLayout}>
+                                    <Button type="primary" htmlType="submit">
+                                        Submit
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        </Col>
+                        <Col>
+                            <div>
+                                <Text>SUBTOTAL:</Text> {
+                                    percent !== 0 && countPromo == 1 && (
+                                        <div>
+                                            <Text delete type="secondary">{financial(preTotal)} vnđ </Text>
+                                            <Text type="success">(giảm {financial(percent)} vnđ)</Text>
+                                            <br></br>
+                                            <Tag color="green">
+                                                <Text  type="success">{financial(total)} vnđ</Text>
+                                            </Tag>
+                                        </div>
+                                    ) || (
+                                        <Tag color="green">
+                                            <Text  type="success">{financial(total)} vnđ</Text>
+                                        </Tag>
+                                    )
+                                }
+                            </div>
+                            <Button type="primary" onClick={() => changePage("/checkout")}>
+                                Check Out
                             </Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
-                <Col>
-                    <p>
-                        SUBTOTAL: {
-                            percent !== 0 && countPromo == 1 && (
-                                <div>
-                                    <Text delete type="secondary">{financial(preTotal)} vnđ </Text>
-                                    <Text type="success">(giảm {Math.floor(percent)}%)</Text>
-                                    <br></br>
-                                    <Tag color="green">
-                                        <Text  type="success">{financial(total)} vnđ</Text>
-                                    </Tag>
-                                </div>
-                            ) || (
-                                <Tag color="green">
-                                    <Text  type="success">{financial(total)} vnđ</Text>
-                                </Tag>
-                            )
-                        }
-                    </p>
-                    <Button type="primary" onClick={onCheckout}>
-                        Check Out
-                    </Button>
-                </Col>
-            </Row>
+                        </Col>
+                    </Row>
+                )
+            }
         </div>
     )
 }

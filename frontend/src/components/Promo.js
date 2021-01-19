@@ -31,14 +31,14 @@ const ViewPromo = (props) => {
         ]
         
         axios.put(
-            `https://${process.env.REACT_APP_API}/promotion/${props.promo._id}`, newPromo[0]
+            `http://${process.env.REACT_APP_API}/promotion/${props.promo._id}`, newPromo[0]
         ).then(res => dispatch(EditPromo(props.promo._id, res))).catch(err => console.log(err))
 
     };
 
     const onDelete = (id) => {
         axios.delete(
-            `https://${process.env.REACT_APP_API}/promotion/${id}`
+            `http://${process.env.REACT_APP_API}/promotion/${id}`
         ).then(res => dispatch(DeletePromo(res))).catch(err => console.log(err))
     }
     
@@ -105,7 +105,7 @@ const Promo = () => {
         ]
 
         axios.post(
-            `https://${process.env.REACT_APP_API}/promotions`, newPromo[0]
+            `http://${process.env.REACT_APP_API}/promotions`, newPromo[0]
         ).then(res => dispatch(AddPromo(res))).catch(err => console.log(err))
         onReset()
     };

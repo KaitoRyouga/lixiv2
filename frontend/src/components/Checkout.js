@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { Form, Input, Button, List, Badge, Image, Row, Col, Divider, Typography } from "antd";
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button, List, Badge, Image, Row, Col, Divider, Typography, Tag } from "antd";
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
 import AddOrder from '../actions/Order/AddOrder'
 import ResetCart from '../actions/Cart/ResetCart'
+import financial from './financial'
 
 let listData = [];
 
@@ -25,51 +26,53 @@ const Checkout = (props) => {
     const [form] = Form.useForm();
     const history = useHistory()
     const dispatch = useDispatch();
-    const stateCart = useSelector(state => state.carts);
-    const stateUser = useSelector(state => state.users);
-    const stateProduct = useSelector(state => state.products);
+    const stateRoot = useSelector(state => state);
+    const [total, setTotal] = useState(0);
 
     listData = []
 
     const onFinish = values => {
+        const stateCart = stateRoot.carts
         values.cart = {stateCart}
-        values.subtotal = props.location.data
+
+        if (stateRoot.promotion.length !== 0) {
+            values.subtotal = total - stateRoot.promotion[0].price
+        }else{
+            values.subtotal = total
+        }
+
         values.status = 'processing'
-        values.author = stateUser[0].uid
+        values.author = stateRoot.users[0].uid
         dispatch(ResetCart())
-        axios.post(`https://${process.env.REACT_APP_API}/orders`, values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
+        axios.post(`http://${process.env.REACT_APP_API}/orders`, values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
         form.resetFields();
         history.push("/")
     };
 
-    const regexp = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+    useEffect(() => {
+        let sumSub = 0;
+        const subtotal = stateRoot.carts.map(c => {
+            const sub = c.quantity*c.price;
+            sumSub += sub
+        })
+        setTotal(sumSub)
+        return subtotal
+    }, [stateRoot])
+
+    const regexp = /(\+(84)+(9|3|7|8|5)+([0-9]{8})\b)/g;
 
     return (
         <div>
 
             {
-                stateCart.map((c, n) => {
-                    const temp = stateProduct.filter(p => p._id === c.id)
-                    if(n !== 0){
-                        const tempPreTotal = listData[n-1].total[1]
-                        listData.push({
-                            key: temp[0]._id,
-                            name: temp[0].name,
-                            quantity: c.quantity,
-                            total: [c.quantity * temp[0].price, tempPreTotal + c.quantity * temp[0].price],
-                            image: temp[0].image,
-
-                        })
-                    }else{
-                        listData.push({
-                            key: temp[0]._id,
-                            name: temp[0].name,
-                            quantity: c.quantity,
-                            total: [c.quantity * temp[0].price, c.quantity * temp[0].price],
-                            image: temp[0].image,
-
-                        })   
-                    }
+                stateRoot.carts.map(c => {
+                    listData.push({
+                        key: c.id,
+                        name: c.name,
+                        quantity: c.quantity,
+                        total: c.quantity * c.price,
+                        image: c.image,
+                    })
                 })
             }
             <Row justify="space-between">
@@ -123,7 +126,7 @@ const Checkout = (props) => {
                                         </Row>
                                     </Col>
                                     <Col span="14">
-                                        <Text>{item.total[0]} vnđ</Text>
+                                        <Tag color="green">{financial(item.total)} vnđ</Tag>
                                     </Col>
                                 </Row>
                             </List.Item>
@@ -142,6 +145,22 @@ const Checkout = (props) => {
                                     <List.Item
                                         key={item.key}
                                     >
+                                        {
+                                            stateRoot.promotion.length !== 0 && (
+                                                <Row justify="space-between" align="middle">
+                                                    <Col span="8">
+                                                        <Row justify="space-between" align="middle">
+                                                            <Col>
+                                                                <Text>Coupon:</Text>
+                                                            </Col>
+                                                        </Row>
+                                                    </Col>
+                                                    <Col span="14">
+                                                        <Text><Tag color="green">{stateRoot.promotion[0].code}</Tag>giảm {financial(stateRoot.promotion[0].price)} vnđ</Text>
+                                                    </Col>
+                                                </Row>
+                                            )
+                                        }
                                         <Row justify="space-between" align="middle">
                                             <Col span="8">
                                                 <Row justify="space-between" align="middle">
@@ -151,7 +170,13 @@ const Checkout = (props) => {
                                                 </Row>
                                             </Col>
                                             <Col span="14">
-                                                <Text>{listData[listData.length-1].total[1]} vnđ</Text>
+                                                {
+                                                    stateRoot.promotion.length !== 0 && (
+                                                        <Tag color="green">{financial(total - stateRoot.promotion[0].price)} vnđ</Tag>
+                                                    ) || (
+                                                        <Tag color="green">{financial(total)} vnđ</Tag>
+                                                    )
+                                                }
                                             </Col>
                                         </Row>
                                     </List.Item>

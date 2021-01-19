@@ -5,6 +5,7 @@ module.exports = function(app) {
     const Promo = require('../controllers/PromoController');
     const Order = require('../controllers/OrderController');
     const User = require('../controllers/UserController');
+    const All = require('../controllers/AllController');
     const Check = require('../middleware/middlewares');
 
     // Users Routes
@@ -61,4 +62,7 @@ module.exports = function(app) {
 
     app.route('/admin')
         .get(Check.isAdmin)
+
+    app.route('/allinfo')
+        .get(All.index)
 };

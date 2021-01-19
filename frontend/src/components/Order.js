@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Form, Select, Button, Descriptions, Typography, Table, Row, Col, Space, Tag, Image, Divider, Badge } from 'antd'
 import axios from 'axios'
 import EditOrder from '../actions/Order/EditOrder'
+import financial from './financial'
 
 let data = [];
   
@@ -19,7 +20,6 @@ const ViewOrder = (props) => {
     const formRef = useRef(null);
     const dispatch = useDispatch()
     const stateUser = useSelector(state => state.users)
-    const stateProduct = useSelector(state => state.products)
     const stateRoot = useSelector(state => state);
     const [admin, setAdmin] = useState(false)
 
@@ -66,7 +66,7 @@ const ViewOrder = (props) => {
                             <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
                             <Row>
                                 <Col>
-                                    <Tag color="green">{all.price} vnđ</Tag>
+                                    <Tag color="green">{financial(all.price)} vnđ</Tag>
                                 </Col>
                             </Row>
                             <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
@@ -79,6 +79,9 @@ const ViewOrder = (props) => {
           title: 'PRICE',
           dataIndex: 'price',
           responsive: ['sm'],
+          render: (price) => (
+            <Tag color="green">{financial(price)}</Tag>
+          )
         },
         {
           title: 'QUANTITY',
@@ -95,9 +98,9 @@ const ViewOrder = (props) => {
         {
             title: 'TOTAL',
             dataIndex: 'total',
-            render: () => (
+            render: (totalItem) => (
                 <Tag color="green">
-                    {total} vnđ
+                    {financial(totalItem)} vnđ
                 </Tag>
             )
         },
@@ -111,7 +114,7 @@ const ViewOrder = (props) => {
     }
 
     axios.get(
-        `https://${process.env.REACT_APP_API}/admin`, {
+        `http://${process.env.REACT_APP_API}/admin`, {
           headers: {
             'uid': stateUser[0].uid
           }
@@ -125,7 +128,7 @@ const ViewOrder = (props) => {
                 status: values.status
             }
         ]
-        axios.put(`https://${process.env.REACT_APP_API}/order/${props.order._id}`, newProduct[0]).then(res => dispatch(EditOrder(props.order._id, res))).catch(err => console.log(err))
+        axios.put(`http://${process.env.REACT_APP_API}/order/${props.order._id}`, newProduct[0]).then(res => dispatch(EditOrder(props.order._id, res))).catch(err => console.log(err))
     };
 
     useEffect(() => {
@@ -135,27 +138,11 @@ const ViewOrder = (props) => {
             })
         }, 600);
 
-        let sumSub = 0;
-        const subtotal = stateRoot.orders.map(o => {
+        stateRoot.orders.map(o => {
             if (o.author === props.order.author && o._id === props.order._id) {
-                o.cart.stateCart.map(c => {
-                    const prod = stateRoot.products.filter(pro => pro.name === c.name);
-                    if(prod.length !== 0){
-                        let sub;
-                        if (prod[0].quantity < c.quantity) {
-                            sub = prod[0].quantity*prod[0].price;
-                        } else {
-                            sub = c.quantity*prod[0].price;
-                        }
-                        
-                        sumSub += sub
-                        return sumSub
-                    }
-                })
+                setTotal(o.subtotal)
             }
         })
-        setTotal(sumSub)
-        return subtotal
 
     }, [props, stateRoot]);
     
@@ -165,28 +152,28 @@ const ViewOrder = (props) => {
                     <Descriptions.Item label="Name">{props.order.name}</Descriptions.Item>
                     <Descriptions.Item label="Phone">{props.order.phone}</Descriptions.Item>
                     <Descriptions.Item label="Address">{props.order.address}</Descriptions.Item>
-                    <Descriptions.Item label="Total">{props.order.subtotal}</Descriptions.Item>
+                    <Descriptions.Item label="Total">{financial(props.order.subtotal)}</Descriptions.Item>
                     <Descriptions.Item label="Status">{props.order.status}</Descriptions.Item>
                 </Descriptions>
                 {
                     props.order.cart.stateCart.map(c => {
-                        const product = stateProduct.filter(p => p._id === c.id)
+                        const product = stateRoot.products.filter(p => p._id === c.id)
                         if(product){
                             data.push({
                                 key: c.id,
                                 product: [c.name, product[0].image],
                                 price: product[0].price,
                                 quantity: c.quantity,
-                                total: product[0].price * c.quantity,  
+                                total:product[0].price * c.quantity,  
                             })
                         }
                     })
                 }
 
                 <Table columns={columns} dataSource={data} pagination={false} />
-                <Text>SUBTOTAL: </Text>
+                <Text>TOTAL: </Text>
                 <Tag color="green">
-                    <Text type="success">{total} vnđ</Text>
+                    <Text type="success">{financial(total)} vnđ</Text>
                 </Tag>
 
                 <br></br>
@@ -225,7 +212,7 @@ const Order = () => {
     }
 
     axios.get(
-        `https://${process.env.REACT_APP_API}/admin`, {
+        `http://${process.env.REACT_APP_API}/admin`, {
           headers: {
             'uid': stateUser[0].uid
           }
@@ -234,7 +221,6 @@ const Order = () => {
 
     return (
         <div>
-            {/* <Header name="Order"></Header> */}
             {
                 stateRoot.map(s => {
                     if(s.author === stateUser[0].uid && admin === false) {

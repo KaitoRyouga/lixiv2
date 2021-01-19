@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   FirebaseAuthProvider,
   FirebaseAuthConsumer
 } from "@react-firebase/auth";
 import firebase from "firebase/app";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import "firebase/auth";
-import { Button, Form, Input, Modal, Space } from 'antd'
-import { config } from "./test-credentials";
+import { Button, Form, Input, Modal } from 'antd'
+import { config } from "./credentials";
 import AddUser from '../actions/User/AddUser'
 import UserLogOut from '../actions/User/UserLogOut'
 import { LoadingOutlined } from '@ant-design/icons'
@@ -24,10 +24,8 @@ const tailLayout = {
 const Login = () => {
 
   const [form] = Form.useForm();
-  const [formCode] = Form.useForm();
   const dispatch = useDispatch()
   const [confirmCode, setConfirmCode] = useState({});
-  const [phone, setPhone] = useState("");
   const [checkCode, setCheckCode] = useState(false);
   const [,updateState] = React.useState();
   const forceUpdate = useCallback(() => updateState({}), []);
@@ -63,7 +61,7 @@ const Login = () => {
   const capcha = (values) => {
     window.reCaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
       size: 'invisible',
-      callback: function (response) {
+      callback: function () {
         successCode()
         setCheckCode(true)
         setConfirmLoadingPhone(false)

@@ -76,7 +76,6 @@ exports.isAuthAdmin = async (req, res, next) => {
 
 exports.isAdmin = async (req, res, next) => {
 
-	// console.log(req.headers.uid)
 	const check = await Admin.findOne({uid: `${req.headers.uid}`})
 	try {
 		if(check !== null){
