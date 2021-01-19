@@ -140,15 +140,17 @@ const ViewOrder = (props) => {
             if (o.author === props.order.author && o._id === props.order._id) {
                 o.cart.stateCart.map(c => {
                     const prod = stateRoot.products.filter(pro => pro.name === c.name);
-                    let sub;
-                    if (prod[0].quantity < c.quantity) {
-                        sub = prod[0].quantity*prod[0].price;
-                    } else {
-                        sub = c.quantity*prod[0].price;
+                    if(prod.length !== 0){
+                        let sub;
+                        if (prod[0].quantity < c.quantity) {
+                            sub = prod[0].quantity*prod[0].price;
+                        } else {
+                            sub = c.quantity*prod[0].price;
+                        }
+                        
+                        sumSub += sub
+                        return sumSub
                     }
-                    
-                    sumSub += sub
-                    return sumSub
                 })
             }
         })
