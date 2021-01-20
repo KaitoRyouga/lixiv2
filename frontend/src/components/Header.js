@@ -17,8 +17,11 @@ const Header = (props) => {
 
     useEffect(() => {
         async function fetchData() {
+
+            const linkAPI = `${process.env.REACT_APP_API}/admin`
+
             const result = await axios.get(
-                `https://${process.env.REACT_APP_API}/admin`, {
+                linkAPI, {
                   headers: {
                     'uid': stateUser[0].uid
                   }

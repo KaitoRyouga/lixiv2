@@ -11,6 +11,7 @@ import { config } from "./credentials";
 import AddUser from '../actions/User/AddUser'
 import UserLogOut from '../actions/User/UserLogOut'
 import { LoadingOutlined } from '@ant-design/icons'
+import { useHistory } from "react-router-dom";
 
 const layout = {
   labelCol: { span: 8 },
@@ -24,13 +25,15 @@ const tailLayout = {
 const Login = () => {
 
   const [form] = Form.useForm();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [confirmCode, setConfirmCode] = useState({});
   const [checkCode, setCheckCode] = useState(false);
   const [,updateState] = React.useState();
   const forceUpdate = useCallback(() => updateState({}), []);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmLoadingPhone, setConfirmLoadingPhone] = useState(false);
+  const [confirmLoadingFB, setConfirmLoadingFB] = useState(false);
 
   const handleOk = () => {
     setConfirmLoading(true);
@@ -59,6 +62,7 @@ const Login = () => {
   }
 
   const capcha = (values) => {
+
     window.reCaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
       size: 'invisible',
       callback: function () {
@@ -68,7 +72,7 @@ const Login = () => {
       }
     });
 
-    const phoneNumber = values.phone;
+    const phoneNumber = "+84" + values.phone.slice(1, values.phone.length)
 
     const appVerifier = window.reCaptchaVerifier;
     firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
@@ -87,6 +91,7 @@ const Login = () => {
       success("Phone")
       setConfirmLoadingPhone(false)
       dispatch(AddUser(result.user))
+      history.push("/cart")
 
     }).catch((error) => {
       fail(error)
@@ -94,7 +99,7 @@ const Login = () => {
 
   };
 
-  const regexp = /(\+(84)+(9|3|7|8|5)+([0-9]{8})\b)/g;
+  const regexp = /((09|03|07|08|05)+([0-9]{8})\b)/g;
 
   return (
     <div>
@@ -126,10 +131,17 @@ const Login = () => {
                     <Button
                       onClick={() => {
                           const fbAuthProvider = new firebase.auth.FacebookAuthProvider
-                          firebase.auth().signInWithRedirect(fbAuthProvider);
+                          firebase.auth().signInWithRedirect(fbAuthProvider).then(res => {
+                          dispatch(AddUser(res.user))
+                          setConfirmLoadingFB(false)
+                          success("FB")
+                        }).catch(err => {
+                          setConfirmLoadingFB(false);
+                          fail(err)}
+                        );
                       }}
                     >
-                      Sign in FB
+                      Sign in FB {confirmLoadingFB && <LoadingOutlined />}
                     </Button>
                     <Button
                       onClick={() => {
@@ -164,7 +176,7 @@ const Login = () => {
                         </Form>
                       ) || (
                         <Form {...layout} form={form} name="control-hooks" onFinish={capcha}>
-                        <Form.Item name="phone" label="Phone" rules={[{ required: true, pattern: new RegExp(regexp), message: "Wrong phone number, format phone number: +84xxxxxxxxx" }]}>
+                        <Form.Item name="phone" label="Phone" rules={[{ required: true, pattern: new RegExp(regexp), message: "Wrong phone number, try again !!!" }]}>
                             <Input type="text" />
                         </Form.Item>
                           <Form.Item {...tailLayout}>

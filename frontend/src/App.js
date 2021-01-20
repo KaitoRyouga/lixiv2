@@ -27,8 +27,10 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       
+      const linkApi = `${process.env.REACT_APP_API}/allinfo`
+
       const allInfo = await axios.get(
-        `https://${process.env.REACT_APP_API}/allinfo`, {
+        linkApi, {
           headers: {
             'uid': stateUser[0].uid
           }
