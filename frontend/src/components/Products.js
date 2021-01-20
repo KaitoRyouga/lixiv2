@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, Card, Row, Col, Image } from "antd";
 import { useSelector , useDispatch} from 'react-redux'
 import axios from 'axios'
-import Header from './Header'
 import AddProduct from '../actions/Product/AddProduct'
 import EditProduct from '../actions/Product/EditProduct'
 import DeleteProduct from '../actions/Product/DeleteProduct'
@@ -25,15 +24,20 @@ const ViewProduct = (props) => {
                 image: '/images/ao_1.jpg'
             }
         ]
+
+        const linkAPI = `${process.env.REACT_APP_API}/product/${props.product._id}`
         
         axios.put(
-            `http://localhost:3000/product/${props.product._id}`, newProduct[0]
+            linkAPI, newProduct[0]
         ).then(res => dispatch(EditProduct(props.product._id, res))).catch(err => console.log(err))
     }
     
     const onDelete = (id) => {
+
+        const linkAPI = `${process.env.REACT_APP_API}/product/${id}`
+
         axios.delete(
-            `http://localhost:3000/product/${id}`
+            linkAPI
         ).then(res => dispatch(DeleteProduct(res))).catch(err => console.log(err))
     }
 
@@ -88,22 +92,26 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
+
+
 const Products = () => {
-    
         const productsRaw = useSelector(state => state.products);
         const dispatch = useDispatch()
         const [form] = Form.useForm();
 
         const onFinish = values => {
             const newProduct = [
-                {
+                {   
                     name: values.Name,
                     quantity: values.Quantity,
                     price: values.Price,
                     image: '/images/ao_1.jpg'
                 }
             ]
-            axios.post('http://localhost:3000/products', newProduct[0]).then(res => dispatch(AddProduct(res))).catch(err => console.log(err))
+
+            const linkAPI = `${process.env.REACT_APP_API}/products`
+
+            axios.post(linkAPI, newProduct[0]).then(res => dispatch(AddProduct(res))).catch(err => console.log(err))
             form.resetFields();
         };
         
@@ -113,7 +121,6 @@ const Products = () => {
           
         return(
             <div>
-                <Header name="Product"></Header>
                 <Row>
                     {
                         productsRaw.map(r => {

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Card, Row, Col, Button, Alert, Modal, Drawer } from "antd";
+import { Row, Col, Button, Alert, Modal, Drawer } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
 import { useDispatch, useSelector } from 'react-redux'
-import Header from './Header'
+import financial from './financial'
 import { useHistory } from "react-router-dom";
 
 const MessengeQuantity = (props) => {
@@ -31,6 +31,8 @@ const ViewList = (props) => {
         const newCart = [{
             id: values.product._id,
             name: values.product.name,
+            price: values.product.price,
+            image: values.product.image,
             quantity: 1,
         }]
 
@@ -83,7 +85,7 @@ const ViewList = (props) => {
             </div>
             <div className="price">
                 <h3 className="headding">{props.product.name}</h3>
-                <span className="price-content">{props.product.price}$</span>
+                <span className="price-content">{financial(props.product.price)} vnđ</span>
             </div>
         </div>
     )
@@ -119,6 +121,8 @@ function ViewProduct (params) {
                 {   
                     id: params.product._id,
                     name: params.product.name,
+                    price: params.product.price,
+                    image: values.product.image,
                     quantity: count + 1
                 }
             ];
@@ -135,6 +139,8 @@ function ViewProduct (params) {
                 {   
                     id: params.product._id,
                     name: params.product.name,
+                    price: params.product.price,
+                    image: values.product.image,
                     quantity: count - 1
                 }
             ];
@@ -148,10 +154,10 @@ function ViewProduct (params) {
     const showDrawer = () => {
         params.showDrawer()
         setVisible(false)
-    }
+    }   
     
     return(
-        <>
+        <div>
             <ViewList key={params.product.id} product={params.product} setVisible={setVisible}></ViewList>
             {
                 showMessenge && messageWarning
@@ -199,7 +205,7 @@ function ViewProduct (params) {
                     </Col>
                 </Row>
             </Modal>
-        </>
+        </div>
     )
 }
 
@@ -207,7 +213,7 @@ const Home = () => {
 
         const [products, setProducts] = useState([]);    
         const [visibleDrawer, setVisibleDrawer] = useState(false);
-        const stateCart = useSelector(state => state)    
+        const stateRoot = useSelector(state => state)    
         const history = useHistory()
 
         const changePage = (path) => {
@@ -224,8 +230,11 @@ const Home = () => {
 
         useEffect(() => {
             async function fetchData() {
+
+                const linkAPI = `${process.env.REACT_APP_API}/products`
+
                 const result = await axios.get(
-                    'http://localhost:3000/products',
+                    linkAPI,
                 );
                 setProducts(result.data.Products);
             }
@@ -234,7 +243,6 @@ const Home = () => {
     
         return(
           <div>
-              <Header name="Home"></Header>
               <div className="container">
                 <div className="row">
                     {
@@ -249,24 +257,24 @@ const Home = () => {
               </div>
 
                 <Drawer
-                    title="Basic Drawer"
+                    title="Cart"
                     placement="right"
                     closable={false}
                     onClose={onClose}
                     visible={visibleDrawer}
                 >
                     {
-                        stateCart.carts.map(c => {
+                        stateRoot.carts.map(c => {
                             return (
-                                <>
+                                <div key={c.name}>
                                     <p>{c.name}</p>
                                     <p>{c.quantity}</p>
-                                </>
+                                </div>
                             )
                         })
                     }
                     <Button onClick={() => changePage("cart")}>Go to cart</Button>
-                    <Button onClick={() => changePage("checkout")}>Check out</Button>
+                    {/* <Button onClick={() => changePage("checkout")}>Check out</Button> */}
                 </Drawer>
           </div>
         )

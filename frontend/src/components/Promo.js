@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button } from "antd";
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
-import Header from "./Header"
 import EditPromo from '../actions/Promo/EditPromo'
 import DeletePromo from '../actions/Promo/DeletePromo'
 import AddPromo from '../actions/Promo/AddPromo'
@@ -30,16 +29,21 @@ const ViewPromo = (props) => {
                 code: values.code
             }
         ]
+
+        const linkAPI = `${process.env.REACT_APP_API}/promotion/${props.promo._id}`
         
         axios.put(
-            `http://localhost:3000/promo/${props.promo._id}`, newPromo[0]
+            linkAPI, newPromo[0]
         ).then(res => dispatch(EditPromo(props.promo._id, res))).catch(err => console.log(err))
 
     };
 
     const onDelete = (id) => {
+
+        const linkAPI = `${process.env.REACT_APP_API}/promotion/${id}`
+
         axios.delete(
-            `http://localhost:3000/promo/${id}`
+            linkAPI
         ).then(res => dispatch(DeletePromo(res))).catch(err => console.log(err))
     }
     
@@ -105,9 +109,10 @@ const Promo = () => {
             }
         ]
 
-        // setPromo(newPromo[0])
+        const linkAPI = `${process.env.REACT_APP_API}/promotions`
+
         axios.post(
-            'http://localhost:3000/promos', newPromo[0]
+            linkAPI, newPromo[0]
         ).then(res => dispatch(AddPromo(res))).catch(err => console.log(err))
         onReset()
     };
@@ -118,12 +123,10 @@ const Promo = () => {
 
     return (
         <div>
-            <Header name="Promo"></Header>
-
             {
                 statePromos.map(p => {
                     return(
-                        <ViewPromo key={p.id} promo={p}></ViewPromo>
+                        <ViewPromo key={p._id} promo={p}></ViewPromo>
                     )
                 })
             }

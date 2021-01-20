@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import axios from 'axios'
+import { Layout } from 'antd'
+import './App.css';
+
 import AllProduct from './actions/Product/AllProduct'
 import AllPromo from './actions/Promo/AllPromo'
 import AllOrder from './actions/Order/AllOrder'
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Products from './components/Products'
 import Home from './components/Home'
 import Cart from './components/Cart'
@@ -12,48 +15,71 @@ import Promo from './components/Promo'
 import Checkout from './components/Checkout'
 import Order from './components/Order'
 import Login from './components/Login'
-import './App.css';
+import HeaderRaw from './components/Header'
+import FooterRaw from './components/Footer'
 
 function App() {
-
+  
+  const { Header, Content, Footer } = Layout;
   const dispatch = useDispatch()
+  const stateUser = useSelector(state => state.users)
+  const [admin, setAdmin] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
-        const resultProducts = await axios.get(
-            'http://localhost:3000/products',
-        );
+      
+      const linkApi = `${process.env.REACT_APP_API}/allinfo`
 
-        const resultPromos = await axios.get(
-          'http://localhost:3000/promos',
-        );
+      const allInfo = await axios.get(
+        linkApi, {
+          headers: {
+            'uid': stateUser[0].uid
+          }
+        }
+      );
 
-        const resultOrders = await axios.get(
-          'http://localhost:3000/orders',
-        );
+      const info = allInfo.data.allInfo
 
-        dispatch(AllProduct(resultProducts.data.Products));
-        dispatch(AllPromo(resultPromos.data.Promos));
-        dispatch(AllOrder(resultOrders.data.Order));
+      setAdmin(info[3].Admin);
+      dispatch(AllProduct(info[1].Product));
+      dispatch(AllPromo(info[2].Promo));
+      dispatch(AllOrder(info[0].Order));
     }
     fetchData();
     
-  }, [dispatch]);
+  }, [stateUser]);
 
   return (
-    <div className="App">
-          <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={Home}></Route>
-          <Route path="/products" component={Products}></Route>
-          <Route path="/cart" component={Cart}></Route>
-          <Route path="/promos" component={Promo}></Route>
-          <Route path="/checkout" component={Checkout}></Route>
-          <Route path="/orders" component={Order}></Route>
-          <Route path="/login" component={Login}></Route>
-        </Switch>
+    <Layout className="App">
+      <BrowserRouter>
+        <Header>
+          <HeaderRaw></HeaderRaw>
+        </Header>
+        <Content>
+          <Switch>
+          
+            <Route exact path="/" component={Home}></Route>
+            {
+              admin && (
+                  <Route path="/products" component={Products}></Route>
+              )
+            }
+            <Route path="/cart" component={Cart}></Route>
+            {
+              admin && (
+                  <Route path="/promotions" component={Promo}></Route>      
+              )
+            }
+            <Route path="/checkout" component={Checkout}></Route>
+            <Route path="/orders" component={Order}></Route>
+            <Route path="/login" component={Login}></Route>
+          </Switch>
+        </Content>
+        <Footer>
+            <FooterRaw></FooterRaw>
+        </Footer>
       </BrowserRouter>
-    </div>
+    </Layout>
   );
 }
 

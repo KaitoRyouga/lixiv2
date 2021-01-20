@@ -57,6 +57,8 @@ class ProductController {
     
     try {
       await Product.updateOne({_id: req.params.productId}, req.body)
+      // const resultProduct = 
+      req.body._id = req.params.productId
       return res.json({ Product: req.body })
     } catch (error) {
       console.log(error)

@@ -1,15 +1,37 @@
-import React from 'react'
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { useHistory} from "react-router-dom";
+import { useSelector } from 'react-redux'
 import { Button} from "antd";
+import axios from 'axios'
 
 const Header = (props) => {
     
+
+    const stateUser = useSelector(state => state.users)
+    const [admin, setAdmin] = useState(false)
 
     const history = useHistory()
 
     const changePage = (path) => {
         history.push(path)
     }
+
+    useEffect(() => {
+        async function fetchData() {
+
+            const linkAPI = `${process.env.REACT_APP_API}/admin`
+
+            const result = await axios.get(
+                linkAPI, {
+                  headers: {
+                    'uid': stateUser[0].uid
+                  }
+                }
+            );
+            setAdmin(result.data.admin);
+        }
+          fetchData();
+    }, [stateUser]);
 
     return (
         <div>
@@ -55,21 +77,28 @@ const Header = (props) => {
             }}>
                 Home
             </Button>
-            <Button onClick={() => {
-                changePage("/products")
-            }}>
-                Products
-            </Button>
+            {
+                admin &&
+                <Button onClick={() => {
+                    changePage("/products")
+                }}>
+                    Products
+                </Button>
+            }
             <Button onClick={() => {
                 changePage("/cart")
             }}>
                 Cart
             </Button>
-            <Button onClick={() => {
-                changePage("/promos")
-            }}>
-                Promo
-            </Button>
+            {
+                admin &&
+                <Button onClick={() => {
+                    changePage("/promotions")
+                }}>
+                    Promo
+                </Button>
+            }
+
             <Button onClick={() => {
                 changePage("/orders")
             }}>
@@ -80,6 +109,9 @@ const Header = (props) => {
             }}>
                 Login
             </Button>
+            <br></br>
+            <br></br>
+            <br></br>
         </div>
     )
 }
