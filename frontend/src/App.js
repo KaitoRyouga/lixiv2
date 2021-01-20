@@ -16,10 +16,11 @@ import Checkout from './components/Checkout'
 import Order from './components/Order'
 import Login from './components/Login'
 import HeaderRaw from './components/Header'
+import FooterRaw from './components/Footer'
 
 function App() {
   
-  const { Header, Content } = Layout;
+  const { Header, Content, Footer } = Layout;
   const dispatch = useDispatch()
   const stateUser = useSelector(state => state.users)
   const [admin, setAdmin] = useState(false)
@@ -74,6 +75,9 @@ function App() {
             <Route path="/login" component={Login}></Route>
           </Switch>
         </Content>
+        <Footer>
+            <FooterRaw></FooterRaw>
+        </Footer>
       </BrowserRouter>
     </Layout>
   );
