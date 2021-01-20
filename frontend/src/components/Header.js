@@ -3,6 +3,7 @@ import { useHistory} from "react-router-dom";
 import { useSelector } from 'react-redux'
 import { Button} from "antd";
 import axios from 'axios'
+import '../assets/css/header.css'
 
 const Header = (props) => {
     
@@ -34,85 +35,84 @@ const Header = (props) => {
     }, [stateUser]);
 
     return (
-        <div>
-                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="#">Navbar</a>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon" />
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">Link</a>
-              </li>
-              <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a className="dropdown-item" href="#">Action</a></li>
-                  <li><a className="dropdown-item" href="#">Another action</a></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li><a className="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link disabled" href="#" tabIndex={-1} aria-disabled="true">Disabled</a>
-              </li>
-            </ul>
-            <form className="d-flex">
-              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          </div>
-        </div>
-      </nav>  
-            <article>This is {props.name}</article>
-            <Button onClick={() => {
-                changePage("/")
-            }}>
-                Home
-            </Button>
-            {
-                admin &&
-                <Button onClick={() => {
-                    changePage("/products")
-                }}>
-                    Products
-                </Button>
-            }
-            <Button onClick={() => {
-                changePage("/cart")
-            }}>
-                Cart
-            </Button>
-            {
-                admin &&
-                <Button onClick={() => {
-                    changePage("/promotions")
-                }}>
-                    Promo
-                </Button>
-            }
+        // <div>
+        //     <Button onClick={() => {
+        //         changePage("/")
+        //     }}>
+        //         Home
+        //     </Button>
+        //     {
+        //         admin &&
+        //         <Button onClick={() => {
+        //             changePage("/products")
+        //         }}>
+        //             Products
+        //         </Button>
+        //     }
+        //     <Button onClick={() => {
+        //         changePage("/cart")
+        //     }}>
+        //         Cart
+        //     </Button>
+        //     {
+        //         admin &&
+        //         <Button onClick={() => {
+        //             changePage("/promotions")
+        //         }}>
+        //             Promo
+        //         </Button>
+        //     }
 
-            <Button onClick={() => {
-                changePage("/orders")
-            }}>
-                Order
-            </Button>
-            <Button onClick={() => {
-                changePage("/login")
-            }}>
-                Login
-            </Button>
-            <br></br>
-            <br></br>
-            <br></br>
+        //     <Button onClick={() => {
+        //         changePage("/orders")
+        //     }}>
+        //         Order
+        //     </Button>
+        //     <Button onClick={() => {
+        //         changePage("/login")
+        //     }}>
+        //         Login
+        //     </Button>
+        //     <br></br>
+        //     <br></br>
+        //     <br></br>
+        // </div>
+
+        <div className="container">
+        <div className="wrapper">
+          <h1 className="logo">LOGO</h1>
+          <a className="nav-toggle">
+            <span className="toggle" />
+            <span className="toggle" />
+            <span className="toggle" />
+          </a>
         </div>
+        <nav className="navbar">
+          <ul className="nav-menu">
+            <li className="nav-item"><a onClick={() => {changePage("/")}}>Home</a></li>
+            <li className="nav-item has-dropdown">
+              <a href="#">Product <i className="fas fa-chevron-down" /></a>
+              <ul className="item-dropdown">
+                <li className="sub-item"><a href="#">Lì xì</a></li>
+                <li className="sub-item"><a href="#">Ngoại tệ</a></li>
+                <li className="sub-item"><a href="#">Khô</a></li>
+                <li className="sub-item"><a href="#">Áo in</a></li>
+              </ul>
+            </li>
+            <li className="nav-item"><a href="#">About</a></li>
+            <li className="nav-item"><a href="#">Contact</a>
+            </li><li className="nav-item"><a onClick={() => {changePage("/cart")}}>
+                <i className="fas fa-cart-plus" />
+              </a>
+            </li>
+            <li className="nav-item">
+              <a onClick={() => {changePage("/login")}}>
+                <i className="fab fa-facebook-f" />
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     )
 }
 
