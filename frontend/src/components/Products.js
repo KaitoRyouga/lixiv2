@@ -24,15 +24,20 @@ const ViewProduct = (props) => {
                 image: '/images/ao_1.jpg'
             }
         ]
+
+        const linkAPI = `${process.env.REACT_APP_API}/product/${props.product._id}`
         
         axios.put(
-            `https://${process.env.REACT_APP_API}/product/${props.product._id}`, newProduct[0]
+            linkAPI, newProduct[0]
         ).then(res => dispatch(EditProduct(props.product._id, res))).catch(err => console.log(err))
     }
     
     const onDelete = (id) => {
+
+        const linkAPI = `${process.env.REACT_APP_API}/product/${id}`
+
         axios.delete(
-            `https://${process.env.REACT_APP_API}/product/${id}`
+            linkAPI
         ).then(res => dispatch(DeleteProduct(res))).catch(err => console.log(err))
     }
 
@@ -103,7 +108,10 @@ const Products = () => {
                     image: '/images/ao_1.jpg'
                 }
             ]
-            axios.post(`https://${process.env.REACT_APP_API}/products`, newProduct[0]).then(res => dispatch(AddProduct(res))).catch(err => console.log(err))
+
+            const linkAPI = `${process.env.REACT_APP_API}/products`
+
+            axios.post(linkAPI, newProduct[0]).then(res => dispatch(AddProduct(res))).catch(err => console.log(err))
             form.resetFields();
         };
         

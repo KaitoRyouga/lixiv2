@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, List, Badge, Image, Row, Col, Divider, Typography, Tag } from "antd";
+import { Form, Input, Button, List, Badge, Image, Row, Col, Divider, Typography, Tag, Modal } from "antd";
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
@@ -31,6 +31,13 @@ const Checkout = (props) => {
 
     listData = []
 
+    const messageWarning = () => {
+        Modal.warning({
+          title: 'Warning',
+          content: `You need to login before ordering`,
+        });
+    }
+
     const onFinish = values => {
         const stateCart = stateRoot.carts
         values.cart = {stateCart}
@@ -43,10 +50,19 @@ const Checkout = (props) => {
 
         values.status = 'processing'
         values.author = stateRoot.users[0].uid
-        dispatch(ResetCart())
-        axios.post(`https://${process.env.REACT_APP_API}/orders`, values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
-        form.resetFields();
-        history.push("/")
+
+        if (values.author === "") {
+            messageWarning()
+            history.push("/login")
+        } else {
+            dispatch(ResetCart())
+
+            const linkAPI = `${process.env.REACT_APP_API}/orders`
+    
+            axios.post(linkAPI, values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
+            form.resetFields();
+            history.push("/")
+        }
     };
 
     useEffect(() => {
@@ -59,7 +75,7 @@ const Checkout = (props) => {
         return subtotal
     }, [stateRoot])
 
-    const regexp = /(\+(84)+(9|3|7|8|5)+([0-9]{8})\b)/g;
+    const regexp = /((09|03|07|08|05)+([0-9]{8})\b)/g;
 
     return (
         <div>

@@ -113,8 +113,10 @@ const ViewOrder = (props) => {
         setAdmin(res.data.admin)
     }
 
+    const linkAPI = `${process.env.REACT_APP_API}/admin`
+
     axios.get(
-        `https://${process.env.REACT_APP_API}/admin`, {
+        linkAPI, {
           headers: {
             'uid': stateUser[0].uid
           }
@@ -128,7 +130,10 @@ const ViewOrder = (props) => {
                 status: values.status
             }
         ]
-        axios.put(`https://${process.env.REACT_APP_API}/order/${props.order._id}`, newProduct[0]).then(res => dispatch(EditOrder(props.order._id, res))).catch(err => console.log(err))
+
+        const linkAPIOrder = `${process.env.REACT_APP_API}/order/${props.order._id}`
+
+        axios.put(linkAPIOrder, newProduct[0]).then(res => dispatch(EditOrder(props.order._id, res))).catch(err => console.log(err))
     };
 
     useEffect(() => {
@@ -211,8 +216,10 @@ const Order = () => {
         setAdmin(res.data.admin)
     }
 
+    const linkAPI = `${process.env.REACT_APP_API}/admin`
+
     axios.get(
-        `https://${process.env.REACT_APP_API}/admin`, {
+        linkAPI, {
           headers: {
             'uid': stateUser[0].uid
           }
