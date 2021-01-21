@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Alert, Modal, Drawer } from "antd";
+import { Row, Col, Button, Alert, Modal, Drawer, Tag, Image, Space, Badge } from "antd";
 import axios from 'axios'
-import { LeftOutlined, RightOutlined} from '@ant-design/icons'
+import { LeftOutlined, RightOutlined, DeleteOutlined } from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
+import DeleteCart from '../actions/Cart/DeleteCart'
 import { useDispatch, useSelector } from 'react-redux'
 import financial from './financial'
 import { useHistory } from "react-router-dom";
@@ -152,6 +153,7 @@ function ViewProduct (params) {
     }
 
     const showDrawer = () => {
+        setCount(0)
         params.showDrawer()
         setVisible(false)
     }   
@@ -215,6 +217,7 @@ const Home = () => {
         const [visibleDrawer, setVisibleDrawer] = useState(false);
         const stateRoot = useSelector(state => state)    
         const history = useHistory()
+        const dispatch = useDispatch();
 
         const changePage = (path) => {
             history.push(path)
@@ -257,7 +260,7 @@ const Home = () => {
               </div>
 
                 <Drawer
-                    title="Cart"
+                    title="SHOPPING CART"
                     placement="right"
                     closable={false}
                     onClose={onClose}
@@ -266,15 +269,35 @@ const Home = () => {
                     {
                         stateRoot.carts.map(c => {
                             return (
-                                <div key={c.name}>
-                                    <p>{c.name}</p>
-                                    <p>{c.quantity}</p>
-                                </div>
+                                <Row key={c.name}>
+                                    <Space size="small">
+                                        <Col span={12}>
+                                            <Badge count={c.quantity}>
+                                                <Image src={c.image} alt="image product"></Image>
+                                            </Badge>
+                                        </Col>
+                                        <Col span={12}>
+                                            <Row>
+                                                <Tag color="green">{c.name}</Tag>
+                                            </Row>
+                                            <Row>
+                                                <Tag color="green">{financial(c.price)} vnđ</Tag>
+                                            </Row>
+                                            <Row>
+                                            <Tag color="volcano">
+                                                <DeleteOutlined onClick={() => {
+                                                    dispatch(DeleteCart(c.id))
+                                                }} />
+                                            </Tag>  
+                                            </Row>
+                                        </Col>
+                                    </Space>
+                                </Row>
                             )
                         })
                     }
                     <Button onClick={() => changePage("cart")}>Go to cart</Button>
-                    {/* <Button onClick={() => changePage("checkout")}>Check out</Button> */}
+                    <Button onClick={() => changePage("checkout")}>Check out</Button>
                 </Drawer>
           </div>
         )
