@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Alert, Modal, Drawer, Tag, Image, Space, Badge } from "antd";
+import { Row, Col, Button, Alert, Modal, Drawer, Tag, Image, Space, Badge, Card, Grid } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined, DeleteOutlined } from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
@@ -7,6 +7,9 @@ import DeleteCart from '../actions/Cart/DeleteCart'
 import { useDispatch, useSelector } from 'react-redux'
 import financial from './financial'
 import { useHistory } from "react-router-dom";
+import QueueAnim from 'rc-queue-anim';
+
+const { useBreakpoint } = Grid;
 
 const MessengeQuantity = (props) => {
 
@@ -22,6 +25,8 @@ const MessengeQuantity = (props) => {
 }
 
 const ViewList = (props) => {
+
+    const { Meta } = Card;
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -41,64 +46,62 @@ const ViewList = (props) => {
         history.push("cart")
     }
 
-    const section_content = {
-        backgroundImage: `url(${process.env.PUBLIC_URL}${props.product.image})`,
-    }
-
-    const hoverBackground = {
-        backgroundImage: `url(${process.env.PUBLIC_URL}'/images/3.jpg')`
-    }
-    
-
     return(
-        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className="col-lg-12 col-md-6 col-12 ">
-            <div className="section_content-home" style={{
-                ...section_content,
-                ...(hover ? hoverBackground : null)
-            }}>
-                <div className="box_content" style={{
-                    ...section_content,
-                    ...(hover ? hoverBackground : null)
-                }}>
-                </div>
-                <div className="overlay">
-                    <div className="icon">
-                        <i className="far fa-heart" />
-                    </div>
-                    <div className="botton">
-                        <a className="view" onClick={()=> props.setVisible(true)}>
-                            <div className="view-text">Quick view</div>
-                            <div className="view-icon">
-                                <i className="fas fa-eye" />
-                            </div>
-                        </a>
-                        <a className="view" onClick={() => onQuickShop(props)}>
-                            <div className="view-text">Quick shop</div>
-                            <div className="view-icon">
-                                <i className="fas fa-cart-plus" />
-                            </div>
-                        </a>
-                    </div>
-                    <div className="size">
-                        XS, S, M, L, XL
-                    </div>
-                </div>
+        <Card
+            hoverable
+            style={{
+                textAlign: "center",
+            }}
+            cover={(
+                    <>
+                        <img alt={props.product.name} src={props.product.image} />
+                    </>
+                )
+            }
+            onMouseEnter={() => setHover(true)} 
+            onMouseLeave={() => setHover(false)}
+        >
+            <Meta title={props.product.name} description={`${financial(props.product.price)} vnđ`} />
+            <div className="queue-demo">
+                <QueueAnim className="demo-content"
+                    animConfig={[
+                        { opacity: [1, 0], translateY: [0, 50] },
+                        { opacity: [1, 0], translateY: [0, -50] }
+                    ]}
+                >
+                {
+                    hover ? (
+                        <div className="demo-thead" key="a" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                            <Space size="small" style={{ marginTop: "1em" }}>
+                                <Button onClick={()=> props.setVisible(true)} type="primary" style={{ borderRadius: "0.3em" }}>
+                                    Quick View
+                                </Button>
+                                <Button onClick={() => onQuickShop(props)} type="primary" style={{ borderRadius: "0.3em" }}>
+                                    Quick Shop
+                                </Button>
+                            </Space>
+                        </div>
+                    ) : null
+                }
+                </QueueAnim>
             </div>
-            <div className="price">
-                <h3 className="headding">{props.product.name}</h3>
-                <span className="price-content">{financial(props.product.price)} vnđ</span>
-            </div>
-        </div>
+        </Card>
     )
 }
 
 
 function ViewProduct (params) {
+
+    const { Meta } = Card;
+    const { lg, md, sm, xs } = useBreakpoint()
+
     const [count, setCount] = useState(0);
+    const [sizeList, setSizeList] = useState(0);
     const [showMessenge, setShowMessenge] = useState(false);
     const [showMessengeCount, setShowMessengeCount] = useState(false);
     const [visible, setVisible] = useState(false);
     const dispatch = useDispatch();
+    
 
     const messageWarning = (<Alert
         message="Warning"
@@ -157,10 +160,25 @@ function ViewProduct (params) {
         params.showDrawer()
         setVisible(false)
     }   
+
+    useEffect(() => {
+        if(lg){
+            setSizeList(5)
+        }else if(sm == true && md == false){
+            setSizeList(10)
+        }else if(xs && md == false){
+            setSizeList(12)
+        }else{
+            setSizeList(7)
+        }
+    });
     
     return(
-        <div>
-            <ViewList key={params.product.id} product={params.product} setVisible={setVisible}></ViewList>
+        <>
+            <Col offset={1} span={sizeList}>
+                <ViewList key={params.product.id} product={params.product} setVisible={setVisible}></ViewList>
+            </Col>
+            <br></br>
             {
                 showMessenge && messageWarning
             }
@@ -176,29 +194,38 @@ function ViewProduct (params) {
                 width={1000}
             >
                 <Row>
-                    <Col span={12}>
-                        <ViewList key={params.product.id} product={params.product} setVisible={setVisible}></ViewList>
+                    <Col span={11}>
+                        <Card
+                            hoverable
+                            style={{ textAlign: "center" }}
+                            cover={<Image alt={params.product.name} src={params.product.image} width={md ? 300 : null} />}
+                        >
+                            <Meta title={params.product.name} description={`${financial(params.product.price)} vnđ`} />
+                        </Card>
                     </Col>
-                    <Col span={12}>
+                    <Col span={2}></Col>
+                    <Col span={11}>
                         <div>
-                            <Row>
-                                <Col span={8}>
+                            <Row justify="center" align="middle">
+                                <Space>
+                                <Col>
                                     <Button onClick={() => {
                                         onDecrement()
                                     }}>
                                         <LeftOutlined />
                                     </Button> 
                                 </Col>
-                                <Col span={8}>
-                                    <p>{count}</p>
+                                <Col>
+                                    <span style={{ textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>{count}</span>
                                 </Col>
-                                <Col span={8}>
+                                <Col>
                                 <Button onClick={() => {
                                         onIncrement()
                                     }}>
                                         <RightOutlined />
                                     </Button> 
                                 </Col>
+                                </Space>
                                 <Col>
                                     <Button onClick={showDrawer}>Add to cart</Button>
                                 </Col>
@@ -207,14 +234,15 @@ function ViewProduct (params) {
                     </Col>
                 </Row>
             </Modal>
-        </div>
+        </>
     )
 }
 
 const Home = () => {
-
+    
         const [products, setProducts] = useState([]);    
         const [visibleDrawer, setVisibleDrawer] = useState(false);
+        
         const stateRoot = useSelector(state => state)    
         const history = useHistory()
         const dispatch = useDispatch();
@@ -246,18 +274,18 @@ const Home = () => {
     
         return(
           <div>
-              <div className="container">
-                <div className="row">
-                    {
-                        
-                        products.map((product, id) => {
-                            return (
-                                <ViewProduct key={id} product={product} showDrawer={showDrawer}></ViewProduct> 
-                            )
-                        })
-                    }
-                </div>
-              </div>
+                <br></br>
+                <Row justify="center">
+                {
+                    
+                    products.map((product, id) => {
+                        return (
+                            <ViewProduct key={id} product={product} showDrawer={showDrawer}></ViewProduct> 
+                        )
+                    })
+                }
+              </Row>
+              <br></br>
 
                 <Drawer
                     title="SHOPPING CART"
@@ -266,23 +294,27 @@ const Home = () => {
                     onClose={onClose}
                     visible={visibleDrawer}
                 >
+                <br></br>
                     {
                         stateRoot.carts.map(c => {
                             return (
+                                <>
                                 <Row key={c.name}>
                                     <Space size="small">
-                                        <Col span={12}>
+                                        <Col span={12} style={{ marginLeft: "1em" }}>
                                             <Badge count={c.quantity}>
                                                 <Image src={c.image} alt="image product"></Image>
                                             </Badge>
                                         </Col>
-                                        <Col span={12}>
+                                        <Col span={12} style={{ display: "flex", flexDirection: "column" ,justifyContent: "center", alignItems: "end" }}>
                                             <Row>
                                                 <Tag color="green">{c.name}</Tag>
                                             </Row>
+                                            <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
                                             <Row>
                                                 <Tag color="green">{financial(c.price)} vnđ</Tag>
                                             </Row>
+                                            <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
                                             <Row>
                                             <Tag color="volcano">
                                                 <DeleteOutlined onClick={() => {
@@ -293,11 +325,15 @@ const Home = () => {
                                         </Col>
                                     </Space>
                                 </Row>
+                                <br></br>
+                                </>
                             )
                         })
                     }
-                    <Button onClick={() => changePage("cart")}>Go to cart</Button>
-                    <Button onClick={() => changePage("checkout")}>Check out</Button>
+                    <Space style={{ marginLeft: "1em" }}>
+                        <Button onClick={() => changePage("cart")}>Go to cart</Button>
+                        <Button onClick={() => changePage("checkout")}>Check out</Button>
+                    </Space>
                 </Drawer>
           </div>
         )

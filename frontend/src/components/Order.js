@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Form, Select, Button, Descriptions, Typography, Table, Row, Col, Space, Tag, Image, Divider, Badge } from 'antd'
+import { Form, Select, Button, Descriptions, Typography, Table, Row, Col, Space, Tag, Image, Divider, Badge, Empty } from 'antd'
 import axios from 'axios'
 import EditOrder from '../actions/Order/EditOrder'
 import financial from './financial'
@@ -215,6 +215,8 @@ const Order = () => {
     const checkAdmin = (res) => {
         setAdmin(res.data.admin)
     }
+
+    console.log("object")
 
     const linkAPI = `${process.env.REACT_APP_API}/admin`
 
