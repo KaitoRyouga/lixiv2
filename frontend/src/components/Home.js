@@ -122,7 +122,7 @@ function ViewProduct (params) {
                     id: params.product._id,
                     name: params.product.name,
                     price: params.product.price,
-                    image: values.product.image,
+                    image: params.product.image,
                     quantity: count + 1
                 }
             ];

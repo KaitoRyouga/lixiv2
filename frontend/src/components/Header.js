@@ -34,49 +34,6 @@ const Header = (props) => {
     }, [stateUser]);
 
     return (
-        // <div>
-        //     <Button onClick={() => {
-        //         changePage("/")
-        //     }}>
-        //         Home
-        //     </Button>
-        //     {
-        //         admin &&
-        //         <Button onClick={() => {
-        //             changePage("/products")
-        //         }}>
-        //             Products
-        //         </Button>
-        //     }
-        //     <Button onClick={() => {
-        //         changePage("/cart")
-        //     }}>
-        //         Cart
-        //     </Button>
-        //     {
-        //         admin &&
-        //         <Button onClick={() => {
-        //             changePage("/promotions")
-        //         }}>
-        //             Promo
-        //         </Button>
-        //     }
-
-        //     <Button onClick={() => {
-        //         changePage("/orders")
-        //     }}>
-        //         Order
-        //     </Button>
-        //     <Button onClick={() => {
-        //         changePage("/login")
-        //     }}>
-        //         Login
-        //     </Button>
-        //     <br></br>
-        //     <br></br>
-        //     <br></br>
-        // </div>
-
         <div className="container">
         <div className="wrapper">
           <h1 className="logo">LOGO</h1>
