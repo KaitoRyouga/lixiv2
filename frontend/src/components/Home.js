@@ -167,7 +167,7 @@ function ViewProduct (params) {
         }else if(sm == true && md == false){
             setSizeList(10)
         }else if(xs && md == false){
-            setSizeList(12)
+            setSizeList(22)
         }else{
             setSizeList(7)
         }
