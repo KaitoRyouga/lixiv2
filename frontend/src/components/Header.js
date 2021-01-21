@@ -92,7 +92,11 @@ const LeftMenu = () => {
 const Header = () => {
 
     const [visible, setVisible] = useState(false)
+    const history = useHistory()
 
+    const changePage = (path) => {
+      history.push(path)
+    }
 
     const showDrawer = () => {
       setVisible(true)
@@ -105,7 +109,7 @@ const Header = () => {
     return (
       <Row justify="space-between">
         <Col span={3}>
-          <a href="">logo</a>
+          <a onClick={() => changePage("/")}>logo</a>
         </Col>
         <Col span={20}>
           <Row justify="start" align="middle">

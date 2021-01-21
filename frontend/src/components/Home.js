@@ -51,6 +51,7 @@ const ViewList = (props) => {
             hoverable
             style={{
                 textAlign: "center",
+                marginBottom: "2em"
             }}
             cover={(
                     <>
@@ -178,7 +179,6 @@ function ViewProduct (params) {
             <Col offset={1} span={sizeList}>
                 <ViewList key={params.product.id} product={params.product} setVisible={setVisible}></ViewList>
             </Col>
-            <br></br>
             {
                 showMessenge && messageWarning
             }
@@ -275,7 +275,7 @@ const Home = () => {
         return(
           <div>
                 <br></br>
-                <Row justify="center">
+                <Row justify="center" align="middle">
                 {
                     
                     products.map((product, id) => {
@@ -285,7 +285,6 @@ const Home = () => {
                     })
                 }
               </Row>
-              <br></br>
 
                 <Drawer
                     title="SHOPPING CART"

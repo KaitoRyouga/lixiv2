@@ -31,7 +31,6 @@ const OrderSchema = new Schema({
   },
   author: {
     type: String,
-    required: true,
     trim: true
   }
 }, { timestamps: true })

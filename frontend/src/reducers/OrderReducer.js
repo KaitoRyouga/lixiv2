@@ -3,14 +3,19 @@ const initState = []
 const OrderReducer = (state = initState, action) => {
     switch (action.type) {
         case 'ALL_ORDER':
-
             const data = action.info
             return data
 
         case 'ADD_ORDER':
 
-            const newOrder = [].concat(state, action.info.data.Order)
-            return newOrder
+            const checkOrder = state.filter(o => o._id === action.info.data.Order[0]._id)
+
+            if (checkOrder.length !== 0) {
+                return state
+            } else {
+                const newOrder = [].concat(state, action.info.data.Order)
+                return newOrder
+            }
 
         case 'EDIT_ORDER':
 
