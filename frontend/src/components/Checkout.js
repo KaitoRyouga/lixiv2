@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, List, Badge, Image, Row, Col, Divider, Typography, Tag, Modal } from "antd";
+import { Form, Input, Button, List, Badge, Image, Row, Col, Divider, Typography, Tag } from "antd";
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
@@ -19,7 +19,7 @@ const tailLayout = {
 };
 
 
-const Checkout = (props) => {
+const Checkout = () => {
 
     const { Text } = Typography;
 
@@ -30,13 +30,6 @@ const Checkout = (props) => {
     const [total, setTotal] = useState(0);
 
     listData = []
-
-    const messageWarning = () => {
-        Modal.warning({
-          title: 'Warning',
-          content: `You need to login before ordering`,
-        });
-    }
 
     const onFinish = values => {
         const stateCart = stateRoot.carts
@@ -51,18 +44,13 @@ const Checkout = (props) => {
         values.status = 'processing'
         values.author = stateRoot.users[0].uid
 
-        if (values.author === "") {
-            messageWarning()
-            history.push("/login")
-        } else {
-            dispatch(ResetCart())
+        dispatch(ResetCart())
 
-            const linkAPI = `${process.env.REACT_APP_API}/orders`
-    
-            axios.post(linkAPI, values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
-            form.resetFields();
-            history.push("/")
-        }
+        const linkAPI = `${process.env.REACT_APP_API}/orders`
+
+        axios.post(linkAPI, values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
+        form.resetFields();
+        history.push("/")
     };
 
     useEffect(() => {

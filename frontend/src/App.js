@@ -8,6 +8,7 @@ import './App.css';
 import AllProduct from './actions/Product/AllProduct'
 import AllPromo from './actions/Promo/AllPromo'
 import AllOrder from './actions/Order/AllOrder'
+import AddUser from './actions/User/AddUser'
 import Products from './components/Products'
 import Home from './components/Home'
 import Cart from './components/Cart'
@@ -19,6 +20,13 @@ import HeaderRaw from './components/Header'
 import FooterRaw from './components/Footer'
 import Banner from './components/Banner'
 import MessengerCustomerChat from 'react-messenger-customer-chat';
+import firebase from "firebase/app";
+import {
+  FirebaseAuthProvider,
+  FirebaseAuthConsumer
+} from "@react-firebase/auth";
+import "firebase/auth";
+import { config } from "../src/components/credentials";
 
 function App() {
   
@@ -26,6 +34,7 @@ function App() {
   const dispatch = useDispatch()
   const stateUser = useSelector(state => state.users)
   const [admin, setAdmin] = useState(false)
+  const [countUser, setCountUser] = useState(0)
 
   useEffect(() => {
     async function fetchData() {
@@ -35,17 +44,20 @@ function App() {
       const allInfo = await axios.get(
         linkApi, {
           headers: {
-            'uid': stateUser[0].uid
+            'uid': stateUser[0].uid,
+            'phone': stateUser[0].phoneNumber,
           }
         }
       );
 
       const info = allInfo.data.allInfo
+      if (info[0].Order.length !== 0) {
+        dispatch(AllOrder(info[0].Order));
+      }
 
       setAdmin(info[3].Admin);
       dispatch(AllProduct(info[1].Product));
       dispatch(AllPromo(info[2].Promo));
-      dispatch(AllOrder(info[0].Order));
     }
     fetchData();
     
@@ -53,6 +65,16 @@ function App() {
 
   return (
     <Layout className="App">
+    <FirebaseAuthProvider {...config} firebase={firebase}>
+      <FirebaseAuthConsumer>
+      {({ isSignedIn, user }) => {       
+          if(isSignedIn  && countUser === 0 ){
+            setCountUser(countUser + 1)
+            dispatch(AddUser(user))
+          }
+      }}
+      </FirebaseAuthConsumer>
+    </FirebaseAuthProvider>
       <BrowserRouter>
         <Header style={{ background: "#fff" }}>
           <HeaderRaw></HeaderRaw>

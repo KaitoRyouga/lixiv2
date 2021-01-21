@@ -1,8 +1,9 @@
 const Order = require('../models/Order')
+const Admin = require('../models/Admin')
 
 class OrderController {
   static async store (req, res, next) {
-    // console.log(req)
+
     try {
         const OrderCartRaw = req.body
 
@@ -21,12 +22,6 @@ class OrderController {
         if (!req.body.address || !req.body.address.trim().length) {
           return res.status(422).json({
             message: 'Address is required!'
-          })
-        }
-
-        if (!req.body.author || !req.body.author.trim().length) {
-          return res.status(422).json({
-            message: 'Author is required!'
           })
         }
 
@@ -63,7 +58,23 @@ class OrderController {
 
   static async index (req, res, next) {
     try {
-      const OrderCart = await Order.find({})
+
+      console.log(req.headers)
+
+      const check = await Admin.findOne({uid: `${req.headers.uid}`})
+      let OrderCart
+      const uid = req.headers.uid;
+      const phone = req.headers.phone;
+
+      if(check !== null){ // if you is admin
+        OrderCart = await Order.find({})
+      }else if( uid !== "" && phone === ""){ // login with fb + gg => search orders with uid
+        OrderCart = await Order.find({uid: uid})
+      }else if(phone !== ""){ // login with phone => search orders with phone
+        
+        const phoneNumber = "0" + phone.slice(3, phone.length)
+        OrderCart = await Order.find({phone: phoneNumber})
+      }
 
       return res.json({ Order: OrderCart })
     } catch (error) {

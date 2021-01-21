@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Form, Select, Button, Descriptions, Typography, Table, Row, Col, Space, Tag, Image, Divider, Badge, Empty } from 'antd'
 import axios from 'axios'
 import EditOrder from '../actions/Order/EditOrder'
+import AddOrder from '../actions/Order/AddOrder'
 import financial from './financial'
 
 let data = [];
@@ -137,11 +138,13 @@ const ViewOrder = (props) => {
     };
 
     useEffect(() => {
-        setTimeout(() => {
-            form.setFieldsValue({
-                status: props.order.status,
-            })
-        }, 600);
+        if(admin){
+            setTimeout(() => {
+                form.setFieldsValue({
+                    status: props.order.status,
+                })
+            }, 500);
+        }
 
         stateRoot.orders.map(o => {
             if (o.author === props.order.author && o._id === props.order._id) {
@@ -209,40 +212,33 @@ const ViewOrder = (props) => {
 
 const Order = () => {
 
-    const stateRoot = useSelector(state => state.orders);
+    const stateOrder = useSelector(state => state.orders);
     const stateUser = useSelector(state => state.users)
-    const [admin, setAdmin] = useState(false)
-    const checkAdmin = (res) => {
-        setAdmin(res.data.admin)
-    }
+    const dispatch = useDispatch()
 
-    console.log("object")
+    useEffect(() => {
 
-    const linkAPI = `${process.env.REACT_APP_API}/admin`
+        if (stateUser[0].uid !== "") {
+         
+            const linkAPI = `${process.env.REACT_APP_API}/orders`
 
-    axios.get(
-        linkAPI, {
-          headers: {
-            'uid': stateUser[0].uid
-          }
+            axios.get(
+                linkAPI, {
+                headers: {
+                    'uid': stateUser[0].uid,
+                    'phone': stateUser[0].phoneNumber,
+                }
+                }
+            ).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))   
         }
-    ).then(res => checkAdmin(res)).catch(err => console.log(err))
+    }, [stateUser])
 
     return (
         <div>
             {
-                stateRoot.map(s => {
-                    if(s.author === stateUser[0].uid && admin === false) {
-                        return <ViewOrder key={s._id} order={s}></ViewOrder>
-                    }
-                })
-            }
-
-            {
-                stateRoot.map(s => {
-                    if(admin === true) {
-                        return <ViewOrder key={s._id} order={s}></ViewOrder>
-                    }
+                stateOrder.length !== 0 && stateOrder[0] !== undefined && stateOrder[0] !== null &&
+                stateOrder.map(s => {
+                    return <ViewOrder key={s._id} order={s}></ViewOrder>
                 })
             }
         </div>
