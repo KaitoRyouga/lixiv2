@@ -17,6 +17,7 @@ import Order from './components/Order'
 import Login from './components/Login'
 import HeaderRaw from './components/Header'
 import FooterRaw from './components/Footer'
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 
 function App() {
   
@@ -74,6 +75,10 @@ function App() {
             <Route path="/orders" component={Order}></Route>
             <Route path="/login" component={Login}></Route>
           </Switch>
+          <MessengerCustomerChat
+            pageId="102235194617391"
+            appId="446677652971923"
+          />
         </Content>
         <Footer>
             <FooterRaw></FooterRaw>
