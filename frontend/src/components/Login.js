@@ -109,9 +109,9 @@ const Login = () => {
             {({ isSignedIn, firebase, user }) => {
               if (isSignedIn === true && user !== null) {
                 return (
-                  <div>
-                    <h2>You're signed in, welcome {user.displayName} 🎉 </h2>
-                    <Button
+                  <div style={{ textAlign: "center" }}>
+                      <h2>You're signed in, welcome {user.displayName} 🎉 </h2>
+                      <Button
                       onClick={() => {
                         firebase
                           .app()
@@ -126,7 +126,7 @@ const Login = () => {
                 );
               } else {
                 return (
-                  <div>
+                  <div style={{ textAlign: "center" }}>
                     <h2>You're not signed in </h2>
                     <Button
                       onClick={() => {
@@ -160,6 +160,7 @@ const Login = () => {
                       Sign in with Google {confirmLoading && <LoadingOutlined />}
                     </Button>
                     <div id="recaptcha-container">
+                    <br></br>
                     {
                       checkCode && (
                         <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
