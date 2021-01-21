@@ -15,12 +15,6 @@ body {
   background: #ffffff;
 }
 
-.container {
-  max-width: 90rem;
-  width: 100%;
-  padding: 0 4rem;
-  margin: 0 auto;
-}
 
 .header {
   min-height: 70px;
@@ -28,22 +22,28 @@ body {
 }
 
 .wrapper {
-  color: #ffffff;
-  min-height: 60px;
+
   float: left;
+  height: 64px;
 }
 .wrapper .logo {
   float: left;
   margin: 0;
-  padding: 9px 0 0 10px;
 }
+.wrapper h1.logo {
+  margin-top: 32px;
+  transform: translateY(-50%);
+  color: #ffffff !important;
+}
+
 .navbar {
   display: block;
+  padding: 0;
+  margin-bottom: 0;
 }
 
 .nav-menu {
   margin: 0;
-  padding: 4px 0 0 0;
   list-style: none;
   float: right;
 }
@@ -54,7 +54,7 @@ body {
 .nav-menu li a {
   display: block;
   padding: 1rem;
-  color: #ffffff;
+  color: #ffffff !important;
 }
 .nav-menu li:hover a {
   color: #9fa0a6;

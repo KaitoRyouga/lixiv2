@@ -107,7 +107,7 @@ const Header = (props) => {
             </li>
             <li className="nav-item">
               <a onClick={() => {changePage("/login")}}>
-                <i className="fab fa-facebook-f" />
+                <i className="fas fa-user" />
               </a>
             </li>
           </ul>

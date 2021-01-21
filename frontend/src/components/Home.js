@@ -50,7 +50,7 @@ const ViewList = (props) => {
     
 
     return(
-        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className="col-lg-3 col-md-3 col-sm-6 col-xs-6  ">
+        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className="col-lg-12 col-md-6 col-12 ">
             <div className="section_content-home" style={{
                 ...section_content,
                 ...(hover ? hoverBackground : null)
