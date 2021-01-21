@@ -17,6 +17,7 @@ import Order from './components/Order'
 import Login from './components/Login'
 import HeaderRaw from './components/Header'
 import FooterRaw from './components/Footer'
+import Banner from './components/Banner'
 import MessengerCustomerChat from 'react-messenger-customer-chat';
 
 function App() {
@@ -53,9 +54,10 @@ function App() {
   return (
     <Layout className="App">
       <BrowserRouter>
-        <Header>
+        <Header style={{ background: "#fff" }}>
           <HeaderRaw></HeaderRaw>
         </Header>
+        <Banner></Banner>
         <Content>
           <Switch>
           
@@ -80,7 +82,7 @@ function App() {
             appId="446677652971923"
           />
         </Content>
-        <Footer>
+        <Footer style={{ textAlign: 'center' }}>
             <FooterRaw></FooterRaw>
         </Footer>
       </BrowserRouter>

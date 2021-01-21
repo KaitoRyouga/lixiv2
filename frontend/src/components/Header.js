@@ -1,117 +1,142 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory} from "react-router-dom";
 import { useSelector } from 'react-redux'
-import { Button} from "antd";
+import { Button, Menu, Grid, Drawer, Row, Col } from "antd";
 import axios from 'axios'
+import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons'
 import '../assets/css/header.css'
 
-const Header = (props) => {
+const SubMenu = Menu.SubMenu;
 
-    const stateUser = useSelector(state => state.users)
-    const [admin, setAdmin] = useState(false)
+const { useBreakpoint } = Grid;
 
-    const history = useHistory()
+const RightMenu = () => {
+  const { md } = useBreakpoint();
+  const history = useHistory()
 
-    const changePage = (path) => {
-        history.push(path)
-    }
+  const changePage = (path) => {
+      history.push(path)
+  }
 
-    useEffect(() => {
-        async function fetchData() {
+  return (
+    <Menu mode={md ? "horizontal" : "inline"}>
+      <Menu.Item key="mail">
+        <ShoppingCartOutlined onClick={() => changePage("/cart")} />
+      </Menu.Item>
+      <Menu.Item key="app">
+        <UserOutlined onClick={() => changePage("/login")} />
+      </Menu.Item>
+    </Menu>
+  );
+}
 
-            const linkAPI = `${process.env.REACT_APP_API}/admin`
+const LeftMenu = () => {
+  const { md } = useBreakpoint()
+  const history = useHistory()
 
-            const result = await axios.get(
-                linkAPI, {
-                  headers: {
-                    'uid': stateUser[0].uid
-                  }
+  const stateUser = useSelector(state => state.users)
+  const [admin, setAdmin] = useState(false)
+
+  useEffect(() => {
+      async function fetchData() {
+
+          const linkAPI = `${process.env.REACT_APP_API}/admin`
+
+          const result = await axios.get(
+              linkAPI, {
+                headers: {
+                  'uid': stateUser[0].uid
                 }
-            );
-            setAdmin(result.data.admin);
-        }
-          fetchData();
-    }, [stateUser]);
+              }
+          );
+          setAdmin(result.data.admin);
+      }
+        fetchData();
+  }, [stateUser]);
+
+  const changePage = (path) => {
+      history.push(path)
+  }
+
+  return (
+    <Menu theme="light" mode={md ? "horizontal" : "inline"}>
+      <Menu.Item key="mail">
+        <a onClick={() => changePage("/")}>Home</a>
+      </Menu.Item>
+      <SubMenu key="sub1" title={<span>Products</span>}>
+          <Menu.Item key="setting:1">Lì xì</Menu.Item>
+          <Menu.Item key="setting:2">Đồ Khô</Menu.Item>
+          <Menu.Item key="setting:3">Áo thường</Menu.Item>
+          <Menu.Item key="setting:4">Áo in</Menu.Item>
+      </SubMenu>
+      <Menu.Item key="orders">
+        <a onClick={() => changePage("/orders")}>Order</a>
+      </Menu.Item>
+      {
+        admin && (
+          <>
+          <Menu.Item key="all">
+            <a onClick={() => changePage("/products")}>All Products</a>
+          </Menu.Item>
+          <Menu.Item key="promo">
+            <a onClick={() => changePage("/promotions")}>Promotions</a>
+          </Menu.Item>
+          </>
+        )
+      }
+    </Menu>
+  );
+}
+
+
+const Header = () => {
+
+    const [visible, setVisible] = useState(false)
+
+
+    const showDrawer = () => {
+      setVisible(true)
+    };
+
+    const onClose = () => {
+      setVisible(false)
+    };
 
     return (
-        // <div>
-        //     <Button onClick={() => {
-        //         changePage("/")
-        //     }}>
-        //         Home
-        //     </Button>
-        //     {
-        //         admin &&
-        //         <Button onClick={() => {
-        //             changePage("/products")
-        //         }}>
-        //             Products
-        //         </Button>
-        //     }
-        //     <Button onClick={() => {
-        //         changePage("/cart")
-        //     }}>
-        //         Cart
-        //     </Button>
-        //     {
-        //         admin &&
-        //         <Button onClick={() => {
-        //             changePage("/promotions")
-        //         }}>
-        //             Promo
-        //         </Button>
-        //     }
-
-        //     <Button onClick={() => {
-        //         changePage("/orders")
-        //     }}>
-        //         Order
-        //     </Button>
-        //     <Button onClick={() => {
-        //         changePage("/login")
-        //     }}>
-        //         Login
-        //     </Button>
-        //     <br></br>
-        //     <br></br>
-        //     <br></br>
-        // </div>
-
-        <div className="container">
-        <div className="wrapper">
-          <h1 className="logo">LOGO</h1>
-          <a className="nav-toggle">
-            <span className="toggle" />
-            <span className="toggle" />
-            <span className="toggle" />
-          </a>
-        </div>
-        <nav className="navbar">
-          <ul className="nav-menu">
-            <li className="nav-item"><a onClick={() => {changePage("/")}}>Home</a></li>
-            <li className="nav-item has-dropdown">
-              <a href="#">Product <i className="fas fa-chevron-down" /></a>
-              <ul className="item-dropdown">
-                <li className="sub-item"><a href="#">Lì xì</a></li>
-                <li className="sub-item"><a href="#">Ngoại tệ</a></li>
-                <li className="sub-item"><a href="#">Khô</a></li>
-                <li className="sub-item"><a href="#">Áo in</a></li>
-              </ul>
-            </li>
-            <li className="nav-item"><a href="#">About</a></li>
-            <li className="nav-item"><a href="#">Contact</a>
-            </li><li className="nav-item"><a onClick={() => {changePage("/cart")}}>
-                <i className="fas fa-cart-plus" />
-              </a>
-            </li>
-            <li className="nav-item">
-              <a onClick={() => {changePage("/login")}}>
-                <i className="fab fa-facebook-f" />
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      <Row justify="space-between">
+        <Col span={3}>
+          <a href="">logo</a>
+        </Col>
+        <Col span={20}>
+          <Row justify="start" align="middle">
+            <Col span={18}>
+              <div className="leftMenu">
+                <LeftMenu />
+              </div>
+            </Col>
+            <Col span={6}>
+              <Row justify="end">
+                <div className="rightMenu">
+                  <RightMenu />
+                </div>
+              </Row>
+            </Col>
+          </Row>
+          <Button className="barsMenu" type="primary" onClick={showDrawer}>
+            <span className="barsBtn"></span>
+          </Button>
+          <Drawer
+            title="Menu"
+            placement="right"
+            closable={false}
+            onClose={onClose}
+            visible={visible}
+          >
+            <LeftMenu />
+            <RightMenu />
+          </Drawer>
+        </Col>
+        </Row>
     )
 }
 

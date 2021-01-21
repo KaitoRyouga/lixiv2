@@ -1,5 +1,5 @@
 footer {
-    background-color: #111;
+    background-color: #111 !important;
   }
   
   a {
@@ -293,5 +293,4 @@ footer {
     font-weight: 700;
   }
   
-  /*# sourceMappingURL=style.css.map */
   
