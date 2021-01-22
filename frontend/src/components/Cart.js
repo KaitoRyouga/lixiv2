@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal, Typography, Divider } from "antd";
+import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal, Typography, Divider, Grid } from "antd";
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import EditCart from '../actions/Cart/EditCart'
 import DeleteCart from '../actions/Cart/DeleteCart'
@@ -9,20 +9,14 @@ import { DeleteOutlined } from '@ant-design/icons'
 import financial from './financial'
 import AddPromotion from '../actions/Promotion/AddPromotion'
   
-let data = [];
+const { useBreakpoint } = Grid;
 
-const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-};
-  
-const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-};
+let data = [];
 
 const Cart = () => {
 
     const { Text } = Typography;
+    const { lg, md, sm, xs } = useBreakpoint()
 
     const [total, setTotal] = useState(0);
     const [countPromo, setCountPromo] = useState(0);
@@ -30,11 +24,14 @@ const Cart = () => {
     const [pricePromo, setPricePromo] = useState([]);
     const [percent, setPercent] = useState(0);
     const [enterPromo, setEnterPromo] = useState(false);
+    const [promo, setPromo] = useState("");
     const [,updateState] = React.useState();
     const forceUpdate = useCallback(() => updateState({}), []);
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const stateRoot = useSelector(state => state);
+    const [sizeListRight, setSizeListRight] = useState(0);
+    const [sizeListLeft, setSizeListLeft] = useState(0);
 
     const history = useHistory()
 
@@ -55,10 +52,11 @@ const Cart = () => {
                     </Col>
                     <Col>             
                         <Row>
-                            <Col span={12}>
+                            <Col span={24}>
                                 <Tag color="green">{product[0]}</Tag>
                             </Col>
-                            <Col>
+                            <Divider dashed style={{ marginTop: "0.2em", marginBottom: "0.2em" }}></Divider>
+                            <Col span={24}>
                                 <Tag color="volcano">
                                     <DeleteOutlined onClick={() => {
                                         onDelete(all.key)
@@ -77,63 +75,59 @@ const Cart = () => {
             responsive: ["xs"],
             render: (product, all) => (
                 <Row>
-                     {/* <Space size="small"> */}
-                        <Col span={12}>
-                            <Image src={`${product[1]}`} alt={product[0]}></Image>
-                        </Col>
-                        <Col span={2}></Col>
-                        <Col span={10}>        
-                            <Row>
-                                <Col span={22} style={{ marginBottom: "0.3em" }}>
-                                    <Tag color="green">{product[0]}</Tag>
-                                </Col>
-                                <Col>
-                                    <Tag color="volcano">
-                                        <DeleteOutlined onClick={() => {
-                                            onDelete(all.key)
-                                        }} />
-                                    </Tag>  
-                                </Col>
-                            </Row>
-                            <Divider dashed style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></Divider>
-                            {/* <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div> */}
-                            <Row>
-                                <Col>
-                                    <Tag color="green">{financial(all.price)} vnđ</Tag>
-                                </Col>
-                            </Row>
-                            {/* <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div> */}
-                            <Divider dashed style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></Divider>
-                            
-                            <Row justify="start" align="middle">
-                                <Space>
-                                <Col span={6}>
-                                    <Button onClick={() => {
-                                        onDecrement(all.key)
-                                    }}>
-                                        <LeftOutlined />
-                                    </Button> 
-                                </Col>
-                                <Col type="flex" align="center" justify="center" style={{marginTop: "1em"}}>
-                                    <p>{all.quantity}</p>
-                                </Col>
-                                <Col span={6}>
-                                    <Button onClick={() => {
-                                        onIncrement(all.key)
-                                    }}>
-                                        <RightOutlined />
-                                    </Button> 
-                                </Col>
-                                </Space>
-                            </Row>
-                            <Divider dashed style={{ marginTop: "1em", marginBottom: "1em" }}></Divider>
-                            <Row>
-                                <Tag color="green">
-                                    {financial(all.total)}
-                                </Tag>
-                            </Row>
-                        </Col>
-                     {/* </Space> */}
+                    <Col span={12}>
+                        <Image src={`${product[1]}`} alt={product[0]}></Image>
+                    </Col>
+                    <Col span={2}></Col>
+                    <Col span={10}>        
+                        <Row>
+                            <Col span={22} style={{ marginBottom: "0.3em" }}>
+                                <Tag color="green">{product[0]}</Tag>
+                            </Col>
+                            <Col>
+                                <Tag color="volcano">
+                                    <DeleteOutlined onClick={() => {
+                                        onDelete(all.key)
+                                    }} />
+                                </Tag>  
+                            </Col>
+                        </Row>
+                        <Divider dashed style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></Divider>
+                        <Row>
+                            <Col>
+                                <Tag color="green">{financial(all.price)} vnđ</Tag>
+                            </Col>
+                        </Row>
+                        <Divider dashed style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></Divider>
+                        
+                        <Row justify="start" align="middle">
+                            <Space>
+                            <Col span={6}>
+                                <Button onClick={() => {
+                                    onDecrement(all.key)
+                                }}>
+                                    <LeftOutlined />
+                                </Button> 
+                            </Col>
+                            <Col type="flex" align="center" justify="center" style={{marginTop: "1em"}}>
+                                <p>{all.quantity}</p>
+                            </Col>
+                            <Col span={6}>
+                                <Button onClick={() => {
+                                    onIncrement(all.key)
+                                }}>
+                                    <RightOutlined />
+                                </Button> 
+                            </Col>
+                            </Space>
+                        </Row>
+                        <Divider dashed style={{ marginTop: "1em", marginBottom: "1em" }}></Divider>
+                        <Row>
+                            <Tag color="green">
+                                {financial(all.total)}
+                            </Tag>
+                        </Row>
+                    </Col>
                 </Row>
             ),
         },
@@ -236,8 +230,8 @@ const Cart = () => {
         forceUpdate()
     }
 
-    const onFinish = values => {
-        const checkPromo = stateRoot.promos.filter(p => p.code === values.Code)
+    const onFinish = () => {
+        const checkPromo = stateRoot.promos.filter(p => p.code === promo)
         setPricePromo(checkPromo)
         setEnterPromo(true)
     };
@@ -308,6 +302,42 @@ const Cart = () => {
         }
     }, [total])
 
+    useEffect(() => {
+        // console.log("lg: ", lg)
+        // console.log("md: ", md)
+        // console.log("sm: ", sm)
+        // console.log("xs: ", xs)
+
+        if (percent !== 0 && countPromo == 1) {
+            if(lg){ // lg
+                console.log("check")
+                setSizeListRight(24)
+                setSizeListLeft(24)
+            }else if(sm == true && md == false){ // sm
+                setSizeListRight(24)
+                setSizeListLeft(24)
+            }else if(xs && md == false){ // xs
+                setSizeListRight(24)
+                setSizeListLeft(23)
+            }else{ // md
+                setSizeListRight(7)
+            }
+        } else {
+            if(lg){ // lg
+                setSizeListRight(11)
+                setSizeListLeft(6)
+            }else if(sm == true && md == false){ // sm
+                setSizeListRight(24)
+                setSizeListLeft(24)
+            }else if(xs && md == false){ // xs
+                setSizeListRight(24)
+                setSizeListLeft(23)
+            }else{ // md
+                setSizeListRight(7)
+            }
+        }
+    });
+
     return (
         <div>
             { 
@@ -330,43 +360,53 @@ const Cart = () => {
             {
                 total > 0 && (
                     <Row justify="space-around" >
-                    {/* <Space size="middle"> */}
                         <Col span={12} style={{ padding: "16px" }}>
-                            <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-                                <Form.Item name="Code" rules={[{ required: true }]}>
-                                    <Input disabled={percent !== 0 && countPromo == 1 ? true : false} type="text" placeholder="coupon code" />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" htmlType="submit">
+                            <Row justify="start">
+                                <Col span={12}>
+                                    <Input disabled={percent !== 0 && countPromo == 1 ? true : false} type="text" placeholder="coupon code" value={promo} onChange={(event) => setPromo(event.target.value) } />
+                                </Col>
+                                <Col span={1}></Col>
+                                <Col span={11}>
+                                    <Button type="primary" onClick={onFinish} >
                                         Submit
                                     </Button>
-                                </Form.Item>
-                            </Form>
+                                </Col>
+                            </Row>
                         </Col>
                         <Col span={12} style={{ textAlign: "right", padding: "16px" }}>
-                            <div>
-                                <Text>SUBTOTAL:</Text> {
+                            <Row align="middle" justify="end">
+                                <Col span={sizeListRight}>
+                                    <Text>SUBTOTAL: </Text> 
+                                </Col>
+                                <Col span={1}></Col>
+                                {
                                     percent !== 0 && countPromo == 1 && (
-                                        <div>
+                                        <Col span={sizeListLeft}>
                                             <Text delete type="secondary">{financial(preTotal)} vnđ </Text>
                                             <Text type="success">(giảm {financial(percent)} vnđ)</Text>
                                             <br></br>
-                                            <Tag color="green">
-                                                <Text  type="success">{financial(total)} vnđ</Text>
+                                            <Tag color="green" style={{ marginRight: 0 }}>
+                                                {financial(total)} vnđ
                                             </Tag>
-                                        </div>
+                                        </Col>
                                     ) || (
-                                        <Tag color="green">
-                                            <Text  type="success">{financial(total)} vnđ</Text>
-                                        </Tag>
+                                        <Col span={sizeListLeft}>
+                                            <Text style={{ margin: 0, padding: 0} }>
+                                                {financial(total)} vnđ
+                                            </Text>
+                                        </Col>
                                     )
                                 }
-                            </div>
-                            <Button type="primary" onClick={() => changePage("/checkout")}>
-                                Check Out
-                            </Button>
+                            </Row>
+                            <Divider></Divider>
+                            <Row align="middle" justify="end">
+                                <Col span={24}>
+                                    <Button type="primary" onClick={() => changePage("/checkout")}>
+                                        Check Out
+                                    </Button>
+                                </Col>
+                            </Row>
                         </Col>
-                        {/* </Space> */}
                     </Row>
                 )
             }

@@ -21,10 +21,10 @@ const RightMenu = () => {
   return (
     <Menu mode={md ? "horizontal" : "inline"}>
       <Menu.Item key="mail">
-        <ShoppingCartOutlined onClick={() => changePage("/cart")} />
+        <ShoppingCartOutlined style={{ fontSize: '1.2em' }} onClick={() => changePage("/cart")} />
       </Menu.Item>
       <Menu.Item key="app">
-        <UserOutlined onClick={() => changePage("/login")} />
+        <UserOutlined style={{ fontSize: '1.2em' }} onClick={() => changePage("/login")} />
       </Menu.Item>
     </Menu>
   );

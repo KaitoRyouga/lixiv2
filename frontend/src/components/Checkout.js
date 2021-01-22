@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, List, Badge, Image, Row, Col, Divider, Typography, Tag } from "antd";
+import { Form, Input, Button, List, Badge, Image, Row, Col, Divider, Typography, Tag, Grid } from "antd";
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
@@ -11,26 +11,27 @@ let listData = [];
 
 const layout = {
     labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
+    wrapperCol: { span: 10 },
 };
   
 const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
+const { useBreakpoint } = Grid;
+
 
 const Checkout = () => {
 
-    console.log("cookies")
-    console.log(Cookies.get('name'))
-
     const { Text } = Typography;
-
+    const { lg, md, sm, xs } = useBreakpoint()
     const [form] = Form.useForm();
     const history = useHistory()
     const dispatch = useDispatch();
     const stateRoot = useSelector(state => state);
     const [total, setTotal] = useState(0);
+    const [sizeListRight, setSizeListRight] = useState(0);
+    const [sizeListLeft, setSizeListLeft] = useState(0);
 
     listData = []
 
@@ -66,6 +67,28 @@ const Checkout = () => {
         return subtotal
     }, [stateRoot])
 
+    useEffect(() => {
+        console.log("lg: ", lg)
+        console.log("md: ", md)
+        console.log("sm: ", sm)
+        console.log("xs: ", xs)
+
+        if(lg){ // lg
+            setSizeListRight(12)
+            setSizeListLeft(9)
+        }else if(sm == true && md == false){ // sm
+            setSizeListRight(9)
+            setSizeListLeft(9)
+        }else if(xs && md == false){ // xs
+            setSizeListRight(11)
+            setSizeListLeft(12)
+        }else{ // md
+            setSizeListRight(9)
+            setSizeListLeft(13)
+        }
+    });
+
+
     const regexp = /((09|03|07|08|05)+([0-9]{8})\b)/g;
 
     return (
@@ -82,30 +105,32 @@ const Checkout = () => {
                     })
                 })
             }
-            <Row justify="space-between">
-                <Col span={12}>
-                <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-                    <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-                        <Input type="text" placeholder="Nguyễn Văn A" />
-                    </Form.Item>
-                    <Form.Item name="phone" label="Phone" rules={[{ required: true, pattern: new RegExp(regexp), message: "Wrong phone number!" }]}>
-                        <Input type="text" placeholder="0909259713" />
-                    </Form.Item>
-                    <Form.Item name="address" label="Address" rules={[{ required: true }]}>
-                        <Input type="text" placeholder="139 Xuân Hồng" />
-                    </Form.Item>
+            <Row justify="center" align="middle">
+                <Col span={md ? 12 : 24}>
+                
+                    <Form {...layout} form={form} name="control-hooks" onFinish={onFinish} style={{ margin: "1em"}}>
+                        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+                            <Input type="text" placeholder="Nguyễn Văn A" />
+                        </Form.Item>
+                        <Form.Item name="phone" label="Phone" rules={[{ required: true, pattern: new RegExp(regexp), message: "Wrong phone number!" }]}>
+                            <Input type="text" placeholder="0909259713" />
+                        </Form.Item>
+                        <Form.Item name="address" label="Address" rules={[{ required: true }]}>
+                            <Input type="text" placeholder="139 Xuân Hồng" />
+                        </Form.Item>
+                        
+                        <Form.Item {...sm ? tailLayout : null}>
+                            <Button type="primary" htmlType="submit">
+                            Order
+                            </Button>
+                        </Form.Item>
+                    </Form>
                     
-                    <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="submit">
-                        Order
-                        </Button>
-                    </Form.Item>
-                </Form>
                 </Col>
                 <Col span={1}>
                     
                 </Col>
-                <Col span={11}>
+                <Col span={md ? 11 : 24}>
                     <List
                         itemLayout="vertical"
                         size="large"
@@ -115,9 +140,9 @@ const Checkout = () => {
                                 key={item.key}
                             >
                                 <Row justify="space-between" align="middle">
-                                    <Col span="8">
-                                        <Row justify="space-between" align="middle">
-                                            <Col span={12}>
+                                    <Col span="10">
+                                        <Row justify="start" align="middle">
+                                            <Col span={sizeListLeft}>
                                                 <Badge count={item.quantity}>
                                                     <Image
                                                         width="4.6em"
@@ -127,12 +152,12 @@ const Checkout = () => {
                                                     />
                                                 </Badge>
                                             </Col>
-                                            <Col span={12}>
+                                            <Col span={sizeListRight}>
                                                 <Text>{item.name}</Text>
                                             </Col>
                                         </Row>
                                     </Col>
-                                    <Col span="14">
+                                    <Col span="10">
                                         <Tag color="green">{financial(item.total)} vnđ</Tag>
                                     </Col>
                                 </Row>
@@ -158,16 +183,18 @@ const Checkout = () => {
                                                     <Col span="8">
                                                         <Row justify="space-between" align="middle">
                                                             <Col>
-                                                                <Text>Coupon:</Text>
+                                                                <span>Coupon:</span>
                                                             </Col>
                                                         </Row>
                                                     </Col>
-                                                    <Col span="14">
-                                                        <Text><Tag color="green">{stateRoot.promotion[0].code}</Tag>giảm {financial(stateRoot.promotion[0].price)} vnđ</Text>
+                                                    <Col span="10">
+                                                        <Tag color="green">{stateRoot.promotion[0].code}</Tag>
+                                                        <Tag color="green">giảm {financial(stateRoot.promotion[0].price)} vnđ</Tag>
                                                     </Col>
                                                 </Row>
                                             )
                                         }
+                                        <Divider dashed style={{ marginTop: "0.2em", marginBottom: "0.2em" }}></Divider>
                                         <Row justify="space-between" align="middle">
                                             <Col span="8">
                                                 <Row justify="space-between" align="middle">
@@ -176,7 +203,7 @@ const Checkout = () => {
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                            <Col span="14">
+                                            <Col span="10">
                                                 {
                                                     stateRoot.promotion.length !== 0 && (
                                                         <Tag color="green">{financial(total - stateRoot.promotion[0].price)} vnđ</Tag>

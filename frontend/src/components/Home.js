@@ -176,7 +176,7 @@ function ViewProduct (params) {
     
     return(
         <>
-            <Col offset={sm ? 1 : 0} span={sizeList}>
+            <Col span={sizeList}>
                 <ViewList key={params.product.id} product={params.product} setVisible={setVisible}></ViewList>
             </Col>
             {
@@ -275,7 +275,7 @@ const Home = () => {
         return(
           <div>
                 <br></br>
-                <Row justify="center" align="middle">
+                <Row justify="space-around" align="middle">
                 {
                     
                     products.map((product, id) => {
