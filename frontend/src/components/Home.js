@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Alert, Modal, Drawer, Tag, Image, Space, Badge, Card, Grid, Carousel } from "antd";
+import { Row, Col, Button, Alert, Modal, Drawer, Tag, Image, Space, Badge, Card, Grid, Slider } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined, DeleteOutlined } from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
@@ -37,6 +37,7 @@ const ViewList = (props) => {
         const newCart = [{
             id: values.product._id,
             name: values.product.name,
+            size: values.product.size,
             price: values.product.price,
             image: values.product.image,
             quantity: 1,
@@ -96,6 +97,7 @@ function ViewProduct (params) {
     const { lg, md, sm, xs } = useBreakpoint()
 
     const [count, setCount] = useState(0);
+    const [sizeShoes, setSizeShoes] = useState(0);
     const [sizeList, setSizeList] = useState(0);
     const [showMessenge, setShowMessenge] = useState(false);
     const [showMessengeCount, setShowMessengeCount] = useState(false);
@@ -125,6 +127,7 @@ function ViewProduct (params) {
                 {   
                     id: params.product._id,
                     name: params.product.name,
+                    size: sizeShoes,
                     price: params.product.price,
                     image: params.product.image,
                     quantity: count + 1
@@ -143,6 +146,7 @@ function ViewProduct (params) {
                 {   
                     id: params.product._id,
                     name: params.product.name,
+                    size: sizeShoes,
                     price: params.product.price,
                     image: values.product.image,
                     quantity: count - 1
@@ -161,6 +165,15 @@ function ViewProduct (params) {
         setVisible(false)
     }   
 
+    function onChange(value) {
+        // console.log('onChange: ', value);
+        setSizeShoes(value  )
+    }
+      
+    function onAfterChange(value) {
+        console.log('onAfterChange: ', value);
+    }
+
     useEffect(() => {
         if(lg){
             setSizeList(5)
@@ -172,6 +185,10 @@ function ViewProduct (params) {
             setSizeList(7)
         }
     });
+
+    useEffect(() => {
+        setSizeShoes(params.product.size[0])
+    }, [params]);
     
     return(
         <>
@@ -206,6 +223,17 @@ function ViewProduct (params) {
                     <Col span={11}>
                         <div>
                             <Row justify="center" align="middle">
+                                
+                                <Col span={24}>
+                                    Size: <Tag color="green">{sizeShoes}</Tag>
+                                    <Slider
+                                        min={params.product.size[0]}
+                                        max={params.product.size[params.product.size.length - 1]}
+                                        defaultValue={params.product.size[0]}
+                                        onChange={onChange}
+                                        onAfterChange={onAfterChange}
+                                    />
+                                </Col>
                                 <Space>
                                 <Col>
                                     <Button onClick={() => {

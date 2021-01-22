@@ -102,6 +102,7 @@ const Checkout = () => {
                     listData.push({
                         key: c.id,
                         name: c.name,
+                        size: c.size,
                         quantity: c.quantity,
                         total: c.quantity * c.price,
                         image: c.image,

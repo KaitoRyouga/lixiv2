@@ -15,8 +15,24 @@ class ProductController {
         })
       }
 
+      // console.log(req.body)
+      const size = req.body.size.split("-")
+      const arrSize = []
+
+      if (Number.isInteger(size[0] - 0)) {
+        for (let index = size[0]; index <= size[size.length - 1]; index++) {
+          arrSize.push(Number(index)) 
+        }
+      } else {
+        const sizeLess = req.body.size.split(",")
+        sizeLess.forEach(element => {
+          arrSize.push(Number(element))
+        });
+      }
+
       const product = new Product({
         name: req.body.name,
+        size: arrSize,
         quantity: parseInt(req.body.quantity, 10),
         price: parseInt(req.body.price, 10),
         image: req.body.image

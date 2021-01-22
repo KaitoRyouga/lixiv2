@@ -56,6 +56,15 @@ const Cart = () => {
                                 <Tag color="green">{product[0]}</Tag>
                             </Col>
                             <Divider dashed style={{ marginTop: "0.2em", marginBottom: "0.2em" }}></Divider>
+                            {
+                                all.size && (
+                                    <Col span={24}>
+                                        <Tag color="green">Size: {all.size}</Tag>
+                                    </Col>
+                                )
+                            }
+                            
+                            <Divider dashed style={{ marginTop: "0.2em", marginBottom: "0.2em" }}></Divider>
                             <Col span={24}>
                                 <Tag color="volcano">
                                     <DeleteOutlined onClick={() => {
@@ -63,6 +72,7 @@ const Cart = () => {
                                     }} />
                                 </Tag>  
                             </Col>
+                            
                         </Row>
                     </Col>
                 </Space>
@@ -84,6 +94,14 @@ const Cart = () => {
                             <Col span={22} style={{ marginBottom: "0.3em" }}>
                                 <Tag color="green">{product[0]}</Tag>
                             </Col>
+                            {
+                                all.size && (
+                                    <Col span={24}>
+                                        <Tag color="green">Size: {all.size}</Tag>
+                                    </Col>
+                                )
+                            }
+                            <Divider dashed style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></Divider>
                             <Col>
                                 <Tag color="volcano">
                                     <DeleteOutlined onClick={() => {
@@ -349,6 +367,7 @@ const Cart = () => {
                             key: c.id,
                             product: [c.name, product[0].image],
                             price: product[0].price,
+                            size: c.size,
                             quantity: c.quantity,
                             total: product[0].price * c.quantity,  
                         })
