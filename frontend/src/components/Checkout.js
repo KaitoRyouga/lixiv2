@@ -21,6 +21,9 @@ const tailLayout = {
 
 const Checkout = () => {
 
+    console.log("cookies")
+    console.log(Cookies.get('name'))
+
     const { Text } = Typography;
 
     const [form] = Form.useForm();

@@ -9,6 +9,7 @@ import "firebase/auth";
 import { Button, Form, Input, Modal } from 'antd'
 import { config } from "./credentials";
 import AddUser from '../actions/User/AddUser'
+import AllOrder from '../actions/Order/AllOrder'
 import UserLogOut from '../actions/User/UserLogOut'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useHistory } from "react-router-dom";
@@ -116,7 +117,8 @@ const Login = () => {
                         firebase
                           .app()
                           .auth()
-                          .signOut();
+                          .signOut()
+                          .then(() => dispatch(AllOrder([])))
                           dispatch(UserLogOut())
                       }}
                     >
