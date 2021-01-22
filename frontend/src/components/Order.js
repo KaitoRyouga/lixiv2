@@ -29,7 +29,7 @@ const ViewOrder = (props) => {
           title: 'PRODUCT',
           dataIndex: 'product',
           responsive: ['sm'],
-          render: (product) => (
+          render: (product, all) => (
             <Row type="flex" align="middle">
                 <Space size="middle">
                     <Col span={12}>
@@ -40,6 +40,13 @@ const ViewOrder = (props) => {
                             <Col span={12}>
                                 <Tag color="green">{product[0]}</Tag>
                             </Col>
+                            {
+                                all.size && (
+                                    <Col span={24}>
+                                        <Tag color="green">Size: {all.size}</Tag>
+                                    </Col>
+                                )
+                            }
                         </Row>
                     </Col>
                 </Space>
@@ -63,6 +70,13 @@ const ViewOrder = (props) => {
                                 <Col>
                                     <Tag color="green">{product[0]}</Tag>
                                 </Col>
+                                {
+                                    all.size && (
+                                        <Col span={24}>
+                                            <Tag color="green">Size: {all.size}</Tag>
+                                        </Col>
+                                    )
+                                }
                             </Row>
                             <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
                             <Row>
@@ -166,11 +180,12 @@ const ViewOrder = (props) => {
                 {
                     props.order.cart.stateCart.map(c => {
                         const product = stateRoot.products.filter(p => p._id === c.id)
-                        if(product){
+                        if(product.length !== 0){
                             data.push({
                                 key: c.id,
                                 product: [c.name, product[0].image],
                                 price: product[0].price,
+                                size: c.size,
                                 quantity: c.quantity,
                                 total:product[0].price * c.quantity,  
                             })

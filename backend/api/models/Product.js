@@ -7,6 +7,13 @@ const ProductSchema = new Schema({
     required: true,
     trim: true
   },
+  category: {
+    type: String,
+    trim: true
+  },
+  size: {
+    type: []
+  },
   quantity: {
     type: Number,
     required: true

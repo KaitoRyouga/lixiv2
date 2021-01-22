@@ -19,6 +19,7 @@ const ViewProduct = (props) => {
         const newProduct = [
             {
                 name: values.name,
+                size: values.size,
                 quantity: values.quantity,
                 price: values.price,
                 image: '/images/ao_1.jpg'
@@ -44,6 +45,7 @@ const ViewProduct = (props) => {
     useEffect(() => {
         form.setFieldsValue({
             name: props.product.name,
+            size: props.product.size,
             quantity: props.product.quantity,
             price: props.product.price,
         })
@@ -57,6 +59,9 @@ const ViewProduct = (props) => {
             />}>
                 <Form onFinish={onFinish} form={form}>
                     <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+                        <Input type="text"/>
+                    </Form.Item>
+                    <Form.Item name="size" label="Size">
                         <Input type="text"/>
                     </Form.Item>
                     <Form.Item name="quantity" label="Quantity" rules={[{ required: true }]}>
@@ -100,18 +105,23 @@ const Products = () => {
         const [form] = Form.useForm();
 
         const onFinish = values => {
+            
             const newProduct = [
                 {   
                     name: values.Name,
+                    size: values.Size,
                     quantity: values.Quantity,
                     price: values.Price,
-                    image: '/images/ao_1.jpg'
+                    image: values.Image,
                 }
             ]
+
+            // console.log(newProduct)
 
             const linkAPI = `${process.env.REACT_APP_API}/products`
 
             axios.post(linkAPI, newProduct[0]).then(res => dispatch(AddProduct(res))).catch(err => console.log(err))
+            // axios.post(linkAPI, newProduct[0]).then(res => console.log(res)).catch(err => console.log(err))
             form.resetFields();
         };
         
@@ -131,6 +141,12 @@ const Products = () => {
                 <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
                     <Form.Item name="Name" label="Name" rules={[{ required: true }]}>
                         <Input />
+                    </Form.Item>
+                    <Form.Item name="Size" label="Size">
+                        <Input type="text"/>
+                    </Form.Item>
+                    <Form.Item name="Image" label="Image">
+                        <Input type="text"/>
                     </Form.Item>
                     <Form.Item name="Quantity" label="Quantity" rules={[{ required: true }]}>
                         <Input type="number" />
