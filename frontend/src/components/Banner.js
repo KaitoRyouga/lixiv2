@@ -1,7 +1,6 @@
 import Texty from 'rc-texty';
 import '../assets/css/banner.css'
 import TweenOne from 'rc-tween-one';
-import Button from 'antd/lib/button';
 import React from 'react'
 
 class Demo extends React.Component {
