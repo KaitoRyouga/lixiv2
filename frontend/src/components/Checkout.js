@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, List, Badge, Image, Row, Col, Divider, Typography, Tag, Grid } from "antd";
+import { Form, Input, Button, List, Badge, Image, Row, Col, Divider, Typography, Tag, Grid, Modal } from "antd";
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
@@ -35,6 +35,13 @@ const Checkout = () => {
 
     listData = []
 
+    const successCode = () => {
+        Modal.success({
+          title: 'Order success',
+          content: `Order Completed Successfully!`,
+        });
+      }
+
     const onFinish = values => {
         const stateCart = stateRoot.carts
         values.cart = {stateCart}
@@ -47,7 +54,6 @@ const Checkout = () => {
 
         values.status = 'processing'
         values.author = stateRoot.users[0].uid
-
         dispatch(ResetCart())
 
         const linkAPI = `${process.env.REACT_APP_API}/orders`
@@ -55,6 +61,7 @@ const Checkout = () => {
         axios.post(linkAPI, values).then(res => dispatch(AddOrder(res))).catch(err => console.log(err))
         form.resetFields();
         history.push("/")
+        successCode()
     };
 
     useEffect(() => {
@@ -68,10 +75,6 @@ const Checkout = () => {
     }, [stateRoot])
 
     useEffect(() => {
-        console.log("lg: ", lg)
-        console.log("md: ", md)
-        console.log("sm: ", sm)
-        console.log("xs: ", xs)
 
         if(lg){ // lg
             setSizeListRight(12)

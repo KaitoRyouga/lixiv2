@@ -8,7 +8,7 @@ const OrderReducer = (state = initState, action) => {
 
         case 'ADD_ORDER':
 
-            const checkOrder = state.filter(o => o._id === action.info.data.Order[0]._id)
+            const checkOrder = state.filter(o => o._id === action.info.data.Order._id)
 
             if (checkOrder.length !== 0) {
                 return state
