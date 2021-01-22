@@ -176,7 +176,7 @@ function ViewProduct (params) {
     
     return(
         <>
-            <Col offset={1} span={sizeList}>
+            <Col offset={sm ? 1 : 0} span={sizeList}>
                 <ViewList key={params.product.id} product={params.product} setVisible={setVisible}></ViewList>
             </Col>
             {

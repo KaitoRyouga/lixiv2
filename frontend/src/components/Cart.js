@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal, Typography } from "antd";
+import { Form, Input, Button, Image, Row, Col, Table, Space, Tag, Modal, Typography, Divider } from "antd";
 import { LeftOutlined, RightOutlined} from '@ant-design/icons'
 import EditCart from '../actions/Cart/EditCart'
 import DeleteCart from '../actions/Cart/DeleteCart'
@@ -50,7 +50,7 @@ const Cart = () => {
           render: (product, all) => (
             <Row type="flex" align="middle">
                 <Space size="middle">
-                    <Col span={12}>
+                    <Col>
                         <Image src={`${product[1]}`} alt={product[0]} width={120} height={150}></Image>
                     </Col>
                     <Col>             
@@ -76,14 +76,15 @@ const Cart = () => {
             dataIndex: 'product',
             responsive: ["xs"],
             render: (product, all) => (
-                <Row type="flex" align="middle">
-                    <Space size="middle">
-                        <Col>
+                <Row>
+                     {/* <Space size="small"> */}
+                        <Col span={12}>
                             <Image src={`${product[1]}`} alt={product[0]}></Image>
                         </Col>
-                        <Col>        
+                        <Col span={2}></Col>
+                        <Col span={10}>        
                             <Row>
-                                <Col span={12}>
+                                <Col span={22} style={{ marginBottom: "0.3em" }}>
                                     <Tag color="green">{product[0]}</Tag>
                                 </Col>
                                 <Col>
@@ -94,35 +95,45 @@ const Cart = () => {
                                     </Tag>  
                                 </Col>
                             </Row>
-                            <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
+                            <Divider dashed style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></Divider>
+                            {/* <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div> */}
                             <Row>
                                 <Col>
                                     <Tag color="green">{financial(all.price)} vnđ</Tag>
                                 </Col>
                             </Row>
-                            <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
+                            {/* <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div> */}
+                            <Divider dashed style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></Divider>
                             
-                            <Row>
+                            <Row justify="start" align="middle">
+                                <Space>
                                 <Col span={6}>
-                                    <Tag color="green" onClick={() => {
+                                    <Button onClick={() => {
                                         onDecrement(all.key)
                                     }}>
                                         <LeftOutlined />
-                                    </Tag> 
+                                    </Button> 
                                 </Col>
-                                <Col span={8} type="flex" align="center" justify="center" style={{ marginLeft: "0.5em" }}>
+                                <Col type="flex" align="center" justify="center" style={{marginTop: "1em"}}>
                                     <p>{all.quantity}</p>
                                 </Col>
                                 <Col span={6}>
-                                    <Tag color="green" onClick={() => {
+                                    <Button onClick={() => {
                                         onIncrement(all.key)
                                     }}>
                                         <RightOutlined />
-                                    </Tag> 
+                                    </Button> 
                                 </Col>
+                                </Space>
+                            </Row>
+                            <Divider dashed style={{ marginTop: "1em", marginBottom: "1em" }}></Divider>
+                            <Row>
+                                <Tag color="green">
+                                    {financial(all.total)}
+                                </Tag>
                             </Row>
                         </Col>
-                    </Space>
+                     {/* </Space> */}
                 </Row>
             ),
         },
@@ -165,6 +176,7 @@ const Cart = () => {
         {
             title: 'TOTAL',
             dataIndex: 'total',
+            responsive: ['sm'],
             render: (totalItem) => (
                 <Tag color="green">
                     {financial(totalItem)} vnđ
@@ -317,20 +329,21 @@ const Cart = () => {
             <Table columns={columns} dataSource={data} pagination={false} />
             {
                 total > 0 && (
-                    <Row justify="space-around">
-                        <Col>
+                    <Row justify="space-around" >
+                    {/* <Space size="middle"> */}
+                        <Col span={12} style={{ padding: "16px" }}>
                             <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-                                <Form.Item name="Code" label="Code" rules={[{ required: true }]}>
-                                    <Input disabled={percent !== 0 && countPromo == 1 ? true : false} type="text" />
+                                <Form.Item name="Code" rules={[{ required: true }]}>
+                                    <Input disabled={percent !== 0 && countPromo == 1 ? true : false} type="text" placeholder="coupon code" />
                                 </Form.Item>
-                                <Form.Item {...tailLayout}>
+                                <Form.Item>
                                     <Button type="primary" htmlType="submit">
                                         Submit
                                     </Button>
                                 </Form.Item>
                             </Form>
                         </Col>
-                        <Col>
+                        <Col span={12} style={{ textAlign: "right", padding: "16px" }}>
                             <div>
                                 <Text>SUBTOTAL:</Text> {
                                     percent !== 0 && countPromo == 1 && (
@@ -353,6 +366,7 @@ const Cart = () => {
                                 Check Out
                             </Button>
                         </Col>
+                        {/* </Space> */}
                     </Row>
                 )
             }
