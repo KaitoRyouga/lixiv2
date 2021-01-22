@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Button, Alert, Modal, Drawer, Tag, Image, Space, Badge, Card, Grid } from "antd";
+import { Row, Col, Button, Alert, Modal, Drawer, Tag, Image, Space, Badge, Card, Grid, Carousel } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined, DeleteOutlined } from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
@@ -89,7 +89,6 @@ const ViewList = (props) => {
         </Card>
     )
 }
-
 
 function ViewProduct (params) {
 
@@ -198,7 +197,7 @@ function ViewProduct (params) {
                         <Card
                             hoverable
                             style={{ textAlign: "center" }}
-                            cover={<Image alt={params.product.name} src={params.product.image} width={md ? 300 : null} />}
+                            cover={<Image alt={params.product.name} src={params.product.image} width={md ? 200 : null} />}
                         >
                             <Meta title={params.product.name} description={`${financial(params.product.price)} vnđ`} />
                         </Card>
