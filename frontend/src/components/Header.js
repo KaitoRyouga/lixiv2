@@ -16,22 +16,19 @@ const RightMenu = (props) => {
   const history = useHistory()
 
   const changePage = (path) => {
+      if(Object.keys(props).length === 1){
+        props.onClose()
+      }
       history.push(path)
   }
 
   return (
     <Menu mode={md ? "horizontal" : "inline"}>
       <Menu.Item key="mail">
-        <ShoppingCartOutlined style={{ fontSize: '1.2em' }} onClick={() => {
-          props.onClose()
-          changePage("/cart")
-        }} />
+        <ShoppingCartOutlined style={{ fontSize: '1.2em' }} onClick={() => changePage("/cart")} />
       </Menu.Item>
       <Menu.Item key="app">
-        <UserOutlined style={{ fontSize: '1.2em' }} onClick={() => {
-          props.onClose()
-          changePage("/login")
-        }} />
+        <UserOutlined style={{ fontSize: '1.2em' }} onClick={() => changePage("/login")} />
       </Menu.Item>
     </Menu>
   );
@@ -62,50 +59,35 @@ const LeftMenu = (props) => {
   }, [stateUser]);
 
   const changePage = (path) => {
+      if(Object.keys(props).length === 1){
+        props.onClose()
+      }
       history.push(path)
   }
 
   return (
     <Menu theme="light" mode={md ? "horizontal" : "inline"}>
       <Menu.Item key="mail">
-        <a onClick={() => {
-          props.onClose()
-          changePage("/")
-        }}>{Messenge("home")}</a>
+        <a onClick={() => changePage("/")}>{Messenge("home")}</a>
       </Menu.Item>
       <SubMenu key="sub1" title={<span>{Messenge("products")}</span>}>
-          <Menu.Item key="setting:1" onClick={() => {
-            props.onClose()
-            changePage("/category/lixi")
-          }}>Lì xì</Menu.Item>
+          <Menu.Item key="setting:1" onClick={() => changePage("/category/lixi")}>Lì xì</Menu.Item>
           <Menu.Item key="setting:2">Đồ Khô</Menu.Item>
           <Menu.Item key="setting:3">Áo thường</Menu.Item>
-          <Menu.Item key="setting:4" onClick={() => {
-            props.onClose()
-            changePage("/category/shoes")
-          }}>Giày</Menu.Item>
+          <Menu.Item key="setting:4" onClick={() => changePage("/category/shoes")}>Giày</Menu.Item>
           <Menu.Item key="setting:5">Áo in</Menu.Item>
       </SubMenu>
       <Menu.Item key="orders">
-        <a onClick={() => {
-          props.onClose()
-          changePage("/orders")
-        }}>{Messenge("orders")}</a>
+        <a onClick={() => changePage("/orders")}>{Messenge("orders")}</a>
       </Menu.Item>
       {
         admin && (
           <>
           <Menu.Item key="all">
-            <a onClick={() => {
-              props.onClose()
-              changePage("/products")
-            }}>All Products</a>
+            <a onClick={() => changePage("/products")}>All Products</a>
           </Menu.Item>
           <Menu.Item key="promo">
-            <a onClick={() => {
-              props.onClose()
-              changePage("/promotions")
-            }}>Promotions</a>
+            <a onClick={() => changePage("/promotions")}>Promotions</a>
           </Menu.Item>
           </>
         )

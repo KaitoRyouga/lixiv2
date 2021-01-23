@@ -5,6 +5,7 @@ import axios from 'axios'
 import EditOrder from '../actions/Order/EditOrder'
 import AddOrder from '../actions/Order/AddOrder'
 import financial from './financial'
+import Messenge from './Messenge'
 
 let data = [];
   
@@ -26,7 +27,7 @@ const ViewOrder = (props) => {
 
     const columns = [
         {
-          title: 'PRODUCT',
+          title: Messenge("products"),
           dataIndex: 'product',
           responsive: ['sm'],
           render: (product, all) => (
@@ -54,7 +55,7 @@ const ViewOrder = (props) => {
           ),
         },
         {
-            title: 'PRODUCT',
+            title: Messenge("products"),
             dataIndex: 'product',
             responsive: ["xs"],
             render: (product, all) => (
@@ -91,7 +92,7 @@ const ViewOrder = (props) => {
             ),
         },
         {
-          title: 'PRICE',
+          title: Messenge("price"),
           dataIndex: 'price',
           responsive: ['sm'],
           render: (price) => (
@@ -99,7 +100,7 @@ const ViewOrder = (props) => {
           )
         },
         {
-          title: 'QUANTITY',
+          title: Messenge("quantity"),
           dataIndex: 'quantity',
           responsive: ['sm'],
           render: (quantity) => (
@@ -111,7 +112,7 @@ const ViewOrder = (props) => {
           )
         },
         {
-            title: 'TOTAL',
+            title: Messenge("total"),
             dataIndex: 'total',
             render: (totalItem) => (
                 <Tag color="green">
@@ -171,11 +172,11 @@ const ViewOrder = (props) => {
     return(
         <div style={{ padding: "1em" }}>
                 <Descriptions style={{ paddingLeft: "1em" }}>
-                    <Descriptions.Item label="Name">{props.order.name}</Descriptions.Item>
-                    <Descriptions.Item label="Phone">{props.order.phone}</Descriptions.Item>
-                    <Descriptions.Item label="Address">{props.order.address}</Descriptions.Item>
-                    <Descriptions.Item label="Total">{financial(props.order.subtotal)}</Descriptions.Item>
-                    <Descriptions.Item label="Status">{props.order.status}</Descriptions.Item>
+                    <Descriptions.Item label={Messenge("name")}>{props.order.name}</Descriptions.Item>
+                    <Descriptions.Item label={Messenge("phone")}>{props.order.phone}</Descriptions.Item>
+                    <Descriptions.Item label={Messenge("address")}>{props.order.address}</Descriptions.Item>
+                    <Descriptions.Item label={Messenge("total")}>{financial(props.order.subtotal)}</Descriptions.Item>
+                    <Descriptions.Item label={Messenge("status")}>{props.order.status === "processing" ? "Chưa giao" : "Đã giao"}</Descriptions.Item>
                 </Descriptions>
                 {
                     props.order.cart.stateCart.map(c => {
