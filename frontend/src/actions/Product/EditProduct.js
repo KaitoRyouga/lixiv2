@@ -1,7 +1,8 @@
-const EditProduct = (id) => {
+const EditProduct = (id, info) => {
     return{
         type: 'EDIT_PRODUCT',
-        id
+        id,
+        info
     }
 }
 

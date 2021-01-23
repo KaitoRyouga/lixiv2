@@ -26,7 +26,7 @@ dotenv.config();
 const cors = require('cors');
 app.use(cors());
 
-const port = process.env.PORT_DEV;
+const port = process.env.PORT_DEV || 3000;
 app.listen(port);
 
 console.log('API server started on: ' + port);

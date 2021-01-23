@@ -19,9 +19,6 @@ class CartController {
             CartProduct.push({name: prod.name, quantity: prod.quantity});
         })
 
-        
-
-
       const cart = new Cart({
         product: CartProduct
       })
@@ -44,10 +41,6 @@ class CartController {
       console.log(error)
       console.log('error')
     }
-  }
-
-  static async get_home (req, res) {
-    return res.json("kaito")
   }
 }
 

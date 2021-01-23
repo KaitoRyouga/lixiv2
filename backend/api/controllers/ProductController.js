@@ -15,8 +15,26 @@ class ProductController {
         })
       }
 
+      const arrSize = []
+
+      if (req.body.size !== undefined) {
+        const size = req.body.size.split("-")
+      
+        if (Number.isInteger(size[0] - 0)) {
+          for (let index = size[0]; index <= size[size.length - 1]; index++) {
+            arrSize.push(Number(index)) 
+          }
+        } else {
+          const sizeLess = req.body.size.split(",")
+          sizeLess.forEach(element => {
+            arrSize.push(Number(element))
+          });
+        }
+      }
+
       const product = new Product({
         name: req.body.name,
+        size: arrSize,
         quantity: parseInt(req.body.quantity, 10),
         price: parseInt(req.body.price, 10),
         image: req.body.image
@@ -24,7 +42,7 @@ class ProductController {
 
       await product.save()
 
-      return res.redirect('/')
+      return res.json({ Product: product })
     } catch (error) {
       console.log(error)
       console.log('ERROR')
@@ -42,9 +60,41 @@ class ProductController {
     }
   }
 
-  static async get_home (req, res) {
-    return res.json("kaito")
+  static async welcome (req, res, next) {
+    try {
+      // const products = await Product.find({})
+
+      return res.json({ messenge: "welcome to lixiv2" })
+    } catch (error) {
+      console.log(error)
+      console.log('error')
+    }
   }
+
+  static async editById (req, res, next) {
+    
+    try {
+      await Product.updateOne({_id: req.params.productId}, req.body)
+      // const resultProduct = 
+      req.body._id = req.params.productId
+      return res.json({ Product: req.body })
+    } catch (error) {
+      console.log(error)
+      console.log('error')
+    }
+  }
+
+  static async deleteById (req, res, next) {
+    try {
+      await Product.deleteOne({_id: req.params.productId})
+
+      return res.json({ messenge: req.params.productId}) 
+    } catch (error) {
+      console.log(error)
+      console.log('error')
+    }
+  }
+
 }
 
 module.exports = ProductController
