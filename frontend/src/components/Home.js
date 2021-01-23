@@ -122,8 +122,6 @@ const ViewList = (props) => {
 }
 
 function ViewProduct (params) {
-
-    const { Meta } = Card;
     const { lg, md, sm, xs } = useBreakpoint()
 
     const [count, setCount] = useState(1);
@@ -243,18 +241,28 @@ function ViewProduct (params) {
                 title={Messenge("quickView")}
                 centered
                 visible={visible}
-                onOk={() => setVisible(false)}
-                onCancel={() => setVisible(false)}
+                onOk={() => {
+                    setVisible(false)                    
+                }}
+                onCancel={() => {
+                    setVisible(false)
+                }}
                 width={1000}
             >
-                <Row>
+                <Row
+                    style={{
+                        padding: "1em"
+                    }}
+                >
                     <Col span={sm ? 11 : 24}>
                         <Slide product={params.product} ></Slide>
                     </Col>
-                    <Col span={sm ? 2 : 24}></Col>
+                    {/* <Col span={sm ? 2 : 24}></Col> */}
                     <Col span={11} style={ xs && {
                         marginTop: "5em"
-                    } || {}}>
+                    } || {
+                        marginLeft: "5em"
+                    }}>
                         <div>
                             <Row justify="center" align="middle">
                                 
