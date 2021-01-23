@@ -140,10 +140,10 @@ const Login = () => {
                 );
               } else {
                 return (
-                  <div class="container">
-                    <h2 class="sign-in-title">SIGN IN</h2>
-                    <div class="sign-in-container">
-                        <div class="sign-in-facebook btn">
+                  <div className="container">
+                    <h2 className="sign-in-title">SIGN IN</h2>
+                    <div className="sign-in-container">
+                        <div className="sign-in-facebook btn">
                           <Button 
                             onClick={() => {
                                 const fbAuthProvider = new firebase.auth.FacebookAuthProvider
@@ -160,7 +160,7 @@ const Login = () => {
                             <FaFacebookF /> Login with Facebook {confirmLoadingFB && <LoadingOutlined />}
                           </Button>
                         </div>
-                        <div class="sign-in-google btn">
+                        <div className="sign-in-google btn">
                           <Button
                             onClick={() => {
                               handleOk()
@@ -179,7 +179,7 @@ const Login = () => {
                           </Button>
                         </div>
                       </div>
-                    <div class="capcha">
+                    <div className="capcha">
                         {
                         checkCode && (
                           <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
