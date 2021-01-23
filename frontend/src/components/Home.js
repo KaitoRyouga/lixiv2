@@ -51,19 +51,42 @@ const ViewList = (props) => {
     return(
         <Card
             hoverable
-            style={{
+            style={ hover && lg && {
+                height:"43em",
                 textAlign: "center",
-                marginBottom: "2em"
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                position:"relative"
+            } || {
+                textAlign: "center",
+                marginBottom:"2em",
+                height: xs ? null : "38em",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                position:"relative"
             }}
             cover={(
                     <>
-                        <img alt={props.product.name} src={props.product.image} />
+                        <img style={{
+                            marginBottom: xs ? "5.5em" : null
+                        }} alt={props.product.name} src={props.product.image} />
                     </>
                 )
             }
             onMouseEnter={() => setHover(true)} 
             onMouseLeave={() => setHover(false)}
         >
+            <div style={ {
+                position: "absolute",
+                bottom: "20px",
+                left:"50%",
+                transform: "translateX(-50%)"
+            }
+            }>
             <Meta title={props.product.name} description={`${financial(props.product.price)} vnđ`} />
             <div className="queue-demo">
                 <QueueAnim className="demo-content"
@@ -87,6 +110,7 @@ const ViewList = (props) => {
                     ) : null
                 }
                 </QueueAnim>
+            </div>
             </div>
         </Card>
     )
