@@ -1,0 +1,28 @@
+.container{
+    margin-right: 11% !important;
+    margin-top: 1rem;
+}
+.sign-in-title{
+    margin-left:59%;
+}
+.sign-in-container{
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+.sign-in-container > div{
+    margin-left: 1rem;
+}
+.sign-in-facebook button{
+    background-color: #3B5998;
+    color: white;
+}
+.sign-in-google button{
+    background-color: #dd4b39;
+    color: white;
+}
+.btn button{
+    font-size: 1rem;
+    font-weight:bold;
+    padding-bottom:2rem;
+}
