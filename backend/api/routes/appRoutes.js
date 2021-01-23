@@ -6,6 +6,7 @@ module.exports = function(app) {
     const Order = require('../controllers/OrderController');
     const User = require('../controllers/UserController');
     const All = require('../controllers/AllController');
+    const Category = require('../controllers/CategoryController');
     const Check = require('../middleware/middlewares');
 
     // Users Routes
@@ -22,6 +23,11 @@ module.exports = function(app) {
 
     app.param(['orderId'], function(req, res, next) {
         req.orderId = req.params.orderId;
+        next()
+    });
+
+    app.param(['nameCategory'], function(req, res, next) {
+        req.nameCategory = req.params.nameCategory;
         next()
     });
     
@@ -65,4 +71,7 @@ module.exports = function(app) {
 
     app.route('/allinfo')
         .get(All.index)
+
+    app.route('/category/:nameCategory')
+        .get(Category.index)
 };

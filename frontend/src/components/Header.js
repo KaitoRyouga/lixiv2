@@ -64,10 +64,11 @@ const LeftMenu = () => {
         <a onClick={() => changePage("/")}>Home</a>
       </Menu.Item>
       <SubMenu key="sub1" title={<span>Products</span>}>
-          <Menu.Item key="setting:1">Lì xì</Menu.Item>
+          <Menu.Item key="setting:1" onClick={() => changePage("/category/lixi")}>Lì xì</Menu.Item>
           <Menu.Item key="setting:2">Đồ Khô</Menu.Item>
           <Menu.Item key="setting:3">Áo thường</Menu.Item>
-          <Menu.Item key="setting:4">Áo in</Menu.Item>
+          <Menu.Item key="setting:4" onClick={() => changePage("/category/shoes")}>Giày</Menu.Item>
+          <Menu.Item key="setting:5">Áo in</Menu.Item>
       </SubMenu>
       <Menu.Item key="orders">
         <a onClick={() => changePage("/orders")}>Order</a>
