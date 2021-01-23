@@ -68,6 +68,10 @@ const Messenge = (name) => {
             EN: "Go to Cart",
             VN: "Đến giỏ hàng"
         },
+        status: {
+            EN: "Status",
+            VN: "Trạng thái"
+        },
         
     }
 

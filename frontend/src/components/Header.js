@@ -11,11 +11,14 @@ const SubMenu = Menu.SubMenu;
 
 const { useBreakpoint } = Grid;
 
-const RightMenu = () => {
+const RightMenu = (props) => {
   const { md } = useBreakpoint();
   const history = useHistory()
 
   const changePage = (path) => {
+      if(Object.keys(props).length === 1){
+        props.onClose()
+      }
       history.push(path)
   }
 
@@ -31,7 +34,7 @@ const RightMenu = () => {
   );
 }
 
-const LeftMenu = () => {
+const LeftMenu = (props) => {
   const { md } = useBreakpoint()
   const history = useHistory()
 
@@ -56,6 +59,9 @@ const LeftMenu = () => {
   }, [stateUser]);
 
   const changePage = (path) => {
+      if(Object.keys(props).length === 1){
+        props.onClose()
+      }
       history.push(path)
   }
 
@@ -138,8 +144,8 @@ const Header = () => {
             onClose={onClose}
             visible={visible}
           >
-            <LeftMenu />
-            <RightMenu />
+            <LeftMenu onClose={onClose} />
+            <RightMenu onClose={onClose} />
           </Drawer>
         </Col>
         </Row>

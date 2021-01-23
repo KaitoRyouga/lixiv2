@@ -1,39 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { Card, Image, Button } from 'antd'
+import { Card, Image, Button, Row, Col } from 'antd'
 import { RightOutlined, LeftOutlined } from '@ant-design/icons'
 
-function SampleNextArrow(props) {
-    const {onClick } = props;
-    return (
-      <div
-        onClick={onClick}
-      >
-          <Button>
-              <RightOutlined />
-          </Button>
-      </div>
-    );
-  }
-  
-  function SamplePrevArrow(props) {
-    const { onClick } = props;
-    return (
-        <div
-            onClick={onClick}
-        >
-            <Button>
-              <LeftOutlined />
-          </Button>
-        </div>
-    );
-  }
 
 const CenterMode = (props) => {
 
     const listImage = []
+    const [slider, setSlider] = useState()
     const temp = props.product.listimage.split("-")
       
     if (Number.isInteger(temp[0] - 0)) {
@@ -43,9 +19,12 @@ const CenterMode = (props) => {
     }
 
     const settings = {
-      customPaging: () => {
+      customPaging: (i) => {
+        const img = props.product.image
+        const head = img.slice(0, img.length - 5)
+        const displayImage = head + (i+1) + '.jpg'
         return (
-            <img alt="image" src="/images/giay/adidas/so/adidas_so_4.jpg" style={{ height: "2em", width: "2em" }} />
+            <img alt="image" src={displayImage} style={{ height: "2em", width: "2em" }} />
         );
       },
       dots: true,
@@ -54,36 +33,48 @@ const CenterMode = (props) => {
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      nextArrow: <SampleNextArrow />,
-      prevArrow: <SamplePrevArrow />
     };
 
     return (
-      <div>
-        <Slider {...settings} style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
+      <Row align="middle" justify="center">
+        <Col span={3} style={{
+          textAlign: "center"
         }}>
-            {
-                listImage.map(count => {
-                    const img = props.product.image
-                    const head = img.slice(0, img.length - 5)
-                    const displayImage = head + count + '.jpg'
-                    return(
-                        <div key={count}>
-                            <Card
-                                hoverable
-                                style={{ textAlign: "center" }}
-                                cover={<Image alt="image" src={displayImage} width={200} />}
-                            >
-                            </Card>
-                        </div>
-                    )
-                })
-            }
-        </Slider>
-      </div>
+            <Button onClick={() => slider.slickPrev()}>
+              <LeftOutlined />
+            </Button>
+        </Col>
+        <Col span={18}>
+          <Slider ref={c => setSlider(c)} {...settings}>
+              {
+                  listImage.map(count => {
+                      const img = props.product.image
+                      const head = img.slice(0, img.length - 5)
+                      const displayImage = head + (count) + '.jpg'
+                      return(
+                          <div key={count}>
+                              <Card
+                                  hoverable
+                                  style={{ textAlign: "center" }}
+                                  cover={(
+                                    <Image alt="image" src={displayImage} width={200} />
+                                  )}
+                              >
+                              </Card>
+                          </div>
+                      )
+                  })
+              }
+          </Slider>
+        </Col>
+        <Col span={3} style={{
+          textAlign: "center"
+        }}>
+          <Button onClick={() => slider.slickNext()}>
+            <RightOutlined />
+          </Button>
+        </Col>
+      </Row>
     );
   }
 

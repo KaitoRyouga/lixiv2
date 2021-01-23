@@ -65,7 +65,7 @@ const ViewList = (props) => {
             } || {
                 textAlign: "center",
                 marginBottom:"2em",
-                height: xs ? null : "38em",
+                height: xs ? "30em" : "38em",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -99,7 +99,7 @@ const ViewList = (props) => {
                     ]}
                 >
                 {
-                    hover ? (
+                    hover || xs ? (
                         <div className="demo-thead" key="a" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                             <Space size="small" style={{ marginTop: "1em" }}>
                                 <Button onClick={()=> props.setVisible(true)} type="primary" style={{ borderRadius: "0.3em" }}>
@@ -122,8 +122,6 @@ const ViewList = (props) => {
 }
 
 function ViewProduct (params) {
-
-    const { Meta } = Card;
     const { lg, md, sm, xs } = useBreakpoint()
 
     const [count, setCount] = useState(1);
@@ -218,7 +216,7 @@ function ViewProduct (params) {
         }else if(sm == true && md == false){
             setSizeList(10)
         }else if(xs && md == false){
-            setSizeList(22)
+            setSizeList(11)
         }else{
             setSizeList(7)
         }
@@ -243,18 +241,28 @@ function ViewProduct (params) {
                 title={Messenge("quickView")}
                 centered
                 visible={visible}
-                onOk={() => setVisible(false)}
-                onCancel={() => setVisible(false)}
+                onOk={() => {
+                    setVisible(false)                    
+                }}
+                onCancel={() => {
+                    setVisible(false)
+                }}
                 width={1000}
             >
-                <Row>
+                <Row
+                    style={{
+                        padding: "1em"
+                    }}
+                >
                     <Col span={sm ? 11 : 24}>
                         <Slide product={params.product} ></Slide>
                     </Col>
-                    <Col span={sm ? 2 : 24}></Col>
+                    {/* <Col span={sm ? 2 : 24}></Col> */}
                     <Col span={11} style={ xs && {
                         marginTop: "5em"
-                    } || {}}>
+                    } || {
+                        marginLeft: "5em"
+                    }}>
                         <div>
                             <Row justify="center" align="middle">
                                 
