@@ -38,8 +38,8 @@ const Checkout = () => {
 
     const successCode = () => {
         Modal.success({
-          title: 'Order success',
-          content: `Order Completed Successfully!`,
+          title: 'Thành công',
+          content: `Đặt hàng thành công!`,
         });
       }
 
