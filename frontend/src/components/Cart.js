@@ -8,6 +8,7 @@ import DeleteCart from '../actions/Cart/DeleteCart'
 import { DeleteOutlined } from '@ant-design/icons'
 import financial from './financial'
 import AddPromotion from '../actions/Promotion/AddPromotion'
+import Messenge from './Messenge'
   
 const { useBreakpoint } = Grid;
 
@@ -41,7 +42,7 @@ const Cart = () => {
 
     const columns = [
         {
-          title: 'PRODUCT',
+          title: Messenge("products"),
           dataIndex: 'product',
           responsive: ['sm'],
           render: (product, all) => (
@@ -80,7 +81,7 @@ const Cart = () => {
           ),
         },
         {
-            title: 'PRODUCT',
+            title: Messenge("products"),
             dataIndex: 'product',
             responsive: ["xs"],
             render: (product, all) => (
@@ -150,7 +151,7 @@ const Cart = () => {
             ),
         },
         {
-          title: 'PRICE',
+          title: Messenge("price"),
           dataIndex: 'price',
           responsive: ['sm'],
           render: (price) => (
@@ -158,7 +159,7 @@ const Cart = () => {
           )
         },
         {
-          title: 'QUANTITY',
+          title: Messenge("quantity"),
           dataIndex: 'quantity',
           responsive: ['sm'],
           render: (quantity, all) => (
@@ -186,7 +187,7 @@ const Cart = () => {
           )
         },
         {
-            title: 'TOTAL',
+            title: Messenge("total"),
             dataIndex: 'total',
             responsive: ['sm'],
             render: (totalItem) => (
@@ -321,10 +322,6 @@ const Cart = () => {
     }, [total])
 
     useEffect(() => {
-        // console.log("lg: ", lg)
-        // console.log("md: ", md)
-        // console.log("sm: ", sm)
-        // console.log("xs: ", xs)
 
         if (percent !== 0 && countPromo == 1) {
             if(lg){ // lg
@@ -387,7 +384,7 @@ const Cart = () => {
                                 <Col span={1}></Col>
                                 <Col span={11}>
                                     <Button type="primary" onClick={onFinish} >
-                                        Submit
+                                        {Messenge("submit")}
                                     </Button>
                                 </Col>
                             </Row>
@@ -395,7 +392,7 @@ const Cart = () => {
                         <Col span={12} style={{ textAlign: "right", padding: "16px" }}>
                             <Row align="middle" justify="end">
                                 <Col span={sizeListRight}>
-                                    <Text>SUBTOTAL: </Text> 
+                                    <Text>{Messenge("total")}: </Text> 
                                 </Col>
                                 <Col span={1}></Col>
                                 {
@@ -421,7 +418,7 @@ const Cart = () => {
                             <Row align="middle" justify="end">
                                 <Col span={24}>
                                     <Button type="primary" onClick={() => changePage("/checkout")}>
-                                        Check Out
+                                        {Messenge("checkOut")}
                                     </Button>
                                 </Col>
                             </Row>

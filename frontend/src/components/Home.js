@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import financial from './financial'
 import { useHistory, useParams } from "react-router-dom";
 import QueueAnim from 'rc-queue-anim';
+import Slide from "./Slide"
+import Messenge from './Messenge'
 
 const { useBreakpoint } = Grid;
 
@@ -101,10 +103,12 @@ const ViewList = (props) => {
                         <div className="demo-thead" key="a" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                             <Space size="small" style={{ marginTop: "1em" }}>
                                 <Button onClick={()=> props.setVisible(true)} type="primary" style={{ borderRadius: "0.3em" }}>
-                                    Quick View
+                                    {/* Quick View */}
+                                    {Messenge("quickView")}
                                 </Button>
                                 <Button onClick={() => onQuickShop(props)} type="primary" style={{ borderRadius: "0.3em" }}>
-                                    Quick Shop
+                                    {/* Quick Shop */}
+                                    {Messenge("quickShop")}
                                 </Button>
                             </Space>
                         </div>
@@ -236,7 +240,7 @@ function ViewProduct (params) {
                 showMessengeCount && <MessengeQuantity key={params.product.id} error={params.product}></MessengeQuantity>
             }
             <Modal
-                title="Quick view"
+                title={Messenge("quickView")}
                 centered
                 visible={visible}
                 onOk={() => setVisible(false)}
@@ -244,17 +248,13 @@ function ViewProduct (params) {
                 width={1000}
             >
                 <Row>
-                    <Col span={11}>
-                        <Card
-                            hoverable
-                            style={{ textAlign: "center" }}
-                            cover={<Image alt={params.product.name} src={params.product.image} width={md ? 200 : null} />}
-                        >
-                            <Meta title={params.product.name} description={`${financial(params.product.price)} vnđ`} />
-                        </Card>
+                    <Col span={sm ? 11 : 24}>
+                        <Slide product={params.product} ></Slide>
                     </Col>
-                    <Col span={2}></Col>
-                    <Col span={11}>
+                    <Col span={sm ? 2 : 24}></Col>
+                    <Col span={11} style={ xs && {
+                        marginTop: "5em"
+                    } || {}}>
                         <div>
                             <Row justify="center" align="middle">
                                 
@@ -364,7 +364,7 @@ const Home = () => {
               </Row>
 
                 <Drawer
-                    title="SHOPPING CART"
+                    title={Messenge("shoppingCart")}
                     placement="right"
                     closable={false}
                     onClose={onClose}
@@ -407,8 +407,8 @@ const Home = () => {
                         })
                     }
                     <Space style={{ marginLeft: "1em" }}>
-                        <Button onClick={() => changePage("cart")}>Go to cart</Button>
-                        <Button onClick={() => changePage("checkout")}>Check out</Button>
+                        <Button onClick={() => changePage("cart")}>{Messenge("goToCart")}</Button>
+                        <Button onClick={() => changePage("checkout")}>{Messenge("checkOut")}</Button>
                     </Space>
                 </Drawer>
           </div>

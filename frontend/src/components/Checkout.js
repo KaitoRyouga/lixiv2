@@ -6,6 +6,7 @@ import axios from 'axios'
 import AddOrder from '../actions/Order/AddOrder'
 import ResetCart from '../actions/Cart/ResetCart'
 import financial from './financial'
+import Messenge from './Messenge'
 
 let listData = [];
 
@@ -113,19 +114,19 @@ const Checkout = () => {
                 <Col span={md ? 12 : 24}>
                 
                     <Form {...layout} form={form} name="control-hooks" onFinish={onFinish} style={{ margin: "1em"}}>
-                        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+                        <Form.Item name="name" label={Messenge("name")} rules={[{ required: true }]}>
                             <Input type="text" placeholder="Nguyễn Văn A" />
                         </Form.Item>
-                        <Form.Item name="phone" label="Phone" rules={[{ required: true, pattern: new RegExp(regexp), message: "Wrong phone number!" }]}>
+                        <Form.Item name="phone" label={Messenge("phone")} rules={[{ required: true, pattern: new RegExp(regexp), message: "Wrong phone number!" }]}>
                             <Input type="text" placeholder="0909259713" />
                         </Form.Item>
-                        <Form.Item name="address" label="Address" rules={[{ required: true }]}>
+                        <Form.Item name="address" label={Messenge("address")} rules={[{ required: true }]}>
                             <Input type="text" placeholder="139 Xuân Hồng" />
                         </Form.Item>
                         
                         <Form.Item {...sm ? tailLayout : null}>
                             <Button type="primary" htmlType="submit">
-                            Order
+                            {Messenge("order")}
                             </Button>
                         </Form.Item>
                     </Form>
@@ -203,7 +204,7 @@ const Checkout = () => {
                                             <Col span="8">
                                                 <Row justify="space-between" align="middle">
                                                     <Col>
-                                                        <Text>Total:</Text>
+                                                        <Text>{Messenge("total")}:</Text>
                                                     </Col>
                                                 </Row>
                                             </Col>
