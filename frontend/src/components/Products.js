@@ -110,18 +110,16 @@ const Products = () => {
                 {   
                     name: values.Name,
                     size: values.Size,
+                    category: values.Category,
                     quantity: values.Quantity,
                     price: values.Price,
                     image: values.Image,
                 }
             ]
 
-            // console.log(newProduct)
-
             const linkAPI = `${process.env.REACT_APP_API}/products`
 
             axios.post(linkAPI, newProduct[0]).then(res => dispatch(AddProduct(res))).catch(err => console.log(err))
-            // axios.post(linkAPI, newProduct[0]).then(res => console.log(res)).catch(err => console.log(err))
             form.resetFields();
         };
         
@@ -143,6 +141,9 @@ const Products = () => {
                         <Input />
                     </Form.Item>
                     <Form.Item name="Size" label="Size">
+                        <Input type="text"/>
+                    </Form.Item>
+                    <Form.Item name="Category" label="Category">
                         <Input type="text"/>
                     </Form.Item>
                     <Form.Item name="Image" label="Image">

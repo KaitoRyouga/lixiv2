@@ -98,6 +98,7 @@ function App() {
             <Route path="/checkout" component={Checkout}></Route>
             <Route path="/orders" component={Order}></Route>
             <Route path="/login" component={Login}></Route>
+            <Route path="/category/:categoryName" component={Home}></Route>
           </Switch>
           <MessengerCustomerChat
             pageId="102235194617391"

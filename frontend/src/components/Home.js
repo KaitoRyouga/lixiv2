@@ -6,7 +6,7 @@ import AddCart from '../actions/Cart/AddCart'
 import DeleteCart from '../actions/Cart/DeleteCart'
 import { useDispatch, useSelector } from 'react-redux'
 import financial from './financial'
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import QueueAnim from 'rc-queue-anim';
 
 const { useBreakpoint } = Grid;
@@ -27,6 +27,7 @@ const MessengeQuantity = (props) => {
 const ViewList = (props) => {
 
     const { Meta } = Card;
+    const { lg, md, sm, xs } = useBreakpoint()
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -266,7 +267,9 @@ function ViewProduct (params) {
 }
 
 const Home = () => {
-    
+
+        let { categoryName } = useParams();
+
         const [products, setProducts] = useState([]);    
         const [visibleDrawer, setVisibleDrawer] = useState(false);
         
@@ -288,16 +291,28 @@ const Home = () => {
 
         useEffect(() => {
             async function fetchData() {
+                console.log("check")
 
-                const linkAPI = `${process.env.REACT_APP_API}/products`
+                let result;
 
-                const result = await axios.get(
-                    linkAPI,
-                );
+                if (categoryName  === undefined) {
+                    const linkAPI = `${process.env.REACT_APP_API}/products`
+
+                    result = await axios.get(
+                        linkAPI,
+                    );
+                } else {
+                    const linkAPI = `${process.env.REACT_APP_API}/category/${categoryName}`
+
+                    result = await axios.get(
+                        linkAPI,
+                    );
+                }
+
                 setProducts(result.data.Products);
             }
               fetchData();
-        }, []);
+        }, [categoryName]);
     
         return(
           <div>
