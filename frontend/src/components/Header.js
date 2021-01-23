@@ -5,6 +5,7 @@ import { Button, Menu, Grid, Drawer, Row, Col } from "antd";
 import axios from 'axios'
 import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons'
 import '../assets/css/header.css'
+import Messenge from './Messenge'
 
 const SubMenu = Menu.SubMenu;
 
@@ -61,9 +62,9 @@ const LeftMenu = () => {
   return (
     <Menu theme="light" mode={md ? "horizontal" : "inline"}>
       <Menu.Item key="mail">
-        <a onClick={() => changePage("/")}>Home</a>
+        <a onClick={() => changePage("/")}>{Messenge("home")}</a>
       </Menu.Item>
-      <SubMenu key="sub1" title={<span>Products</span>}>
+      <SubMenu key="sub1" title={<span>{Messenge("products")}</span>}>
           <Menu.Item key="setting:1" onClick={() => changePage("/category/lixi")}>Lì xì</Menu.Item>
           <Menu.Item key="setting:2">Đồ Khô</Menu.Item>
           <Menu.Item key="setting:3">Áo thường</Menu.Item>
@@ -71,7 +72,7 @@ const LeftMenu = () => {
           <Menu.Item key="setting:5">Áo in</Menu.Item>
       </SubMenu>
       <Menu.Item key="orders">
-        <a onClick={() => changePage("/orders")}>Order</a>
+        <a onClick={() => changePage("/orders")}>{Messenge("orders")}</a>
       </Menu.Item>
       {
         admin && (

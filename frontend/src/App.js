@@ -27,6 +27,7 @@ import {
 } from "@react-firebase/auth";
 import "firebase/auth";
 import { config } from "../src/components/credentials";
+import Slide from "./components/Slide"
 
 function App() {
   
@@ -98,6 +99,7 @@ function App() {
             <Route path="/checkout" component={Checkout}></Route>
             <Route path="/orders" component={Order}></Route>
             <Route path="/login" component={Login}></Route>
+            <Route path="/slide" component={Slide}></Route>
             <Route path="/category/:categoryName" component={Home}></Route>
           </Switch>
           <MessengerCustomerChat
