@@ -117,7 +117,7 @@ const Header = () => {
     return (
       <Row justify="space-between">
         <Col span={3}>
-          <a onClick={() => changePage("/")}>logo</a>
+          <a onClick={() => changePage("/")} class="home">GunnersKMA</a>
         </Col>
         <Col span={20}>
           <Row justify="start" align="middle">

@@ -13,6 +13,9 @@ import AllOrder from '../actions/Order/AllOrder'
 import UserLogOut from '../actions/User/UserLogOut'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useHistory } from "react-router-dom";
+import "../assets/css/login.css"
+import { FaFacebookF } from 'react-icons/fa';
+import { FaGoogle } from 'react-icons/fa';
 
 const layout = {
   labelCol: { span: 8 },
@@ -100,6 +103,15 @@ const Login = () => {
 
   };
 
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+  };
+  const tailLayout = {
+    wrapperCol: { offset: 8, span: 16 },
+  };
+  
+
   const regexp = /((09|03|07|08|05)+([0-9]{8})\b)/g;
 
   return (
@@ -128,72 +140,78 @@ const Login = () => {
                 );
               } else {
                 return (
-                  <div style={{ textAlign: "center" }}>
-                    <h2>You're not signed in </h2>
-                    <Button
-                      onClick={() => {
-                          const fbAuthProvider = new firebase.auth.FacebookAuthProvider
-                          firebase.auth().signInWithRedirect(fbAuthProvider).then(res => {
-                          dispatch(AddUser(res.user))
-                          setConfirmLoadingFB(false)
-                          success("FB")
-                        }).catch(err => {
-                          setConfirmLoadingFB(false);
-                          fail(err)}
-                        );
-                      }}
-                    >
-                      Sign in FB {confirmLoadingFB && <LoadingOutlined />}
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        handleOk()
-                        const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-                        firebase.auth().signInWithPopup(googleAuthProvider).then(res => {
-                          dispatch(AddUser(res.user))
-                          setConfirmLoading(false)
-                          success("Google")
-                        }).catch(err => {
-                          setConfirmLoading(false);
-                          fail(err)}
-                        );
-                      }}
-                    >
-                      Sign in with Google {confirmLoading && <LoadingOutlined />}
-                    </Button>
-                    <div id="recaptcha-container">
-                    <br></br>
-                    {
-                      checkCode && (
-                        <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-                          <Form.Item name="code" label="Code" rules={[{ required: true }]}>
-                            <Input />
-                          </Form.Item>
-                          <Form.Item {...tailLayout}>
-                              <Button type="primary" htmlType="submit" onClick={() => {
-                                setConfirmLoadingPhone(true)
-                              }}>
-                              Login with Phone {confirmLoadingPhone && <LoadingOutlined />}
-                              </Button>
-                          </Form.Item>
-                        </Form>
-                      ) || (
-                        <Form {...layout} form={form} name="control-hooks" onFinish={capcha}>
-                        <Form.Item name="phone" label="Phone" rules={[{ required: true, pattern: new RegExp(regexp), message: "Wrong phone number, try again !!!" }]}>
-                            <Input type="text" />
-                        </Form.Item>
-                          <Form.Item {...tailLayout}>
-                              <Button type="primary" htmlType="submit" onClick={() => {
-                                setConfirmLoadingPhone(true)
-                              }}>
-                              Send Code {confirmLoadingPhone && <LoadingOutlined />}
-                              </Button>
-                          </Form.Item>
-                        </Form>
-                      )
-                    }
-                    <div id="sign-in-button"></div>
-                    </div>
+                  <div class="container">
+                    <h2 class="sign-in-title">SIGN IN</h2>
+                    <div class="sign-in-container">
+                        <div class="sign-in-facebook btn">
+                          <Button 
+                            onClick={() => {
+                                const fbAuthProvider = new firebase.auth.FacebookAuthProvider
+                                firebase.auth().signInWithRedirect(fbAuthProvider).then(res => {
+                                dispatch(AddUser(res.user))
+                                setConfirmLoadingFB(false)
+                                success("FB")
+                              }).catch(err => {
+                                setConfirmLoadingFB(false);
+                                fail(err)}
+                              );
+                            }}
+                          >
+                            <FaFacebookF /> Login with Facebook {confirmLoadingFB && <LoadingOutlined />}
+                          </Button>
+                        </div>
+                        <div class="sign-in-google btn">
+                          <Button
+                            onClick={() => {
+                              handleOk()
+                              const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+                              firebase.auth().signInWithPopup(googleAuthProvider).then(res => {
+                                dispatch(AddUser(res.user))
+                                setConfirmLoading(false)
+                                success("Google")
+                              }).catch(err => {
+                                setConfirmLoading(false);
+                                fail(err)}
+                              );
+                            }}
+                          >
+                            <FaGoogle /> Login with Google+  {confirmLoading && <LoadingOutlined />}
+                          </Button>
+                        </div>
+                      </div>
+                    <div class="capcha">
+                        {
+                        checkCode && (
+                          <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+                            <Form.Item name="code" label="Code" rules={[{ required: true }]}>
+                              <Input />
+                            </Form.Item>
+                            
+                            <Form.Item {...tailLayout}>
+                                <Button type="primary" htmlType="submit" onClick={() => {
+                                  setConfirmLoadingPhone(true)
+                                }}>
+                                Login with Phone {confirmLoadingPhone && <LoadingOutlined />}
+                                </Button>
+                            </Form.Item>
+                          </Form>
+                        ) || (
+                          <Form {...layout} form={form} name="control-hooks" onFinish={capcha}>
+                      <Form.Item name="phone" label="Phone" rules={[{ required: true, pattern: new RegExp(regexp), message: "Wrong phone number, try again !!!" }]}>
+                          <Input type="text" />
+                      </Form.Item>
+                      <Form.Item {...tailLayout}>
+                          <Button type="primary" htmlType="submit" onClick={() => {
+                            setConfirmLoadingPhone(true)
+                          }}>
+                          Send Code {confirmLoadingPhone && <LoadingOutlined />}
+                          </Button>
+                      </Form.Item>
+                    </Form>
+                        )
+                      }
+                      <div id="sign-in-button"></div>
+                      </div>
                   </div>
                 );
               }

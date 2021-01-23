@@ -4,12 +4,17 @@
   overflow: auto;
   box-shadow: 0 0 30px #f3f1f1;
 }
-
+.home{
+  font-size:20px;
+  color: black;
+}
+.home:hover{
+  color: orange;
+}
 .logo {
   width: 150px;
   float: left;
 }
-
 .logo a {
   display: inline-block;
   font-size: 20px;
@@ -102,6 +107,9 @@
   border-bottom-color: transparent;
 }
 
+.ant-menu{
+  font-size: 16px;
+}
 @media (max-width: 767px) {
   .barsMenu {
     display: inline-block;

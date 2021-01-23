@@ -9,6 +9,7 @@ import { DeleteOutlined } from '@ant-design/icons'
 import financial from './financial'
 import AddPromotion from '../actions/Promotion/AddPromotion'
 import Messenge from './Messenge'
+import '../assets/css/cart.css'
   
 const { useBreakpoint } = Grid;
 
@@ -390,7 +391,7 @@ const Cart = () => {
                             </Row>
                         </Col>
                         <Col span={12} style={{ textAlign: "right", padding: "16px" }}>
-                            <Row align="middle" justify="end">
+                            <Row align="middle" justify="end" style={{ fontWeight: "bold" }}>
                                 <Col span={sizeListRight}>
                                     <Text>{Messenge("total")}: </Text> 
                                 </Col>
