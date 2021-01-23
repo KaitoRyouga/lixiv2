@@ -48,23 +48,21 @@ const CenterMode = (props) => {
           <Slider ref={c => setSlider(c)} {...settings}>
               {
                   listImage.map(count => {
-                      if( count !== listImage.length - 1 ){
-                        const img = props.product.image
-                        const head = img.slice(0, img.length - 5)
-                        const displayImage = head + count + '.jpg'
-                        return(
-                            <div key={count}>
-                                <Card
-                                    hoverable
-                                    style={{ textAlign: "center" }}
-                                    cover={(
-                                      <Image alt="image" src={displayImage} width={200} />
-                                    )}
-                                >
-                                </Card>
-                            </div>
-                        )
-                      }
+                      const img = props.product.image
+                      const head = img.slice(0, img.length - 5)
+                      const displayImage = head + (count) + '.jpg'
+                      return(
+                          <div key={count}>
+                              <Card
+                                  hoverable
+                                  style={{ textAlign: "center" }}
+                                  cover={(
+                                    <Image alt="image" src={displayImage} width={200} />
+                                  )}
+                              >
+                              </Card>
+                          </div>
+                      )
                   })
               }
           </Slider>
