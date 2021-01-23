@@ -1,6 +1,7 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
+// const { BrowserRouter, Route, Switch } = lazy(() => import('react-router-dom'));
 import axios from 'axios'
 import { Layout } from 'antd'
 import './App.css';
@@ -23,7 +24,7 @@ const Login = lazy(() => import('./components/Login'));
 import HeaderRaw from './components/Header'
 import FooterRaw from './components/Footer'
 import Banner from './components/Banner'
-import MessengerCustomerChat from 'react-messenger-customer-chat';
+// import MessengerCustomerChat from 'react-messenger-customer-chat';
 import firebase from "firebase/app";
 import {
   FirebaseAuthProvider,
@@ -33,6 +34,7 @@ import "firebase/auth";
 import { config } from "../src/components/credentials";
 import Slide from "./components/Slide"
 import { Spin } from "antd"
+// const Spin = lazy(() => import('antd'));
 
 function App() {
   
@@ -109,10 +111,10 @@ function App() {
               <Route path="/category/:categoryName" component={Home}></Route>
             </Switch>
           </Suspense>
-          <MessengerCustomerChat
+          {/* <MessengerCustomerChat
             pageId="102235194617391"
             appId="446677652971923"
-          />
+          /> */}
         </Content>
         <Footer style={{ textAlign: 'center' }}>
             <FooterRaw></FooterRaw>
