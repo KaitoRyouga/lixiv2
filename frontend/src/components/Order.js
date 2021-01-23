@@ -195,7 +195,7 @@ const ViewOrder = (props) => {
                 }
 
                 <Table columns={columns} dataSource={data} pagination={false} />
-                <Text>TOTAL: </Text>
+                <Text>{Messenge("total")}: </Text>
                 <Tag color="green">
                     <Text type="success">{financial(total)} vnđ</Text>
                 </Tag>

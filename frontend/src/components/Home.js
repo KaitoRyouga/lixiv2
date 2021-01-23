@@ -65,7 +65,7 @@ const ViewList = (props) => {
             } || {
                 textAlign: "center",
                 marginBottom:"2em",
-                height: xs ? null : "38em",
+                height: xs ? "30em" : "38em",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -99,7 +99,7 @@ const ViewList = (props) => {
                     ]}
                 >
                 {
-                    hover ? (
+                    hover || xs ? (
                         <div className="demo-thead" key="a" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                             <Space size="small" style={{ marginTop: "1em" }}>
                                 <Button onClick={()=> props.setVisible(true)} type="primary" style={{ borderRadius: "0.3em" }}>
@@ -216,7 +216,7 @@ function ViewProduct (params) {
         }else if(sm == true && md == false){
             setSizeList(10)
         }else if(xs && md == false){
-            setSizeList(22)
+            setSizeList(11)
         }else{
             setSizeList(7)
         }
