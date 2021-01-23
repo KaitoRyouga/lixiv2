@@ -51,6 +51,7 @@ const ViewList = (props) => {
     return(
         <Card
             hoverable
+            onClick={()=> props.setVisible(true)}
             style={ hover && lg && {
                 height:"43em",
                 textAlign: "center",
@@ -121,7 +122,7 @@ function ViewProduct (params) {
     const { Meta } = Card;
     const { lg, md, sm, xs } = useBreakpoint()
 
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(1);
     const [sizeShoes, setSizeShoes] = useState(0);
     const [sizeList, setSizeList] = useState(0);
     const [showMessenge, setShowMessenge] = useState(false);
@@ -173,7 +174,7 @@ function ViewProduct (params) {
                     name: params.product.name,
                     size: sizeShoes,
                     price: params.product.price,
-                    image: values.product.image,
+                    image: params.product.image,
                     quantity: count - 1
                 }
             ];
@@ -185,18 +186,26 @@ function ViewProduct (params) {
     }
 
     const showDrawer = () => {
-        setCount(0)
+        if(count === 1){
+            const cartTemp = [
+                {   
+                    id: params.product._id,
+                    name: params.product.name,
+                    size: sizeShoes,
+                    price: params.product.price,
+                    image: params.product.image,
+                    quantity: count
+                }
+            ];
+            addCart(cartTemp)
+        }
+        setCount(1)
         params.showDrawer()
         setVisible(false)
     }   
 
     function onChange(value) {
-        // console.log('onChange: ', value);
         setSizeShoes(value  )
-    }
-      
-    function onAfterChange(value) {
-        console.log('onAfterChange: ', value);
     }
 
     useEffect(() => {
@@ -249,16 +258,19 @@ function ViewProduct (params) {
                         <div>
                             <Row justify="center" align="middle">
                                 
-                                <Col span={24}>
-                                    Size: <Tag color="green">{sizeShoes}</Tag>
-                                    <Slider
-                                        min={params.product.size[0]}
-                                        max={params.product.size[params.product.size.length - 1]}
-                                        defaultValue={params.product.size[0]}
-                                        onChange={onChange}
-                                        onAfterChange={onAfterChange}
-                                    />
-                                </Col>
+                                {
+                                    sizeShoes && (
+                                        <Col span={24}>
+                                            Size: <Tag color="green">{sizeShoes}</Tag>
+                                            <Slider
+                                                min={params.product.size[0]}
+                                                max={params.product.size[params.product.size.length - 1]}
+                                                defaultValue={params.product.size[0]}
+                                                onChange={onChange}
+                                            />
+                                        </Col>
+                                    )
+                                }
                                 <Space>
                                 <Col>
                                     <Button onClick={() => {
@@ -315,7 +327,6 @@ const Home = () => {
 
         useEffect(() => {
             async function fetchData() {
-                console.log("check")
 
                 let result;
 
@@ -363,35 +374,35 @@ const Home = () => {
                     {
                         stateRoot.carts.map(c => {
                             return (
-                                <>
-                                <Row key={c.name}>
-                                    <Space size="small">
-                                        <Col span={12} style={{ marginLeft: "1em" }}>
-                                            <Badge count={c.quantity}>
-                                                <Image src={c.image} alt="image product"></Image>
-                                            </Badge>
-                                        </Col>
-                                        <Col span={12} style={{ display: "flex", flexDirection: "column" ,justifyContent: "center", alignItems: "end" }}>
-                                            <Row>
-                                                <Tag color="green">{c.name}</Tag>
-                                            </Row>
-                                            <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
-                                            <Row>
-                                                <Tag color="green">{financial(c.price)} vnđ</Tag>
-                                            </Row>
-                                            <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
-                                            <Row>
-                                            <Tag color="volcano">
-                                                <DeleteOutlined onClick={() => {
-                                                    dispatch(DeleteCart(c.id))
-                                                }} />
-                                            </Tag>  
-                                            </Row>
-                                        </Col>
-                                    </Space>
-                                </Row>
-                                <br></br>
-                                </>
+                                <div key={c.name}>
+                                    <Row key={c.name}>
+                                        <Space size="small">
+                                            <Col span={12} style={{ marginLeft: "1em" }}>
+                                                <Badge count={c.quantity}>
+                                                    <Image src={c.image} alt="image product"></Image>
+                                                </Badge>
+                                            </Col>
+                                            <Col span={12} style={{ display: "flex", flexDirection: "column" ,justifyContent: "center", alignItems: "end" }}>
+                                                <Row>
+                                                    <Tag color="green">{c.name}</Tag>
+                                                </Row>
+                                                <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
+                                                <Row>
+                                                    <Tag color="green">{financial(c.price)} vnđ</Tag>
+                                                </Row>
+                                                <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
+                                                <Row>
+                                                <Tag color="volcano">
+                                                    <DeleteOutlined onClick={() => {
+                                                        dispatch(DeleteCart(c.id))
+                                                    }} />
+                                                </Tag>  
+                                                </Row>
+                                            </Col>
+                                        </Space>
+                                    </Row>
+                                    <br></br>
+                                </div>
                             )
                         })
                     }
