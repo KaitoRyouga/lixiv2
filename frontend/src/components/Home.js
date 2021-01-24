@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Row, Col, Button, Alert, Modal, Drawer, Tag, Image, Space, Badge, Card, Grid, Slider } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined, DeleteOutlined } from '@ant-design/icons'
@@ -28,8 +28,11 @@ const MessengeQuantity = (props) => {
 
 const ViewList = (props) => {
 
+    // const renders = useRef(0)
+    // console.log("View List render: ", renders.current++)
+
     const { Meta } = Card;
-    const { lg, md, sm, xs } = useBreakpoint()
+    const { lg, xs } = useBreakpoint()
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -40,7 +43,7 @@ const ViewList = (props) => {
         const newCart = [{
             id: values.product._id,
             name: values.product.name,
-            size: values.product.size,
+            size: values.product.size[0],
             price: values.product.price,
             image: values.product.image,
             quantity: 1,
@@ -122,6 +125,10 @@ const ViewList = (props) => {
 }
 
 function ViewProduct (params) {
+
+    // const renders = useRef(0)
+    // console.log("View Product render: ", renders.current++)
+
     const { lg, md, sm, xs } = useBreakpoint()
 
     const [count, setCount] = useState(1);
@@ -305,18 +312,21 @@ function ViewProduct (params) {
                         </div>
                     </Col>
                 </Row>
-            </Modal>
+            </Modal> 
         </>
     )
 }
 
 const Home = () => {
 
+        const renders = useRef(0)
+        console.log("Home.js render: ", renders.current++)
+
         let { categoryName } = useParams();
 
         const [products, setProducts] = useState([]);    
         const [visibleDrawer, setVisibleDrawer] = useState(false);
-        
+
         const stateRoot = useSelector(state => state)    
         const history = useHistory()
         const dispatch = useDispatch();
@@ -333,42 +343,43 @@ const Home = () => {
             setVisibleDrawer(false);
         };
 
-        useEffect(() => {
-            async function fetchData() {
+        useEffect( async () => {
 
-                let result;
+            let result;
 
-                if (categoryName  === undefined) {
-                    const linkAPI = `${process.env.REACT_APP_API}/products`
+            if (categoryName  === undefined) {
+                const linkAPI = `${process.env.REACT_APP_API}/products`
 
-                    result = await axios.get(
-                        linkAPI,
-                    );
-                } else {
-                    const linkAPI = `${process.env.REACT_APP_API}/category/${categoryName}`
+                result = await axios.get(
+                    linkAPI,
+                );
+            } else {
+                const linkAPI = `${process.env.REACT_APP_API}/category/${categoryName}`
 
-                    result = await axios.get(
-                        linkAPI,
-                    );
-                }
-
-                setProducts(result.data.Products);
+                result = await axios.get(
+                    linkAPI,
+                );
             }
-              fetchData();
+
+            setProducts(result.data.Products);
+
         }, [categoryName]);
+
+        const memoProductList = useMemo(() => 
+            products.map((product, id) => {
+                return (
+                    <>
+                        <ViewProduct key={id} product={product} showDrawer={showDrawer}></ViewProduct> 
+                    </>
+                )
+            }, [products])
+        )
     
         return(
           <div>
                 <br></br>
                 <Row justify="space-around" align="middle">
-                {
-                    
-                    products.map((product, id) => {
-                        return (
-                            <ViewProduct key={id} product={product} showDrawer={showDrawer}></ViewProduct> 
-                        )
-                    })
-                }
+                    {memoProductList}
               </Row>
 
                 <Drawer
@@ -400,11 +411,11 @@ const Home = () => {
                                                 </Row>
                                                 <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}></div>
                                                 <Row>
-                                                <Tag color="volcano">
-                                                    <DeleteOutlined onClick={() => {
-                                                        dispatch(DeleteCart(c.id))
-                                                    }} />
-                                                </Tag>  
+                                                    <Tag color="volcano">
+                                                        <DeleteOutlined onClick={() => {
+                                                            dispatch(DeleteCart(c.id))
+                                                        }} />
+                                                    </Tag>  
                                                 </Row>
                                             </Col>
                                         </Space>

@@ -1,30 +1,23 @@
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React, { useEffect, useState, lazy, Suspense, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
-// const { BrowserRouter, Route, Switch } = lazy(() => import('react-router-dom'));
 import axios from 'axios'
-import { Layout } from 'antd'
+// Css
 import './App.css';
-
+// action redux
 import AllProduct from './actions/Product/AllProduct'
 import AllPromo from './actions/Promo/AllPromo'
 import AllOrder from './actions/Order/AllOrder'
 import AddUser from './actions/User/AddUser'
-// import Products from './components/Products'
-const Products = lazy(() => import('./components/Products'));
+// component
 import Home from './components/Home'
-// import Cart from './components/Cart'
-const Cart = lazy(() => import('./components/Cart'));
 import Promo from './components/Promo'
-// import Checkout from './components/Checkout'
-const Checkout = lazy(() => import('./components/Checkout'));
 import Order from './components/Order'
-// import Login from './components/Login'
-const Login = lazy(() => import('./components/Login'));
 import HeaderRaw from './components/Header'
 import FooterRaw from './components/Footer'
 import Banner from './components/Banner'
-// import MessengerCustomerChat from 'react-messenger-customer-chat';
+import Slide from "./components/Slide"
+// firebaase with login
 import firebase from "firebase/app";
 import {
   FirebaseAuthProvider,
@@ -32,15 +25,25 @@ import {
 } from "@react-firebase/auth";
 import "firebase/auth";
 import { config } from "../src/components/credentials";
-import Slide from "./components/Slide"
-import { Spin } from "antd"
-// const Spin = lazy(() => import('antd'));
+// component antd
+import { Spin, Layout } from "antd"
+// layzy with component
+const Login = lazy(() => import('./components/Login'));
+const Checkout = lazy(() => import('./components/Checkout'));
+const Cart = lazy(() => import('./components/Cart'));
+const Products = lazy(() => import('./components/Products'));
+
+const { Header, Content, Footer } = Layout;
 
 function App() {
-  
-  const { Header, Content, Footer } = Layout;
+
+  const renders = useRef(0)
+  console.log("App.js render: ", renders.current++)
+
+  // redux
   const dispatch = useDispatch()
   const stateUser = useSelector(state => state.users)
+  // state
   const [admin, setAdmin] = useState(false)
   const [countUser, setCountUser] = useState(0)
 
@@ -73,16 +76,16 @@ function App() {
 
   return (
     <Layout className="App">
-    <FirebaseAuthProvider {...config} firebase={firebase}>
-      <FirebaseAuthConsumer>
-      {({ isSignedIn, user }) => {       
-          if(isSignedIn  && countUser === 0 ){
-            setCountUser(countUser + 1)
-            dispatch(AddUser(user))
-          }
-      }}
-      </FirebaseAuthConsumer>
-    </FirebaseAuthProvider>
+      <FirebaseAuthProvider {...config} firebase={firebase}>
+        <FirebaseAuthConsumer>
+        {({ isSignedIn, user }) => {       
+            if(isSignedIn  && countUser === 0 ){
+              setCountUser(countUser + 1)
+              dispatch(AddUser(user))
+            }
+        }}
+        </FirebaseAuthConsumer>
+      </FirebaseAuthProvider>
       <BrowserRouter>
         <Header style={{ background: "#fff" }}>
           <HeaderRaw></HeaderRaw>
@@ -111,10 +114,6 @@ function App() {
               <Route path="/category/:categoryName" component={Home}></Route>
             </Switch>
           </Suspense>
-          {/* <MessengerCustomerChat
-            pageId="102235194617391"
-            appId="446677652971923"
-          /> */}
         </Content>
         <Footer style={{ textAlign: 'center' }}>
             <FooterRaw></FooterRaw>
