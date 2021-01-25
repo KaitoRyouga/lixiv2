@@ -103,11 +103,11 @@ const ViewList = (props) => {
                     hover || xs ? (
                         <div className="demo-thead" key="a" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                             <Space size="small" style={{ marginTop: "1em" }}>
-                                <Button onClick={()=> props.setVisible(true)} type="primary" style={{ borderRadius: "0.3em" }}>
+                                <Button size={xs ? "small" : "middle"} onClick={()=> props.setVisible(true)} type="primary" style={ xs && { borderRadius: "0.3em", fontSize: "0.8em" } || { borderRadius: "0.3em" }}>
                                     {/* Quick View */}
                                     {Messenge("quickView")}
                                 </Button>
-                                <Button onClick={() => onQuickShop(props)} type="primary" style={{ borderRadius: "0.3em" }}>
+                                <Button size={xs ? "small" : "middle"} onClick={() => onQuickShop(props)} type="primary" style={ xs && { borderRadius: "0.3em", fontSize: "0.8em" } || { borderRadius: "0.3em" }}>
                                     {/* Quick Shop */}
                                     {Messenge("quickShop")}
                                 </Button>
