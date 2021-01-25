@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy, Suspense, useRef } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import axios from 'axios'
@@ -36,9 +36,6 @@ const Products = lazy(() => import('./components/Products'));
 const { Header, Content, Footer } = Layout;
 
 function App() {
-
-  const renders = useRef(0)
-  console.log("App.js render: ", renders.current++)
 
   // redux
   const dispatch = useDispatch()

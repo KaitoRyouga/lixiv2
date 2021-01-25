@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Row, Col, Button, Alert, Modal, Drawer, Tag, Image, Space, Badge, Card, Grid, Slider } from "antd";
+import React, { useState, useEffect, useMemo } from 'react';
+import { Row, Col, Button, Alert, Modal, Drawer, Tag, Image, Space, Badge, Card, Grid, Slider, Select, Divider  } from "antd";
 import axios from 'axios'
 import { LeftOutlined, RightOutlined, DeleteOutlined } from '@ant-design/icons'
 import AddCart from '../actions/Cart/AddCart'
@@ -12,6 +12,7 @@ import Slide from "./Slide"
 import Messenge from './Messenge'
 
 const { useBreakpoint } = Grid;
+const { Option } = Select;
 
 const MessengeQuantity = (props) => {
 
@@ -27,9 +28,6 @@ const MessengeQuantity = (props) => {
 }
 
 const ViewList = (props) => {
-
-    // const renders = useRef(0)
-    // console.log("View List render: ", renders.current++)
 
     const { Meta } = Card;
     const { lg, xs } = useBreakpoint()
@@ -126,9 +124,6 @@ const ViewList = (props) => {
 
 function ViewProduct (params) {
 
-    // const renders = useRef(0)
-    // console.log("View Product render: ", renders.current++)
-
     const { lg, md, sm, xs } = useBreakpoint()
 
     const [count, setCount] = useState(1);
@@ -137,7 +132,7 @@ function ViewProduct (params) {
     const [showMessenge, setShowMessenge] = useState(false);
     const [showMessengeCount, setShowMessengeCount] = useState(false);
     const [visible, setVisible] = useState(false);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch();   
     
 
     const messageWarning = (<Alert
@@ -229,10 +224,14 @@ function ViewProduct (params) {
         }
     });
 
+    const onChangeSize = (e) => {
+        setSizeShoes(e)
+    }
+
     useEffect(() => {
         setSizeShoes(params.product.size[0])
     }, [params]);
-    
+
     return(
         <>
             <Col span={sizeList}>
@@ -265,7 +264,7 @@ function ViewProduct (params) {
                         <Slide product={params.product} ></Slide>
                     </Col>
                     {/* <Col span={sm ? 2 : 24}></Col> */}
-                    <Col span={11} style={ xs && {
+                    <Col span={xs ? 24 : 11} style={ xs && {
                         marginTop: "5em"
                     } || {
                         marginLeft: "5em"
@@ -276,37 +275,45 @@ function ViewProduct (params) {
                                 {
                                     sizeShoes && (
                                         <Col span={24}>
-                                            Size: <Tag color="green">{sizeShoes}</Tag>
-                                            <Slider
-                                                min={params.product.size[0]}
-                                                max={params.product.size[params.product.size.length - 1]}
-                                                defaultValue={params.product.size[0]}
-                                                onChange={onChange}
-                                            />
+                                            <span style={{ marginRight: "0.2em" }}>Size:</span>
+                                            <Select defaultValue={sizeShoes} onChange={(e) => onChangeSize(e)}>
+                                                {
+                                                    params.product.size.map(s => {
+                                                        return(
+                                                            <Option key={s} value={s}>{s}</Option>
+                                                        )
+                                                    })
+                                                }
+                                            </Select>
                                         </Col>
                                     )
                                 }
-                                <Space>
-                                <Col>
+                                <div style={{ margin: "1em" }}></div>
+                                <Col span={24}>
+                                <Row justify="start">
+                                    <Space>
+                                    <Col>
+                                        <Button onClick={() => {
+                                            onDecrement()
+                                        }}>
+                                            <LeftOutlined />
+                                        </Button> 
+                                    </Col>
+                                    <Col>
+                                        <span style={{ textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>{count}</span>
+                                    </Col>
+                                    <Col>
                                     <Button onClick={() => {
-                                        onDecrement()
-                                    }}>
-                                        <LeftOutlined />
-                                    </Button> 
-                                </Col>
-                                <Col>
-                                    <span style={{ textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>{count}</span>
-                                </Col>
-                                <Col>
-                                <Button onClick={() => {
-                                        onIncrement()
-                                    }}>
-                                        <RightOutlined />
-                                    </Button> 
-                                </Col>
-                                </Space>
-                                <Col>
-                                    <Button onClick={showDrawer}>Add to cart</Button>
+                                            onIncrement()
+                                        }}>
+                                            <RightOutlined />
+                                        </Button> 
+                                    </Col>
+                                    </Space>
+                                    <Col>
+                                        <Button onClick={showDrawer}>Add to cart</Button>
+                                    </Col>
+                                </Row>
                                 </Col>
                             </Row>
                         </div>
@@ -318,9 +325,6 @@ function ViewProduct (params) {
 }
 
 const Home = () => {
-
-        const renders = useRef(0)
-        console.log("Home.js render: ", renders.current++)
 
         let { categoryName } = useParams();
 
@@ -368,9 +372,7 @@ const Home = () => {
         const memoProductList = useMemo(() => 
             products.map((product, id) => {
                 return (
-                    <>
-                        <ViewProduct key={id} product={product} showDrawer={showDrawer}></ViewProduct> 
-                    </>
+                    <ViewProduct key={id} product={product} showDrawer={showDrawer}></ViewProduct> 
                 )
             }, [products])
         )
