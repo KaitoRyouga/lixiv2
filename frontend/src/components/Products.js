@@ -114,6 +114,7 @@ const Products = () => {
                     quantity: values.Quantity,
                     price: values.Price,
                     image: values.Image,
+                    listimage: values.ListImage,
                 }
             ]
 
@@ -147,6 +148,9 @@ const Products = () => {
                         <Input type="text"/>
                     </Form.Item>
                     <Form.Item name="Image" label="Image">
+                        <Input type="text"/>
+                    </Form.Item>
+                    <Form.Item name="ListImage" label="ListImage">
                         <Input type="text"/>
                     </Form.Item>
                     <Form.Item name="Quantity" label="Quantity" rules={[{ required: true }]}>

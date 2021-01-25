@@ -37,7 +37,9 @@ class ProductController {
         size: arrSize,
         quantity: parseInt(req.body.quantity, 10),
         price: parseInt(req.body.price, 10),
-        image: req.body.image
+        image: req.body.image,
+        category: req.body.category,
+        listimage: req.body.listimage,
       })
 
       await product.save()
