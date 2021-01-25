@@ -24,11 +24,11 @@ const RightMenu = (props) => {
 
   return (
     <Menu mode={md ? "horizontal" : "inline"}>
-      <Menu.Item key="mail">
-        <ShoppingCartOutlined style={{ fontSize: '1.2em' }} onClick={() => changePage("/cart")} />
+      <Menu.Item key="mail" onClick={() => changePage("/cart")}>
+        <ShoppingCartOutlined style={{ fontSize: '1.2em' }} />
       </Menu.Item>
-      <Menu.Item key="app">
-        <UserOutlined style={{ fontSize: '1.2em' }} onClick={() => changePage("/login")} />
+      <Menu.Item key="app" onClick={() => changePage("/login")}>
+        <UserOutlined style={{ fontSize: '1.2em' }} />
       </Menu.Item>
     </Menu>
   );
@@ -72,10 +72,14 @@ const LeftMenu = (props) => {
       </Menu.Item>
       <SubMenu key="sub1" title={<span>{Messenge("products")}</span>}>
           <Menu.Item key="setting:1" onClick={() => changePage("/category/lixi")}>Lì xì</Menu.Item>
-          <Menu.Item key="setting:2">Đồ Khô</Menu.Item>
+          <Menu.ItemGroup key="Đồ Khô" title="Đồ Khô">
+            <Menu.Item key="1" onClick={() => changePage("/category/khobo")}>Khô bò</Menu.Item>
+            <Menu.Item key="2" onClick={() => changePage("/category/khoca")}>Khô cá</Menu.Item>
+            <Menu.Item key="2" onClick={() => changePage("/category/mucgung")}>Mức gừng</Menu.Item>
+          </Menu.ItemGroup>
           <Menu.Item key="setting:3">Áo thường</Menu.Item>
-          <Menu.Item key="setting:4" onClick={() => changePage("/category/shoes")}>Giày</Menu.Item>
           <Menu.Item key="setting:5">Áo in</Menu.Item>
+          <Menu.Item key="setting:4" onClick={() => changePage("/category/shoes")}>Giày</Menu.Item>
       </SubMenu>
       <Menu.Item key="orders">
         <a onClick={() => changePage("/orders")}>{Messenge("orders")}</a>

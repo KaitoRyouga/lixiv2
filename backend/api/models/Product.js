@@ -11,6 +11,10 @@ const ProductSchema = new Schema({
     type: String,
     trim: true
   },
+  listimage: {
+    type: String,
+    trim: true
+  },
   size: {
     type: []
   },
@@ -22,7 +26,10 @@ const ProductSchema = new Schema({
     type: Number,
     required: true
   },
-  image: String
+  image: {
+    type: String,
+    trim: true
+  }
 }, { timestamps: true })
 
 ProductSchema.statics.protectedFields = [
